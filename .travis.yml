@@ -8,3 +8,7 @@ install:
 
 script:
   - docker-compose run --rm cli tsc
+
+deploy:
+  - provider: npm
+  - api_key: $NPM_KEY
