@@ -1,0 +1,10 @@
+sudo: required
+
+services:
+  - docker
+
+install:
+  - docker-compose run --rm cli yarn install
+
+script:
+  - docker-compose run --rm cli tsc
