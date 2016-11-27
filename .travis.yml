@@ -1,5 +1,8 @@
 sudo: required
 
+node_js:
+  - "6"
+
 services:
   - docker
 
@@ -10,6 +13,6 @@ script:
   - docker-compose run --rm cli tsc
 
 deploy:
-  - provider: npm
-  - email: $NPM_EMAIL
-  - api_key: $NPM_KEY
+  provider: npm
+  email: $NPM_EMAIL
+  api_key: $NPM_KEY
