@@ -4,6 +4,8 @@ import * as cookie from "cookie";
 
 
 // ToDo: Reenable query strings.
+// https://github.com/aurelia/fetch-client/issues/71
+// https://github.com/Microsoft/TypeScript/issues/12517
 
 export class Method {
     public static Get = "GET";
