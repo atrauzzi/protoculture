@@ -1,0 +1,9 @@
+src
+node_modules
+.gitignore
+docker-compose.yml
+Dockerfile
+tsconfig.json
+*.log
+yarn.lock
+.git
