@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+
+  cli:
+    build: .
+    container_name: protoculture-cli
+
+    volumes:
+      - "./:/protoculture"
