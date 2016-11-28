@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import App from "./App";
+import {App} from "./App";
 import {createRequest} from "./CreateRequest";
 import {Environment} from "./Domain/Model/Environment";
 import {ApplicationState} from "./Domain/Model/ApplicationState";
@@ -7,7 +7,7 @@ import {ApplicationState} from "./Domain/Model/ApplicationState";
 declare function domready(callback: () => any) : void;
 
 
-export default class Suite<EnvironmentType extends Environment> {
+export class Suite<EnvironmentType extends Environment> {
 
     private environmentFilePath: string;
 

@@ -18,7 +18,7 @@ interface ResponseTarget {
     source: Window;
 }
 
-abstract class App<State extends ApplicationState> {
+export abstract class App<State extends ApplicationState> {
 
     private containerElement: Element|string;
 
@@ -233,5 +233,3 @@ abstract class App<State extends ApplicationState> {
     }
 
 }
-
-export default App;

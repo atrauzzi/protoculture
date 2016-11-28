@@ -1,5 +1,5 @@
 import {Dispatch, Action} from "redux";
-import App from "../../App";
+import {App} from "../../App";
 import {ApplicationState} from "../Model/ApplicationState";
 
 

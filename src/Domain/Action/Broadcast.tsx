@@ -1,4 +1,4 @@
-import App from "../../App";
+import {App} from "../../App";
 import {Dispatch} from "redux";
 import {ApplicationState} from "../Model/ApplicationState";
 
