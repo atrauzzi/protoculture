@@ -1,5 +1,6 @@
 {
   "name": "protoculture",
+  "version": "1.0.1",
   "description": "A library representing some conventions for making TypeScript-based React apps backed by Redux.",
   "main": "lib",
   "scripts": {
