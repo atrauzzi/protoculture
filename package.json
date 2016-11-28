@@ -1,9 +1,9 @@
 {
   "name": "protoculture",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A library representing some conventions for making TypeScript-based React apps backed by Redux.",
   "main": "./lib/index.js",
-  "main": "./lib/index.d.ts",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
