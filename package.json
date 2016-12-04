@@ -1,6 +1,6 @@
 {
   "name": "protoculture",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A library representing some conventions for making TypeScript-based React apps backed by Redux.",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
