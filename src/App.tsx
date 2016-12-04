@@ -110,7 +110,7 @@ export abstract class App<State extends ApplicationState> {
 
     protected abstract getReducers(): {[actionType: string]: Reducer<State>};
 
-    protected abstract getComponent(): Component<any, State>;
+    protected abstract getComponent(): Component<any, any>;
 
     //
     //
