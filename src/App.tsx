@@ -11,6 +11,8 @@ import {createStore} from "./StoreFactory";
 import {Environment} from "./Domain/Model/Environment";
 import {loadConfiguration} from "./Domain/Action/LoadConfiguration";
 import setConfigurationReducer from "./Domain/Reducer/SetConfiguration";
+import loggedInReducer from "./Domain/Reducer/LoggedIn";
+import loggedOutReducer from "./Domain/Reducer/LoggedOut";
 
 
 interface ResponseTarget {
@@ -47,7 +49,9 @@ export abstract class App<State extends ApplicationState> {
 
         const reducers = _.assign(
             this.getReducers(),
-            setConfigurationReducer
+            setConfigurationReducer,
+            loggedInReducer,
+            loggedOutReducer
         );
         const userValue = this.getMetaValue("user");
 
@@ -106,7 +110,7 @@ export abstract class App<State extends ApplicationState> {
 
     protected abstract getReducers(): {[actionType: string]: Reducer<State>};
 
-    protected abstract getComponent(): Component<any, State>;
+    protected abstract getComponent(): Component<any, any>;
 
     //
     //
