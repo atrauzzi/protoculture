@@ -19,7 +19,7 @@ script:
   - docker-compose run --rm cli tsc
 
 after_success:
-  - docker-compose run --rm cli yarn run semantic-release
+  - npm run semantic-release
 
 branches:
   except:
