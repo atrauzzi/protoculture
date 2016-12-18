@@ -2,7 +2,7 @@
   "name": "protoculture",
   "author": "Alexander Trauzzi",
   "version": "0.0.0-development",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "description": "A library representing some conventions for making TypeScript-based React apps backed by Redux.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,7 +22,8 @@
   },
   "homepage": "https://github.com/atrauzzi/protoculture#readme",
   "devDependencies": {
-    "semantic-release": "^6.3.2"
+    "semantic-release": "^6.3.2",
+    "typescript": "^2.0.10"
   },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -41,7 +42,6 @@
     "react-dom": "^15.4.0",
     "react-redux": "^4.4.6",
     "redux-thunk": "^2.1.0",
-    "typescript": "^2.0.10",
     "urlsearchparams": "^0.1.1"
   }
 }
