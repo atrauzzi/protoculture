@@ -5,5 +5,4 @@ export interface User {
     alias?: string;
     firstName?: string;
     lastName?: string;
-
 }
