@@ -6,6 +6,7 @@ import {ApplicationState} from "./Domain/Model/ApplicationState";
 
 
 interface Window {
+
     devToolsExtension?: () => any;
 }
 
@@ -20,7 +21,6 @@ export const createStore = <State extends ApplicationState>(reducers: any, initi
         }
 
         return state;
-
     };
 
     if(window.devToolsExtension) {
@@ -28,5 +28,4 @@ export const createStore = <State extends ApplicationState>(reducers: any, initi
     }
 
     return createReduxStore<State>(keyValueDispatchReducer, compose(applyMiddleware(thunkMiddleware)));
-
 };
