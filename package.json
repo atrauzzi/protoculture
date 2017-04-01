@@ -35,13 +35,16 @@
     "@types/react-redux": "^4.4.32",
     "@types/redux": "^3.6.31",
     "@types/redux-thunk": "^2.1.31",
+    "@types/reflect-metadata": "^0.0.5",
     "@types/whatwg-fetch": "^0.0.32",
     "cookie": "^0.3.1",
     "domready": "^1.0.8",
-    "whatwg-fetch": "^1.1.0",
+    "inversify": "^3.3.0",
     "react-dom": "^15.4.0",
     "react-redux": "^4.4.6",
     "redux-thunk": "^2.1.0",
-    "urlsearchparams": "^0.1.1"
+    "reflect-metadata": "^0.1.10",
+    "urlsearchparams": "^0.1.1",
+    "whatwg-fetch": "^1.1.0"
   }
 }
