@@ -17,9 +17,12 @@
         "sourceMap": true,
         "outDir": "lib",
         "lib": [
+            "dom",
             "es5",
             "es2015",
-            "es2015.promise"
+            "es2015.promise",
+            "es6",
+            "es2016"
         ]
     },
     "include": [

@@ -28,12 +28,8 @@ export abstract class Base<State> {
 
     public async run() {
 
-        this.working = true;
-
         // ToDo: Dispatch an action.
 
         await this.onRun();
-
-        this.working = false;
     }
 }

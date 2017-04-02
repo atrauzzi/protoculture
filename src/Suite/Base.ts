@@ -17,11 +17,16 @@ export abstract class Base {
 
     protected abstract get name(): string;
 
-    protected abstract get appConstructors(): (typeof App & {new(base: Base)})[];
+    protected abstract get appConstructors(): (typeof App & {new(base: Base): App<any>})[];
 
     protected get containerConfiguration(): ContainerOptions { return null; }
 
     protected get heartbeatInterval(): number { return 5; }
+
+    protected get serviceProviders(): ServiceProvider[] {
+
+        return [];
+    }
 
     //
     // Internal
@@ -75,12 +80,11 @@ export abstract class Base {
 
         const childContainer = this.container.createChild();
 
-        const bootPromises = _.map(this.serviceProviders, serviceProvider => serviceProvider.bootChild(childContainer));
-
-        await Promise.all(bootPromises);
-
         const reduxServiceProvider = new ReduxServiceProvider();
-        await reduxServiceProvider.bootChild(this);
+        await reduxServiceProvider.bootChild(childContainer);
+
+        const bootPromises = _.map(this.serviceProviders, serviceProvider => serviceProvider.bootChild(childContainer));
+        await Promise.all(bootPromises);
 
         return childContainer;
     }
@@ -100,6 +104,11 @@ export abstract class Base {
     protected async bootPlatform() {
 
         this.platform = _.find(this.container.getAll<Platform>(suiteSymbols.Platform), platform => platform.current);
+
+        if(!this.platform) {
+
+            throw new Error("Unable to determine current platform.");
+        }
 
         this.container.bind<Platform>(suiteSymbols.CurrentPlatform)
             .to(this.platform)
@@ -136,15 +145,16 @@ export abstract class Base {
     protected startHeartbeat() {
 
         const heartBeat = setInterval(
-            () => {
+            async () => {
 
                 this.log(LogLevel.Debug, "protoculture", "Beat...");
 
                 if(!this.working) {
 
                     this.log(LogLevel.Debug, "heartbeat", "...Heart beat.");
+
                     clearInterval(heartBeat);
-                    this.stop();
+                    await this.stop();
                 }
             },
             this.heartbeatInterval * 1000
@@ -166,7 +176,8 @@ export abstract class Base {
 
     protected getServiceProviderConstructors(): ServiceProviderStatic<ServiceProvider>[] {
 
-        return _.chain(this.appConstructors)
+        return _.chain(this.serviceProviders)
+            .concat(_.flatMap(this.apps, app => app.serviceProviders))
             .flatMap(app => app.serviceProviders)
             .uniq()
             .value()

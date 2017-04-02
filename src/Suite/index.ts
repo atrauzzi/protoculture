@@ -6,5 +6,5 @@ export const suiteSymbols = {
     CurrentRuntime: Symbol("CurrentRuntime"),
     CurrentPlatform: Symbol("CurrentPlatform"),
     // ToDo: Determine how we'll let multiple things converge on redux when we register it.
-    Reducer: Symbol("Reducer")
+    Reducer: Symbol("BusReducer")
 };
