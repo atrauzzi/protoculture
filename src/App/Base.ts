@@ -1,25 +1,39 @@
 import {ServiceProvider} from "../ServiceProvider";
 import {ServiceProviderStatic} from "../ServiceProviderStatic";
+import {Suite} from "../Suite";
 
 
 export abstract class Base<State> {
 
     protected abstract get name(): string;
 
-    public abstract get serviceProviders(): ServiceProviderStatic<ServiceProvider>[];
+    public static get serviceProviders(): ServiceProviderStatic<ServiceProvider>[] {
 
-    public constructor() {
+        return [];
+    };
 
+    protected abstract async onRun(): Promise<void>;
+
+    public get working(): boolean {
+
+        return false;
     }
 
-    public async boot(): Promise<void> {
+    protected suite: Suite;
 
+    public constructor(suite: Suite) {
+
+        this.suite = suite;
     }
 
     public async run() {
 
+        this.working = true;
 
         // ToDo: Dispatch an action.
-        return null;
+
+        await this.onRun();
+
+        this.working = false;
     }
 }

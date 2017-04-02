@@ -1,6 +1,5 @@
 import * as _ from "lodash";
 import {suiteSymbols} from "./";
-import {BaseStatic as AppStatic} from "../App/BaseStatic";
 import {Base as App} from "../App/Base";
 import {Container, interfaces} from "inversify";
 import ContainerOptions = interfaces.ContainerOptions;
@@ -8,26 +7,43 @@ import {ServiceProviderStatic} from "../ServiceProviderStatic";
 import {ServiceProvider} from "../";
 import {ReduxServiceProvider} from "../Redux/ReduxServiceProvider";
 import {Platform} from "./Platform";
-import {Runtime} from "./Runtime";
+import {LogLevel} from "../LogLevel";
 
 
 export abstract class Base {
 
+    //
+    // Configurable by Subclasses
+
     protected abstract get name(): string;
 
-    protected abstract get appConstructors(): AppStatic<any>[];
+    protected abstract get appConstructors(): (typeof App & {new(base: Base)})[];
+
+    protected get containerConfiguration(): ContainerOptions { return null; }
+
+    protected get heartbeatInterval(): number { return 5; }
+
+    //
+    // Internal
 
     protected platform: Platform;
 
-    protected runtime: Runtime;
-
-    protected container: Container;
-
-    protected get containerConfiguration(): ContainerOptions { return null; }
+    protected _container: Container;
 
     protected apps: App<any>[];
 
     protected serviceProviders: ServiceProvider[];
+
+    //
+    // External
+
+    public get container(): Container {
+
+        return this._container;
+    }
+
+    //
+    // Initialization Phase
 
     public constructor() {
 
@@ -37,70 +53,129 @@ export abstract class Base {
 
     protected loadApps() {
 
-        this.apps = _.map(this.appConstructors, app => new app());
+        this.apps = _.map(this.appConstructors, app => new app(this));
     }
 
     protected loadServiceProviders() {
 
-        const serviceProviderConstructors = this.getServiceProviderConstructors();
-
-        serviceProviderConstructors.push(ReduxServiceProvider);
-
         this.serviceProviders = _.map(this.getServiceProviderConstructors(), serviceProvider => new serviceProvider);
+    }
+
+    //
+    // Boot Phase
+
+    public async boot(): Promise<void> {
+
+        this.bootContainer();
+        await this.bootServiceProviders();
+        await this.bootPlatform();
+    }
+
+    public async bootChild(): Promise<Container> {
+
+        const childContainer = this.container.createChild();
+
+        const bootPromises = _.map(this.serviceProviders, serviceProvider => serviceProvider.bootChild(childContainer));
+
+        await Promise.all(bootPromises);
+
+        const reduxServiceProvider = new ReduxServiceProvider();
+        await reduxServiceProvider.bootChild(this);
+
+        return childContainer;
+    }
+
+    protected bootContainer() {
+
+        this._container = new Container(this.containerConfiguration);
+    }
+
+    protected async bootServiceProviders() {
+
+        const bootPromises = _.map(this.serviceProviders, serviceProvider => serviceProvider.boot(this));
+
+        await Promise.all(bootPromises);
+    }
+
+    protected async bootPlatform() {
+
+        this.platform = _.find(this.container.getAll<Platform>(suiteSymbols.Platform), platform => platform.current);
+
+        this.container.bind<Platform>(suiteSymbols.CurrentPlatform)
+            .to(this.platform)
+            .inSingletonScope();
+    }
+
+    //
+    // Run Phase
+
+    public async run(): Promise<void> {
+
+        // ToDo: Redux event.
+
+        this.startHeartbeat();
+
+        try {
+
+            const appPromises = _.map(this.apps, app => app.run());
+            await Promise.all(appPromises);
+        }
+        catch(error) {
+
+            this.log(LogLevel.Error, "app-error", error);
+        }
+    }
+
+    public async stop(): Promise<void> {
+
+        // ToDo: Redux event.
+
+        return null;
+    }
+
+    protected startHeartbeat() {
+
+        const heartBeat = setInterval(
+            () => {
+
+                this.log(LogLevel.Debug, "protoculture", "Beat...");
+
+                if(!this.working) {
+
+                    this.log(LogLevel.Debug, "heartbeat", "...Heart beat.");
+                    clearInterval(heartBeat);
+                    this.stop();
+                }
+            },
+            this.heartbeatInterval * 1000
+        );
+    }
+
+    protected get working() {
+
+        return _.some(this.apps, app => app.working);
+    }
+
+    //
+    // Utils
+
+    protected log(level: LogLevel, topic: string, message: any) {
+
+        this.platform.log(level, topic, message);
     }
 
     protected getServiceProviderConstructors(): ServiceProviderStatic<ServiceProvider>[] {
 
-        return _.chain(this.apps)
+        return _.chain(this.appConstructors)
             .flatMap(app => app.serviceProviders)
             .uniq()
             .value()
         ;
     }
 
-    //
-    // Boot
+    public toString() {
 
-    public async boot(): Promise<void> {
-
-        this.bootContainer();
-        await this.bootServiceProviders();
-
-        this.loadRuntimeMetadata();
-        this.loadPlatformMetadata();
-    }
-
-    protected bootContainer() {
-
-        this.container = new Container(this.containerConfiguration);
-    }
-
-    protected async bootServiceProviders() {
-
-        const bootPromises = _.map(this.serviceProviders, serviceProvider => serviceProvider.boot(this.container));
-
-        await Promise.all(bootPromises);
-    }
-
-    protected loadRuntimeMetadata() {
-
-        this.runtime = _.find(this.container.getAll<Runtime>(suiteSymbols.Runtime), runtime => runtime.current);
-    }
-
-    protected loadPlatformMetadata() {
-
-        this.platform = _.find(this.container.getAll<Platform>(suiteSymbols.Platform), platform => platform.current);
-    }
-
-    //
-    // Run
-
-    public async run(): Promise<void> {
-
-        // ToDo: Redux event.
-
-        const appPromises = _.map(this.apps, app => app.run());
-
-        await Promise.all(appPromises);
+        // I'm not trying to make any kind of URI here, but this is at least splittable and can be used for things like user agents.
+        return `protoculture:${this.platform.name}@${this.name}:${this.platform.environment.name}/${this.platform.environment.debug}#`;
     }
 }

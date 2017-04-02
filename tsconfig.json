@@ -18,8 +18,7 @@
         "outDir": "lib",
         "lib": [
             "es5",
-            "dom",
-            "es2015.iterable",
+            "es2015",
             "es2015.promise"
         ]
     },
