@@ -4,8 +4,7 @@ import {appSymbols} from "../App";
 import {Base as App} from "../App/Base";
 import {Container, interfaces} from "inversify";
 import ContainerOptions = interfaces.ContainerOptions;
-import {ServiceProviderStatic} from "../ServiceProviderStatic";
-import {ServiceProvider} from "../";
+import {ServiceProvider, ServiceProviderConstructor} from "../";
 import {ReduxServiceProvider} from "../Redux/ReduxServiceProvider";
 import {Platform} from "./Platform";
 import {LogLevel} from "../LogLevel";
@@ -24,7 +23,7 @@ export abstract class Base {
 
     protected get heartbeatInterval(): number { return 5; }
 
-    protected get serviceProviders(): ServiceProvider[] {
+    protected get serviceProviders(): ServiceProviderConstructor[] {
 
         return [];
     }
@@ -126,10 +125,6 @@ export abstract class Base {
 
             throw new Error("Unable to determine current platform.");
         }
-
-        this.container.bind<Platform>(suiteSymbols.CurrentPlatform)
-            .to(this.platform)
-            .inSingletonScope();
     }
 
     //
@@ -154,7 +149,7 @@ export abstract class Base {
 
             this.startHeartbeat();
 
-            this.runApps();
+            await this.runApps();
         }
         catch(error) {
 
@@ -225,7 +220,7 @@ export abstract class Base {
         this.platform.log(level, topic, message);
     }
 
-    protected getServiceProviderConstructors(): ServiceProviderStatic<ServiceProvider>[] {
+    protected getServiceProviderConstructors(): ServiceProviderConstructor[] {
 
         return _.chain(this.serviceProviders)
             .concat(_.flatMap(this.appConstructors, app => app.serviceProviders))

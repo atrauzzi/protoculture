@@ -1,7 +1,8 @@
 #!/usr/bin/env ts-node
 import {Suite} from "../src/Suite";
 import {App} from "../src/App";
-import {ServiceProvider} from "../src/ServiceProvider";
+import {ServiceProviderConstructor} from "../src/ServiceProvider";
+import {ConsoleServiceProvider} from "../src/Console/ConsoleServiceProvider";
 
 
 class ConsoleDemoSuite extends Suite {
@@ -16,11 +17,10 @@ class ConsoleDemoSuite extends Suite {
         return undefined;
     }
 
-    protected get serviceProviders(): ServiceProvider[] {
+    protected get serviceProviders(): ServiceProviderConstructor[] {
 
         return [
-
-
+            ConsoleServiceProvider,
         ];
     }
 

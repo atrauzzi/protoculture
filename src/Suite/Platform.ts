@@ -1,13 +1,12 @@
 import {LogLevel} from "../LogLevel";
+import {Environment} from "./Environment";
 
 
 export interface Platform {
 
-    new(): Platform;
-
     current: boolean;
 
-    environment: any;
+    environment: Environment;
 
     name: string;
 

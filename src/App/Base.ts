@@ -1,12 +1,11 @@
-import {ServiceProvider} from "../ServiceProvider";
-import {ServiceProviderStatic} from "../ServiceProviderStatic";
+import {ServiceProviderConstructor} from "../ServiceProvider";
 
 
 export abstract class Base<State> {
 
     public abstract get name(): string;
 
-    public static get serviceProviders(): ServiceProviderStatic<ServiceProvider>[] {
+    public static get serviceProviders(): ServiceProviderConstructor[] {
 
         return [];
     };

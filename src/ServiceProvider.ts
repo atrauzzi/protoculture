@@ -10,3 +10,5 @@ export abstract class ServiceProvider {
 
     }
 }
+
+export type ServiceProviderConstructor = typeof ServiceProvider & {new(): ServiceProvider};
