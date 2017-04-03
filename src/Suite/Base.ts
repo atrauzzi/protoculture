@@ -154,29 +154,34 @@ export abstract class Base {
 
             this.startHeartbeat();
 
-            try {
-
-                this.buildApps();
-
-                this.log(LogLevel.Debug, this.toString(), "Running apps");
-                // ToDo: Redux event per app.
-                const appPromises = _.map(this.apps, app => {
-
-                    this.log(LogLevel.Debug, this.toString(), "Starting app: " + app.name)
-                    return app.run();
-                });
-
-                this.log(LogLevel.Debug, this.toString(), "All apps invoked, waiting");
-                await Promise.all(appPromises);
-            }
-            catch(error) {
-
-                this.log(LogLevel.Error, "app-error", error);
-            }
+            this.runApps();
         }
         catch(error) {
 
             console.error(error.stack);
+        }
+    }
+
+    protected async runApps() {
+
+        try {
+
+            this.buildApps();
+
+            this.log(LogLevel.Debug, this.toString(), "Running apps");
+            // ToDo: Redux event per app.
+            const appPromises = _.map(this.apps, app => {
+
+                this.log(LogLevel.Debug, this.toString(), "Starting app: " + app.name)
+                return app.run();
+            });
+
+            this.log(LogLevel.Debug, this.toString(), "All apps invoked, waiting");
+            await Promise.all(appPromises);
+        }
+        catch(error) {
+
+            this.log(LogLevel.Error, "app-error", error);
         }
     }
 
