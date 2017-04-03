@@ -1,11 +1,10 @@
 import {ServiceProvider} from "../ServiceProvider";
 import {ServiceProviderStatic} from "../ServiceProviderStatic";
-import {Suite} from "../Suite";
 
 
 export abstract class Base<State> {
 
-    protected abstract get name(): string;
+    public abstract get name(): string;
 
     public static get serviceProviders(): ServiceProviderStatic<ServiceProvider>[] {
 
@@ -19,16 +18,7 @@ export abstract class Base<State> {
         return false;
     }
 
-    protected suite: Suite;
-
-    public constructor(suite: Suite) {
-
-        this.suite = suite;
-    }
-
     public async run() {
-
-        // ToDo: Dispatch an action.
 
         await this.onRun();
     }

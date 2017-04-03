@@ -1,5 +1,6 @@
 import * as _ from "lodash";
 import {suiteSymbols} from "./";
+import {appSymbols} from "../App";
 import {Base as App} from "../App/Base";
 import {Container, interfaces} from "inversify";
 import ContainerOptions = interfaces.ContainerOptions;
@@ -17,7 +18,7 @@ export abstract class Base {
 
     protected abstract get name(): string;
 
-    protected abstract get appConstructors(): (typeof App & {new(base: Base): App<any>})[];
+    protected abstract get appConstructors(): (typeof App & {new(suite: Base): App<any>})[];
 
     protected get containerConfiguration(): ContainerOptions { return null; }
 
@@ -37,7 +38,9 @@ export abstract class Base {
 
     protected apps: App<any>[];
 
-    protected serviceProviders: ServiceProvider[];
+    protected loadedServiceProviders: ServiceProvider[];
+
+    protected booted: boolean;
 
     //
     // External
@@ -47,23 +50,22 @@ export abstract class Base {
         return this._container;
     }
 
+    public get working() {
+
+        return _.some(this.apps, app => app.working);
+    }
+
     //
     // Initialization Phase
 
     public constructor() {
 
-        this.loadApps();
         this.loadServiceProviders();
-    }
-
-    protected loadApps() {
-
-        this.apps = _.map(this.appConstructors, app => new app(this));
     }
 
     protected loadServiceProviders() {
 
-        this.serviceProviders = _.map(this.getServiceProviderConstructors(), serviceProvider => new serviceProvider);
+        this.loadedServiceProviders = _.map(this.getServiceProviderConstructors(), serviceProvider => new serviceProvider);
     }
 
     //
@@ -71,9 +73,17 @@ export abstract class Base {
 
     public async boot(): Promise<void> {
 
+        this.booted = false;
+
         this.bootContainer();
+
+        // Note: Anything that runs before this cannot use DI
         await this.bootServiceProviders();
+
+        // Note: It's important that we boot the platform after all ServiceProviders are registered
         await this.bootPlatform();
+
+        this.booted = true;
     }
 
     public async bootChild(): Promise<Container> {
@@ -83,7 +93,7 @@ export abstract class Base {
         const reduxServiceProvider = new ReduxServiceProvider();
         await reduxServiceProvider.bootChild(childContainer);
 
-        const bootPromises = _.map(this.serviceProviders, serviceProvider => serviceProvider.bootChild(childContainer));
+        const bootPromises = _.map(this.loadedServiceProviders, serviceProvider => serviceProvider.bootChild(childContainer));
         await Promise.all(bootPromises);
 
         return childContainer;
@@ -91,12 +101,19 @@ export abstract class Base {
 
     protected bootContainer() {
 
-        this._container = new Container(this.containerConfiguration);
+        if(this.containerConfiguration) {
+
+            this._container = new Container(this.containerConfiguration);
+        }
+        else {
+
+            this._container = new Container();
+        }
     }
 
     protected async bootServiceProviders() {
 
-        const bootPromises = _.map(this.serviceProviders, serviceProvider => serviceProvider.boot(this));
+        const bootPromises = _.map(this.loadedServiceProviders, serviceProvider => serviceProvider.boot(this));
 
         await Promise.all(bootPromises);
     }
@@ -120,18 +137,46 @@ export abstract class Base {
 
     public async run(): Promise<void> {
 
-        // ToDo: Redux event.
-
-        this.startHeartbeat();
-
         try {
 
-            const appPromises = _.map(this.apps, app => app.run());
-            await Promise.all(appPromises);
+            if(!this.booted) {
+
+                await this.boot();
+            }
+
+            if(!_.isEmpty(this.apps)) {
+
+                throw new Error("App already run");
+            }
+
+            this.log(LogLevel.Debug, this.toString(), "Suite started");
+            // ToDo: Redux event.
+
+            this.startHeartbeat();
+
+            try {
+
+                this.buildApps();
+
+                this.log(LogLevel.Debug, this.toString(), "Running apps");
+                // ToDo: Redux event per app.
+                const appPromises = _.map(this.apps, app => {
+
+                    this.log(LogLevel.Debug, this.toString(), "Starting app: " + app.name)
+                    return app.run();
+                });
+
+                this.log(LogLevel.Debug, this.toString(), "All apps invoked, waiting");
+                await Promise.all(appPromises);
+            }
+            catch(error) {
+
+                this.log(LogLevel.Error, "app-error", error);
+            }
         }
         catch(error) {
 
-            this.log(LogLevel.Error, "app-error", error);
+            console.error(error.stack);
         }
     }
 
@@ -142,16 +187,22 @@ export abstract class Base {
         return null;
     }
 
+    protected buildApps() {
+
+        this.log(LogLevel.Debug, this.toString(), "Building apps");
+        this.apps = this.container.getAll<App<any>>(appSymbols.App);
+    }
+
     protected startHeartbeat() {
 
         const heartBeat = setInterval(
             async () => {
 
-                this.log(LogLevel.Debug, "protoculture", "Beat...");
+                this.log(LogLevel.Debug, this.toString() + "heartbeat", "Beat...");
 
                 if(!this.working) {
 
-                    this.log(LogLevel.Debug, "heartbeat", "...Heart beat.");
+                    this.log(LogLevel.Debug, this.toString() + "heartbeat", "...Heart beat.");
 
                     clearInterval(heartBeat);
                     await this.stop();
@@ -161,15 +212,10 @@ export abstract class Base {
         );
     }
 
-    protected get working() {
-
-        return _.some(this.apps, app => app.working);
-    }
-
     //
     // Utils
 
-    protected log(level: LogLevel, topic: string, message: any) {
+    protected log(level: LogLevel, topic: string, message: any = null) {
 
         this.platform.log(level, topic, message);
     }
@@ -177,8 +223,7 @@ export abstract class Base {
     protected getServiceProviderConstructors(): ServiceProviderStatic<ServiceProvider>[] {
 
         return _.chain(this.serviceProviders)
-            .concat(_.flatMap(this.apps, app => app.serviceProviders))
-            .flatMap(app => app.serviceProviders)
+            .concat(_.flatMap(this.appConstructors, app => app.serviceProviders))
             .uniq()
             .value()
         ;
@@ -186,7 +231,7 @@ export abstract class Base {
 
     public toString() {
 
-        // I'm not trying to make any kind of URI here, but this is at least splittable and can be used for things like user agents.
+        // Note: I'm not trying to invent some kind of URI-like convention here, but this is sortable and splittable and can be used for things like logs & user agents
         return `protoculture:${this.platform.name}@${this.name}:${this.platform.environment.name}/${this.platform.environment.debug}#`;
     }
 }
