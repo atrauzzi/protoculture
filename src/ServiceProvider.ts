@@ -1,5 +1,5 @@
 import {Suite} from "./Suite";
-import {Container} from "inversify";
+import {decorate, injectable, Container} from "inversify";
 
 
 export abstract class ServiceProvider {
@@ -9,6 +9,11 @@ export abstract class ServiceProvider {
     public async bootChild(container: Container): Promise<void> {
 
     }
+
+    protected makeInjectable(object: any): void {
+
+        decorate(injectable(), object);
+    }
 }
 
-export type ServiceProviderConstructor = typeof ServiceProvider & {new(): ServiceProvider};
+export type ConcreteServiceProvider = typeof ServiceProvider & {new(): ServiceProvider};

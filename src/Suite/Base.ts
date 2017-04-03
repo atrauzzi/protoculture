@@ -1,13 +1,16 @@
+import "reflect-metadata";
+//
 import * as _ from "lodash";
 import {suiteSymbols} from "./";
 import {appSymbols} from "../App";
 import {Base as App} from "../App/Base";
 import {Container, interfaces} from "inversify";
 import ContainerOptions = interfaces.ContainerOptions;
-import {ServiceProvider, ServiceProviderConstructor} from "../";
+import {ServiceProvider} from "../";
 import {ReduxServiceProvider} from "../Redux/ReduxServiceProvider";
 import {Platform} from "./Platform";
 import {LogLevel} from "../LogLevel";
+import {ConcreteServiceProvider} from "../ServiceProvider";
 
 
 export abstract class Base {
@@ -23,7 +26,7 @@ export abstract class Base {
 
     protected get heartbeatInterval(): number { return 5; }
 
-    protected get serviceProviders(): ServiceProviderConstructor[] {
+    protected get serviceProviders(): typeof ServiceProvider[] {
 
         return [];
     }
@@ -119,12 +122,17 @@ export abstract class Base {
 
     protected async bootPlatform() {
 
-        this.platform = _.find(this.container.getAll<Platform>(suiteSymbols.Platform), platform => platform.current);
+        const platform = _.find(this.container.getAll<Platform>(suiteSymbols.Platform), platform => platform.current);
 
-        if(!this.platform) {
+        if(!platform) {
 
             throw new Error("Unable to determine current platform.");
         }
+
+        this.container.bind<Platform>(suiteSymbols.CurrentPlatform)
+            .toConstantValue(platform);
+
+        this.platform = this.container.get<Platform>(suiteSymbols.CurrentPlatform);
     }
 
     //
@@ -147,8 +155,9 @@ export abstract class Base {
             this.log(LogLevel.Debug, this.toString(), "Suite started");
             // ToDo: Redux event.
 
-            this.startHeartbeat();
+            this.buildApps();
 
+            this.startHeartbeat();
             await this.runApps();
         }
         catch(error) {
@@ -160,8 +169,6 @@ export abstract class Base {
     protected async runApps() {
 
         try {
-
-            this.buildApps();
 
             this.log(LogLevel.Debug, this.toString(), "Running apps");
             // ToDo: Redux event per app.
@@ -176,7 +183,7 @@ export abstract class Base {
         }
         catch(error) {
 
-            this.log(LogLevel.Error, "app-error", error);
+            this.log(LogLevel.Error, "app-error", error.stack);
         }
     }
 
@@ -220,7 +227,7 @@ export abstract class Base {
         this.platform.log(level, topic, message);
     }
 
-    protected getServiceProviderConstructors(): ServiceProviderConstructor[] {
+    protected getServiceProviderConstructors(): ConcreteServiceProvider[] {
 
         return _.chain(this.serviceProviders)
             .concat(_.flatMap(this.appConstructors, app => app.serviceProviders))

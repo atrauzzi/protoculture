@@ -1,1 +1,1 @@
-export {ServiceProvider, ServiceProviderConstructor} from "./ServiceProvider";
+export {ServiceProvider, ConcreteServiceProvider} from "./ServiceProvider";

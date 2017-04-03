@@ -1,15 +1,17 @@
 import {ServiceProvider} from "../ServiceProvider";
-// import {consoleSymbols} from "./";
-import {Suite} from "../Suite";
+import {Suite, suiteSymbols} from "../Suite";
+import {Platform} from "../Suite/Platform";
+import {ConsolePlatform} from "./ConsolePlatform";
 
 
 export class ConsoleServiceProvider extends ServiceProvider {
 
     public async boot(suite: Suite): Promise<void> {
 
-        console.log("I'm being booted!!!");
-        // suite.container.bind<Platform>(suiteSymbols.CurrentPlatform)
-        //     .to(this.platform)
-        //     .inSingletonScope();
+        this.makeInjectable(ConsolePlatform);
+
+        suite.container.bind<Platform>(suiteSymbols.Platform)
+            .to(ConsolePlatform)
+            .inSingletonScope();
     }
 }
