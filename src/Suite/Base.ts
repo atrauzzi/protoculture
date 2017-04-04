@@ -182,6 +182,8 @@ export abstract class BaseSuite {
 
         this.log(LogLevel.Debug, this.toString(), "Building apps");
         this.apps = this.container.getAll<App>(appSymbols.App);
+
+        console.log(this.apps);
     }
 
     protected startHeartbeat() {

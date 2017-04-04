@@ -32,7 +32,7 @@ export abstract class BaseServiceProvider {
     }
 
     protected makeInjectable(object: any): void {
-
+console.log(object);
         decorate(injectable(), object);
     }
 }
