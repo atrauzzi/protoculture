@@ -1,32 +1,49 @@
 #!/usr/bin/env ts-node
-import {Suite} from "../src/Suite";
-import {App} from "../src/App";
-import {ConcreteServiceProvider} from "../src/ServiceProvider";
+import {BaseServiceProvider, StaticServiceProvider} from "../src";
+import {BaseApp} from "../src/App";
+import {BaseSuite} from "../src/Suite";
 import {ConsoleServiceProvider} from "../src/Console/ConsoleServiceProvider";
 
 
-class ConsoleDemoSuite extends Suite {
+//
+// This is how we declare a service provider.
+class ConsoleDemoServiceProvider extends BaseServiceProvider {
 
-    protected get name(): string {
+    public async boot(suite: BaseSuite): Promise<void> {
 
-        return "console-demo";
+        this.bindApp(BoringConsoleDemoApp);
     }
+}
 
-    protected get appConstructors(): (typeof App & {new(suite: Suite): App<any>})[] {
+//
+// Here's a boring console demo app.
+class BoringConsoleDemoApp extends BaseApp {
 
-        return undefined;
+    public name = "console-demo";
+
+    protected async onRun(): Promise<void> {
+
+        console.log("This is from the boring console demo app!");
     }
+}
 
-    protected get serviceProviders(): ConcreteServiceProvider[] {
+//
+// Here's a suite that acts as the composition root for everything.
+class ConsoleDemoSuite extends BaseSuite {
+
+    protected name = "console-demo";
+
+    protected get serviceProviders(): StaticServiceProvider<any>[] {
 
         return [
             ConsoleServiceProvider,
+            ConsoleDemoServiceProvider,
         ];
     }
-
 }
 
+//
+// And this is how we start it!
+
 const suite = new ConsoleDemoSuite();
-
-
 suite.run();

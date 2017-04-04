@@ -3,30 +3,28 @@ import "reflect-metadata";
 import * as _ from "lodash";
 import {suiteSymbols} from "./";
 import {appSymbols} from "../App";
-import {Base as App} from "../App/Base";
+import {BaseApp as App} from "../App/Base";
 import {Container, interfaces} from "inversify";
 import ContainerOptions = interfaces.ContainerOptions;
-import {ServiceProvider} from "../";
+import {BaseServiceProvider} from "../";
 import {ReduxServiceProvider} from "../Redux/ReduxServiceProvider";
 import {Platform} from "./Platform";
 import {LogLevel} from "../LogLevel";
-import {ConcreteServiceProvider} from "../ServiceProvider";
+import {StaticServiceProvider} from "../ServiceProvider";
 
 
-export abstract class Base {
+export abstract class BaseSuite {
 
     //
     // Configurable by Subclasses
 
     protected abstract get name(): string;
 
-    protected abstract get appConstructors(): (typeof App & {new(suite: Base): App<any>})[];
-
     protected get containerConfiguration(): ContainerOptions { return null; }
 
     protected get heartbeatInterval(): number { return 5; }
 
-    protected get serviceProviders(): typeof ServiceProvider[] {
+    protected get serviceProviders(): StaticServiceProvider<any>[] {
 
         return [];
     }
@@ -38,9 +36,9 @@ export abstract class Base {
 
     protected _container: Container;
 
-    protected apps: App<any>[];
+    protected loadedServiceProviders: BaseServiceProvider[];
 
-    protected loadedServiceProviders: ServiceProvider[];
+    protected apps: App[];
 
     protected booted: boolean;
 
@@ -67,7 +65,7 @@ export abstract class Base {
 
     protected loadServiceProviders() {
 
-        this.loadedServiceProviders = _.map(this.getServiceProviderConstructors(), serviceProvider => new serviceProvider);
+        this.loadedServiceProviders = _.map(this.serviceProviders, serviceProvider => new serviceProvider(this));
     }
 
     //
@@ -79,26 +77,10 @@ export abstract class Base {
 
         this.bootContainer();
 
-        // Note: Anything that runs before this cannot use DI
         await this.bootServiceProviders();
-
-        // Note: It's important that we boot the platform after all ServiceProviders are registered
         await this.bootPlatform();
 
         this.booted = true;
-    }
-
-    public async bootChild(): Promise<Container> {
-
-        const childContainer = this.container.createChild();
-
-        const reduxServiceProvider = new ReduxServiceProvider();
-        await reduxServiceProvider.bootChild(childContainer);
-
-        const bootPromises = _.map(this.loadedServiceProviders, serviceProvider => serviceProvider.bootChild(childContainer));
-        await Promise.all(bootPromises);
-
-        return childContainer;
     }
 
     protected bootContainer() {
@@ -149,7 +131,7 @@ export abstract class Base {
 
             if(!_.isEmpty(this.apps)) {
 
-                throw new Error("App already run");
+                throw new Error("Suite already run");
             }
 
             this.log(LogLevel.Debug, this.toString(), "Suite started");
@@ -174,8 +156,10 @@ export abstract class Base {
             // ToDo: Redux event per app.
             const appPromises = _.map(this.apps, app => {
 
-                this.log(LogLevel.Debug, this.toString(), "Starting app: " + app.name)
-                return app.run();
+                this.log(LogLevel.Debug, this.toString(), "Starting app: " + app.name);
+
+                // ToDo: Capture what comes back, if it's a Promise, THEN start the heartbeat?
+                return app.run(this);
             });
 
             this.log(LogLevel.Debug, this.toString(), "All apps invoked, waiting");
@@ -197,7 +181,7 @@ export abstract class Base {
     protected buildApps() {
 
         this.log(LogLevel.Debug, this.toString(), "Building apps");
-        this.apps = this.container.getAll<App<any>>(appSymbols.App);
+        this.apps = this.container.getAll<App>(appSymbols.App);
     }
 
     protected startHeartbeat() {
@@ -222,18 +206,22 @@ export abstract class Base {
     //
     // Utils
 
+    public async bootChild(): Promise<Container> {
+
+        const childContainer = this.container.createChild();
+
+        const reduxServiceProvider = new ReduxServiceProvider(this);
+        await reduxServiceProvider.bootChild(childContainer);
+
+        const bootPromises = _.map(this.loadedServiceProviders, serviceProvider => serviceProvider.bootChild(childContainer));
+        await Promise.all(bootPromises);
+
+        return childContainer;
+    }
+
     protected log(level: LogLevel, topic: string, message: any = null) {
 
         this.platform.log(level, topic, message);
-    }
-
-    protected getServiceProviderConstructors(): ConcreteServiceProvider[] {
-
-        return _.chain(this.serviceProviders)
-            .concat(_.flatMap(this.appConstructors, app => app.serviceProviders))
-            .uniq()
-            .value()
-        ;
     }
 
     public toString() {

@@ -1,4 +1,4 @@
-export {Base as Suite} from "./Base";
+export {BaseSuite} from "./Base";
 
 export const suiteSymbols = {
     Runtime: Symbol("Runtime"),
