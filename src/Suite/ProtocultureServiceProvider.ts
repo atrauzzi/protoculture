@@ -1,12 +1,12 @@
 import {BaseServiceProvider} from "../ServiceProvider";
-import {BaseSuite} from "../Suite";
-import {BaseApp} from "../App";
+import {Suite} from "../Suite";
+import {App} from "../App";
 
 
 export class ProtocultureServiceProvider extends BaseServiceProvider {
 
-    public async boot(suite: BaseSuite): Promise<void> {
+    public async boot(suite: Suite): Promise<void> {
 
-        this.makeInjectable(BaseApp);
+        this.makeInjectable(App);
     }
 }

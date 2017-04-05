@@ -1,9 +1,10 @@
+import * as es6Promise from "es6-promise";
+import "isomorphic-fetch";
 import "reflect-metadata";
 //
 import * as _ from "lodash";
 import {suiteSymbols} from "./";
-import {appSymbols} from "../App";
-import {BaseApp as App} from "../App/Base";
+import {appSymbols, App} from "../App";
 import {Container, interfaces} from "inversify";
 import ContainerOptions = interfaces.ContainerOptions;
 import {BaseServiceProvider} from "../";
@@ -13,6 +14,8 @@ import {LogLevel} from "../LogLevel";
 import {StaticServiceProvider} from "../ServiceProvider";
 import {ProtocultureServiceProvider} from "./ProtocultureServiceProvider";
 
+
+es6Promise.polyfill();
 
 export abstract class BaseSuite {
 

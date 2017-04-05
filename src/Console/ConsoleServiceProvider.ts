@@ -1,12 +1,12 @@
 import {BaseServiceProvider} from "../ServiceProvider";
-import {suiteSymbols, BaseSuite} from "../Suite";
+import {suiteSymbols, Suite} from "../Suite";
 import {Platform} from "../Suite/Platform";
 import {ConsolePlatform} from "./ConsolePlatform";
 
 
 export class ConsoleServiceProvider extends BaseServiceProvider {
 
-    public async boot(suite: BaseSuite): Promise<void> {
+    public async boot(suite: Suite): Promise<void> {
 
         this.makeInjectable(ConsolePlatform);
 

@@ -1,4 +1,4 @@
-import {BaseSuite} from "../Suite";
+import {Suite} from "../Suite";
 
 
 export interface AppStatic<App extends BaseApp> {
@@ -8,7 +8,7 @@ export interface AppStatic<App extends BaseApp> {
 
 export abstract class BaseApp {
 
-    protected suite: BaseSuite;
+    protected suite: Suite;
 
     public abstract get name(): string;
 
@@ -23,7 +23,7 @@ export abstract class BaseApp {
         return false;
     }
 
-    public async run(suite: BaseSuite) {
+    public async run(suite: Suite) {
 
         this.suite = suite;
 

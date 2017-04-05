@@ -1,24 +1,13 @@
 #!/usr/bin/env ts-node
 import {BaseServiceProvider, StaticServiceProvider} from "../src";
-import {BaseApp} from "../src/App";
-import {BaseSuite} from "../src/Suite";
+import {App} from "../src/App";
+import {Suite} from "../src/Suite";
 import {ConsoleServiceProvider} from "../src/Console/ConsoleServiceProvider";
 
 
 //
-// This is how we declare a service provider.
-class ConsoleDemoServiceProvider extends BaseServiceProvider {
-
-    public async boot(suite: BaseSuite): Promise<void> {
-
-        this.bindApp(BoringConsoleDemoApp);
-        this.bindApp(AsynchronousConsoleDemoApp);
-    }
-}
-
-//
 // Here's a boring console demo app.
-class BoringConsoleDemoApp extends BaseApp {
+class BoringConsoleDemoApp extends App {
 
     public name = "console-demo";
 
@@ -28,7 +17,9 @@ class BoringConsoleDemoApp extends BaseApp {
     }
 }
 
-class AsynchronousConsoleDemoApp extends BaseApp {
+//
+// Here's another app that is asynchronous. But still boring.
+class AsynchronousConsoleDemoApp extends App {
 
     public name = "async-demo";
 
@@ -65,8 +56,19 @@ class AsynchronousConsoleDemoApp extends BaseApp {
 }
 
 //
-// Here's a suite that acts as the composition root for everything.
-class ConsoleDemoSuite extends BaseSuite {
+// This is how we declare a service provider.
+class ConsoleDemoServiceProvider extends BaseServiceProvider {
+
+    public async boot(suite: Suite): Promise<void> {
+
+        this.bindApp(BoringConsoleDemoApp);
+        this.bindApp(AsynchronousConsoleDemoApp);
+    }
+}
+
+//
+// Here's a suite that acts as the composition root for the ServiceProvider.
+class ConsoleDemoSuite extends Suite {
 
     protected name = "console-demo";
 

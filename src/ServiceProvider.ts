@@ -1,23 +1,23 @@
 import {decorate, injectable, Container} from "inversify";
-import {BaseSuite} from "./Suite";
+import {Suite} from "./Suite";
 import {appSymbols, AppStatic} from "./App";
 
 
 export interface StaticServiceProvider<ServiceProvider extends BaseServiceProvider> {
 
-    new(suite: BaseSuite): ServiceProvider;
+    new(suite: Suite): ServiceProvider;
 }
 
 export abstract class BaseServiceProvider {
 
-    protected suite: BaseSuite;
+    protected suite: Suite;
 
-    public constructor(suite: BaseSuite) {
+    public constructor(suite: Suite) {
 
         this.suite = suite;
     }
 
-    public abstract async boot(suite: BaseSuite): Promise<void>;
+    public abstract async boot(suite: Suite): Promise<void>;
 
     public async bootChild(container: Container): Promise<void> {
 

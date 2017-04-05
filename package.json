@@ -1,9 +1,9 @@
 {
   "name": "protoculture",
-  "author": "Alexander Trauzzi",
+  "author": "Alexander Trauzzi <atrauzzi@gmail.com>",
   "version": "0.0.0-development",
   "license": "Apache-2.0",
-  "description": "A library representing some conventions for making TypeScript-based React apps backed by Redux.",
+  "description": "Stay tuned...",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
@@ -13,9 +13,9 @@
     "url": "https://github.com/atrauzzi/protoculture.git"
   },
   "keywords": [
-    "react",
-    "redux",
-    "typescript"
+    "typescript",
+    "dependency-injection",
+    "inversify"
   ],
   "bugs": {
     "url": "https://github.com/atrauzzi/protoculture/issues"
@@ -28,20 +28,15 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "dependencies": {
-    "@types/cookie": "^0.1.29",
     "@types/lodash": "^4.14.39",
-    "@types/react": "^0.14.49",
-    "@types/react-dom": "^0.14.18",
-    "@types/react-redux": "^4.4.32",
     "@types/redux": "^3.6.31",
     "@types/redux-thunk": "^2.1.31",
     "@types/reflect-metadata": "^0.0.5",
     "@types/whatwg-fetch": "^0.0.32",
-    "cookie": "^0.3.1",
     "domready": "^1.0.8",
+    "es6-promise": "^4.1.0",
     "inversify": "^3.3.0",
-    "react-dom": "^15.4.0",
-    "react-redux": "^4.4.6",
+    "isomorphic-fetch": "^2.2.1",
     "redux-thunk": "^2.1.0",
     "reflect-metadata": "^0.1.10",
     "urlsearchparams": "^0.1.1",
