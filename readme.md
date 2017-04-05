@@ -32,13 +32,13 @@ use it from regular ES.
 
 #### Service Providers
 Service providers are responsible for telling the dependency injection system about new classes and functionality. All
-`ServiceProvider` instances are instantiated when a `Suite` is booted and asked to make registrations against the context.
+`ServiceProvider` insteances are created when a `Suite` is booted.  They are then asked to make registrations against the context.
 
 If you've used Laravel, these should be very familiar.
 
 #### Suites
 Suites represent the topmost entrypoint for a grouping of Apps.  Your entrypoint scripts should be able to instantiate 
-a suite and call the `run` method on it with little fuss.  You configure your suite by way of the `Platform`, `Apps` 
+a suite and call the `run` method on it with little fuss.  You configure your suite by way of the `Platform`, `App` 
 and `ServiceProvider` types.
 
 Another role of the `Suite` is to act as a language-level root for bundling an entire dependency graph.  This is most 
