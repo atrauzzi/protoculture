@@ -32,7 +32,7 @@ use it from regular ES.
 
 #### Service Providers
 Service providers are responsible for telling the dependency injection system about new classes and functionality. All
-`ServiceProvider` insteances are created when a `Suite` is booted.  They are then asked to make registrations against the context.
+`ServiceProvider` instances are created when a `Suite` is booted.  They are then asked to make registrations against the context.
 
 If you've used Laravel, these should be very familiar.
 
