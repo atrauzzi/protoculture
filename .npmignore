@@ -7,3 +7,5 @@ node_modules
 tsconfig.json
 yarn.lock
 protoculture.png
+Dockerfile
+docker-compose.yml
