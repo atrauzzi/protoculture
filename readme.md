@@ -1,4 +1,4 @@
-# Protoculture
+# ![protoculture]("./protoculture.png")
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![npm version](https://badge.fury.io/js/protoculture.svg)](https://badge.fury.io/js/protoculture)
@@ -23,9 +23,11 @@ The slight opinionation of Protoculture comes from:
 Beyond that, Protoculture assumes nothing about your situation.
 
 ### In Detail
-The concepts expressed by this layering have similar if not identical siblings across other languages and frameworks.
+While the layering Protoculture provides has similar if not identical siblings across other languages and frameworks, 
+its big advantage is in how all of it is tied together.  In that sense, Protoculture is not a full framework, but an 
+application framework.
 
-Protoculture builds upon the standard Promise APIs.  While Protoculture is authored in TypeScript, you can definitely 
+Protoculture builds upon the standard ES Promise APIs.  While Protoculture is authored in TypeScript, you can definitely 
 use it from regular ES.
 
 #### Service Providers
