@@ -79,4 +79,4 @@ The spirit of the library remains the same, however I've changed things quite a 
 about the ES ecosystem.  Particularly as it pertains to the various platforms it finds itself on.
 
 ### Other
-The only answer you should be looking for by this point is _Macross_.
+The only answer you're probably looking for this far down is: _Macross_.
