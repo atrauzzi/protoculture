@@ -11,6 +11,7 @@ import {ReduxServiceProvider} from "../Redux/ReduxServiceProvider";
 import {Platform} from "./Platform";
 import {LogLevel} from "../LogLevel";
 import {StaticServiceProvider} from "../ServiceProvider";
+import {ProtocultureServiceProvider} from "./ProtocultureServiceProvider";
 
 
 export abstract class BaseSuite {
@@ -65,7 +66,14 @@ export abstract class BaseSuite {
 
     protected loadServiceProviders() {
 
-        this.loadedServiceProviders = _.map(this.serviceProviders, serviceProvider => new serviceProvider(this));
+        const internalServiceProviders = [
+            ProtocultureServiceProvider,
+            ReduxServiceProvider,
+        ];
+
+        const serviceProviders = _.concat(internalServiceProviders, this.serviceProviders);
+
+        this.loadedServiceProviders = _.map(serviceProviders, serviceProvider => new serviceProvider(this));
     }
 
     //
@@ -211,9 +219,6 @@ export abstract class BaseSuite {
     public async bootChild(): Promise<Container> {
 
         const childContainer = this.container.createChild();
-
-        const reduxServiceProvider = new ReduxServiceProvider(this);
-        await reduxServiceProvider.bootChild(childContainer);
 
         const bootPromises = _.map(this.loadedServiceProviders, serviceProvider => serviceProvider.bootChild(childContainer));
         await Promise.all(bootPromises);
