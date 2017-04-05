@@ -24,7 +24,7 @@ Beyond that, Protoculture assumes nothing about your situation.
 
 ### In Detail
 While the layering Protoculture provides has similar if not identical siblings across other languages and frameworks, 
-its big advantage is in how all of it is tied together.  In that sense, Protoculture is not a full framework, but an 
+its big advantage is in how everything is tied together.  In that sense, Protoculture is not a full framework, but an 
 application framework.
 
 Protoculture builds upon the standard ES Promise APIs.  While Protoculture is authored in TypeScript, you can definitely 
