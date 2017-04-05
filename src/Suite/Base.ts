@@ -53,7 +53,7 @@ export abstract class BaseSuite {
 
     public get working() {
 
-        return _.some(this.apps, app => app.working);
+        return _.filter(this.apps, app => app.working);
     }
 
     //
@@ -147,7 +147,6 @@ export abstract class BaseSuite {
 
             this.buildApps();
 
-            this.startHeartbeat();
             await this.runApps();
         }
         catch(error) {
@@ -161,7 +160,7 @@ export abstract class BaseSuite {
         try {
 
             this.log(LogLevel.Debug, this.toString(), "Running apps");
-            // ToDo: Redux event per app.
+
             const appPromises = _.map(this.apps, app => {
 
                 this.log(LogLevel.Debug, this.toString(), "Starting app: " + app.name);
@@ -170,7 +169,14 @@ export abstract class BaseSuite {
                 return app.run(this);
             });
 
-            this.log(LogLevel.Debug, this.toString(), "All apps invoked, waiting");
+            this.log(LogLevel.Debug, this.toString(), "All apps invoked");
+
+            if(!_.isEmpty(this.working)) {
+
+                this.log(LogLevel.Debug, this.toString(), "Asynchronous app detected");
+                this.startHeartbeat();
+            }
+
             await Promise.all(appPromises);
         }
         catch(error) {
@@ -181,7 +187,14 @@ export abstract class BaseSuite {
 
     public async stop(): Promise<void> {
 
-        // ToDo: Redux event.
+        try {
+
+
+        }
+        catch(error) {
+
+            this.log(LogLevel.Error, "app-error", error.stack);
+        }
 
         return null;
     }
@@ -190,23 +203,28 @@ export abstract class BaseSuite {
 
         this.log(LogLevel.Debug, this.toString(), "Building apps");
         this.apps = this.container.getAll<App>(appSymbols.App);
-
-        console.log(this.apps);
     }
 
     protected startHeartbeat() {
 
+        this.log(LogLevel.Debug, this.toString(), "Starting heartbeat");
         const heartBeat = setInterval(
-            async () => {
+            () => {
 
                 this.log(LogLevel.Debug, this.toString() + "heartbeat", "Beat...");
 
-                if(!this.working) {
+                const workingApps = this.working;
+
+                if(_.isEmpty(workingApps)) {
 
                     this.log(LogLevel.Debug, this.toString() + "heartbeat", "...Heart beat.");
 
                     clearInterval(heartBeat);
-                    await this.stop();
+                    this.stop();
+                }
+                else {
+
+                    _.forEach(workingApps, app => this.log(LogLevel.Debug, this.toString(), `App ${app.name} is still working`));
                 }
             },
             this.heartbeatInterval * 1000

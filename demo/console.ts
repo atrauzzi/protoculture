@@ -12,6 +12,7 @@ class ConsoleDemoServiceProvider extends BaseServiceProvider {
     public async boot(suite: BaseSuite): Promise<void> {
 
         this.bindApp(BoringConsoleDemoApp);
+        this.bindApp(AsynchronousConsoleDemoApp);
     }
 }
 
@@ -24,6 +25,42 @@ class BoringConsoleDemoApp extends BaseApp {
     protected async onRun(): Promise<void> {
 
         console.log("This is from the boring console demo app!");
+    }
+}
+
+class AsynchronousConsoleDemoApp extends BaseApp {
+
+    public name = "async-demo";
+
+    protected _working: boolean;
+
+    protected timeout = 20;
+
+    public get working(): boolean {
+
+        return this._working;
+    }
+
+    protected async onRun(): Promise<void> {
+
+        this._working = true;
+
+        let resolveDeferred: any;
+        const deferred = new Promise((resolve) => resolveDeferred = resolve);
+
+        const timeout = setTimeout(
+            () => {
+                console.log(`${this.timeout} second timeout elapsed!`);
+                resolveDeferred();
+            },
+            this.timeout * 1000
+        );
+
+        console.log(`${this.timeout} second timeout started.`);
+
+        await deferred;
+
+        this._working = false;
     }
 }
 

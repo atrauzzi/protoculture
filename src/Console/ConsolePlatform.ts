@@ -18,12 +18,24 @@ export class ConsolePlatform implements Platform {
 
         return {
             debug: true,
-            name: "huh?",
+            name: "protoculture",
         }
     }
 
     log(level: LogLevel, topic: string, message: any): void {
 
-        console.log(level.toString(), topic, message);
+        const levelMessage = `${LogLevel[level]} -`;
+
+        switch(level) {
+
+            case LogLevel.Info:
+            case LogLevel.Debug:
+                console.log(levelMessage, topic, message);
+            break;
+
+            default:
+                console.error(levelMessage, topic, message);
+            break;
+        }
     }
 }

@@ -14,5 +14,3 @@ export interface Platform {
 
     log(level: LogLevel, topic: string, message: any): void;
 }
-
-export type ConcretePlatform = Platform & {new(): Platform};
