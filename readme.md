@@ -17,20 +17,22 @@ The best way to understand how Protoculture works is to think about its main pil
  
 The slight opinionation of Protoculture comes from:
 
- - The powerful inversify dependency injection system, used to facilitate better organization of applications
- - Redux, fully integrated at a low level to offer a popular and well documented set of conventions for data handling
+ - The powerful [inversify](http://inversify.io) dependency injection system, used to facilitate better organization of applications
+ - A [Redux](http://redux.js.org), service provider for a popular and well documented set of conventions for data handling
 
 Beyond that, Protoculture assumes nothing about your situation.
 
 ### In Detail
-The concepts expressed by this layering should be fairly familiar and have very similar if not identical siblings 
-across other languages and frameworks.
+The concepts expressed by this layering have similar if not identical siblings across other languages and frameworks.
+
+Protoculture builds upon the standard Promise APIs.  While Protoculture is authored in TypeScript, you can definitely 
+use it from regular ES.
 
 #### Service Providers
 Service providers are responsible for telling the dependency injection system about new classes and functionality. All
-`ServiceProvider` instances are gathered together when a `Suite` is booted and asked to make registrations against the context.
+`ServiceProvider` instances are instantiated when a `Suite` is booted and asked to make registrations against the context.
 
-If you're at all familiar with Laravel, these should be very familiar.
+If you've used Laravel, these should be very familiar.
 
 #### Suites
 Suites represent the topmost entrypoint for a grouping of Apps.  Your entrypoint scripts should be able to instantiate 
@@ -42,22 +44,17 @@ useful when authoring browser applications.
 
 #### Platforms
 Platforms represent the means by which you wish to populate the environment that Protoculture will make available.
-Platforms are also free to do any kind of bootstrap and are also free to register `ServiceProviders`! 
+Platforms are free to do any kind of bootstrap you need and should be used to help make your app universal. 
 
 #### Apps
 Apps are probably the easiest level of encapsulation to think about.  If you were making a console application, you 
 would treat the entrypoint in the `App` class as your `main`.  A `Suite` can also be made up of multiple applications.  
 This is especially true when working in the browser as you may have multiple suites that get minified that wish to reuse apps!
 
-## Author
-
-Protoculture is created by Alexander Trauzzi.
-
-## Meta
-
-_I bet you were hoping for a full readme..._
-
-_Soon, but not quite yet!_
+Remember, Protoculture is asynchronous!  That means your apps can be too.  If a Protoculture suite detects that it 
+contains any asynchronous apps, it will automatically set up a heartbeat.  This is extremely useful for when you have  
+long running processes or are using a library that opens up sockets.  When all applications are done executing, Protoculture 
+will ask every app to finish up.  You don't have to manage a thing!
 
 ### Inspiration
 
@@ -65,6 +62,10 @@ _Soon, but not quite yet!_
  - ASP.NET Core
  - Other cool things in the ES community
  - Maybe some Scala?
+
+## Meta
+
+Protoculture is created by Alexander Trauzzi and is available under the Apache 2.0 license.
 
 ### History
 
@@ -74,3 +75,6 @@ The original idea for protoculture was that it would bundle conventions for Type
 
 The spirit of the library remains the same, however I've changed things quite a fair bit after learning even more 
 about the ES ecosystem.  Particularly as it pertains to the various platforms it finds itself on.
+
+### Other
+The only answer you should be looking for by this point is _Macross_.
