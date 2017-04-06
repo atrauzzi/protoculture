@@ -23,16 +23,15 @@
   "homepage": "https://github.com/atrauzzi/protoculture#readme",
   "devDependencies": {
     "semantic-release": "^6.3.2",
-    "typescript": "^2.0.10"
+    "typescript": "^2.2.2"
   },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "dependencies": {
-    "@types/lodash": "^4.14.39",
+    "@types/lodash": "^4.14.61",
     "@types/redux": "^3.6.31",
     "@types/redux-thunk": "^2.1.31",
     "@types/reflect-metadata": "^0.0.5",
-    "@types/whatwg-fetch": "^0.0.32",
     "domready": "^1.0.8",
     "es6-promise": "^4.1.0",
     "inversify": "^3.3.0",

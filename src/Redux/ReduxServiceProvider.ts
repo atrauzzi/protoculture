@@ -2,7 +2,7 @@ import {BaseServiceProvider} from "../ServiceProvider";
 import {reduxSymbols} from "./";
 import {Suite} from "../Suite";
 import {Container} from "inversify";
-import {createStore, Reducer} from "redux";
+import {createStore, Store} from "redux";
 import {createBusReducer, BusReducer} from "./BusReducer";
 
 
@@ -25,7 +25,7 @@ export class ReduxServiceProvider<State> extends BaseServiceProvider {
             });
     }
 
-    protected createBusReducerStore(busReducers: BusReducer[]): Redux.Store<State> {
+    protected createBusReducerStore(busReducers: BusReducer[]): Store<State> {
 
         return createStore<State>(createBusReducer<State>(busReducers));
     }
