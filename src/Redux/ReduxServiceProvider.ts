@@ -1,4 +1,4 @@
-import {BaseServiceProvider} from "../ServiceProvider";
+import {ServiceProvider} from "../ServiceProvider";
 import {reduxSymbols} from "./";
 import {Suite} from "../Suite";
 import {Container} from "inversify";
@@ -6,7 +6,7 @@ import {createStore, Store} from "redux";
 import {createBusReducer, BusReducer} from "./BusReducer";
 
 
-export class ReduxServiceProvider<State> extends BaseServiceProvider {
+export class ReduxServiceProvider<State> extends ServiceProvider {
 
     public async boot(suite: Suite): Promise<void> {
 

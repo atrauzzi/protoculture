@@ -1,12 +1,12 @@
 import {Suite} from "../Suite";
 
 
-export interface AppStatic<App extends BaseApp> {
+export interface AppStatic<AppType extends App> {
 
-    new(): App;
+    new(): AppType;
 }
 
-export abstract class BaseApp {
+export abstract class App {
 
     protected suite: Suite;
 

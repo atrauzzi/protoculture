@@ -1,10 +1,10 @@
-import {BaseServiceProvider} from "../ServiceProvider";
+import {ServiceProvider} from "../ServiceProvider";
 import {suiteSymbols, Suite} from "../Suite";
 import {Platform} from "../Suite/Platform";
 import {ConsolePlatform} from "./ConsolePlatform";
 
 
-export class ConsoleServiceProvider extends BaseServiceProvider {
+export class ConsoleServiceProvider extends ServiceProvider {
 
     public async boot(suite: Suite): Promise<void> {
 

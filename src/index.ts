@@ -1,5 +1,5 @@
 export {App} from "./App";
-export {StaticServiceProvider, BaseServiceProvider} from "./ServiceProvider";
+export {StaticServiceProvider, ServiceProvider} from "./ServiceProvider";
 export {Suite} from "./Suite";
 export {LogLevel} from "./LogLevel";
 

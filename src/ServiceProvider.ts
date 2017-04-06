@@ -3,12 +3,12 @@ import {Suite} from "./Suite";
 import {appSymbols, AppStatic} from "./App";
 
 
-export interface StaticServiceProvider<ServiceProvider extends BaseServiceProvider> {
+export interface StaticServiceProvider<ServiceProviderType extends ServiceProvider> {
 
-    new(suite: Suite): ServiceProvider;
+    new(suite: Suite): ServiceProviderType;
 }
 
-export abstract class BaseServiceProvider {
+export abstract class ServiceProvider {
 
     protected suite: Suite;
 

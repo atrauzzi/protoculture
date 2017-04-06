@@ -1,4 +1,4 @@
-export {BaseSuite as Suite} from "./Base";
+export {Suite} from "./Base";
 
 export const suiteSymbols = {
     Platform: Symbol("Platform"),

@@ -7,7 +7,7 @@ import {suiteSymbols} from "./";
 import {appSymbols, App} from "../App";
 import {Container, interfaces} from "inversify";
 import ContainerOptions = interfaces.ContainerOptions;
-import {BaseServiceProvider} from "../";
+import {ServiceProvider} from "../";
 import {ReduxServiceProvider} from "../Redux/ReduxServiceProvider";
 import {Platform} from "./Platform";
 import {LogLevel} from "../LogLevel";
@@ -17,7 +17,7 @@ import {ProtocultureServiceProvider} from "./ProtocultureServiceProvider";
 
 es6Promise.polyfill();
 
-export abstract class BaseSuite {
+export abstract class Suite {
 
     //
     // Configurable by Subclasses
@@ -40,7 +40,7 @@ export abstract class BaseSuite {
 
     protected _container: Container;
 
-    protected loadedServiceProviders: BaseServiceProvider[];
+    protected loadedServiceProviders: ServiceProvider[];
 
     protected apps: App[];
 
