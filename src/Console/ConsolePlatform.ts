@@ -1,5 +1,5 @@
 import {Platform} from "../Suite/Platform";
-import {LogLevel} from "../LogLevel";
+import {LogLevel} from "../Log/LogLevel";
 import {Environment} from "../Suite/Environment";
 
 
@@ -18,24 +18,15 @@ export class ConsolePlatform implements Platform {
 
         return {
             debug: true,
-            name: "protoculture",
+            name: undefined,
+            logLevel: LogLevel.Debug,
         }
     }
 
-    log(level: LogLevel, topic: string, message: any): void {
+    public log(message: string, level: LogLevel) {
 
-        const levelMessage = `${LogLevel[level]} -`;
+        const levelName = `${LogLevel[level]} -`;
 
-        switch(level) {
-
-            case LogLevel.Info:
-            case LogLevel.Debug:
-                console.log(levelMessage, topic, message);
-            break;
-
-            default:
-                console.error(levelMessage, topic, message);
-            break;
-        }
+        console.log(`${levelName} ${message}`);
     }
 }

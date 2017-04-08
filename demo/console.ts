@@ -1,5 +1,5 @@
 #!/usr/bin/env ts-node
-import {BaseServiceProvider, StaticServiceProvider} from "../src";
+import {ServiceProvider, StaticServiceProvider} from "../src";
 import {App} from "../src/App";
 import {Suite} from "../src/Suite";
 import {ConsoleServiceProvider} from "../src/Console/ConsoleServiceProvider";
@@ -57,9 +57,9 @@ class AsynchronousConsoleDemoApp extends App {
 
 //
 // This is how we declare a service provider.
-class ConsoleDemoServiceProvider extends BaseServiceProvider {
+class ConsoleDemoServiceProvider extends ServiceProvider {
 
-    public async boot(suite: Suite): Promise<void> {
+    public async boot(): Promise<void> {
 
         this.bindApp(BoringConsoleDemoApp);
         this.bindApp(AsynchronousConsoleDemoApp);
@@ -70,7 +70,7 @@ class ConsoleDemoServiceProvider extends BaseServiceProvider {
 // Here's a suite that acts as the composition root for the ServiceProvider.
 class ConsoleDemoSuite extends Suite {
 
-    protected name = "console-demo";
+    public name = "console-demo";
 
     protected get serviceProviders(): StaticServiceProvider<any>[] {
 

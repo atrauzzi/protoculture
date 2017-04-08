@@ -1,10 +1,13 @@
-import {LogLevel} from "../LogLevel";
+import {LogLevel} from "../Log/LogLevel";
 import {Environment} from "./Environment";
 
 
-export interface Platform {
+export interface StaticPlatform<PlatformType extends Platform> {
 
-    new?(...args: any[]): Platform;
+    new(): PlatformType;
+}
+
+export interface Platform {
 
     current: boolean;
 
@@ -12,5 +15,5 @@ export interface Platform {
 
     name: string;
 
-    log(level: LogLevel, topic: string, message: any): void;
+    log(message: string, level: LogLevel): void;
 }

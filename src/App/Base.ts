@@ -1,7 +1,7 @@
 import {Suite} from "../Suite";
 
 
-export interface AppStatic<AppType extends App> {
+export interface StaticApp<AppType extends App> {
 
     new(): AppType;
 }

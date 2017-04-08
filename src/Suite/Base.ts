@@ -8,11 +8,12 @@ import {appSymbols, App} from "../App";
 import {Container, interfaces} from "inversify";
 import ContainerOptions = interfaces.ContainerOptions;
 import {ServiceProvider} from "../";
-import {ReduxServiceProvider} from "../Redux/ReduxServiceProvider";
 import {Platform} from "./Platform";
-import {LogLevel} from "../LogLevel";
+import {LogLevel} from "../Log/LogLevel";
 import {StaticServiceProvider} from "../ServiceProvider";
 import {ProtocultureServiceProvider} from "./ProtocultureServiceProvider";
+import {logSymbols, LogServiceProvider, LogService} from "../Log";
+import {ReduxServiceProvider} from "../Redux/ReduxServiceProvider";
 
 
 es6Promise.polyfill();
@@ -22,7 +23,7 @@ export abstract class Suite {
     //
     // Configurable by Subclasses
 
-    protected abstract get name(): string;
+    public abstract get name(): string;
 
     protected get containerConfiguration(): ContainerOptions { return null; }
 
@@ -45,6 +46,8 @@ export abstract class Suite {
     protected apps: App[];
 
     protected booted: boolean;
+
+    protected log: LogService;
 
     //
     // External
@@ -71,12 +74,13 @@ export abstract class Suite {
 
         const internalServiceProviders = [
             ProtocultureServiceProvider,
+            LogServiceProvider,
             ReduxServiceProvider,
         ];
 
         const serviceProviders = _.concat(internalServiceProviders, this.serviceProviders);
 
-        this.loadedServiceProviders = _.map(serviceProviders, serviceProvider => new serviceProvider(this));
+        this.loadedServiceProviders = _.map(serviceProviders, (serviceProvider: StaticServiceProvider<any>) => new serviceProvider(this));
     }
 
     //
@@ -108,24 +112,29 @@ export abstract class Suite {
 
     protected async bootServiceProviders() {
 
-        const bootPromises = _.map(this.loadedServiceProviders, serviceProvider => serviceProvider.boot(this));
+        const bootPromises = _.map(this.loadedServiceProviders, (serviceProvider: ServiceProvider) => serviceProvider.boot());
 
         await Promise.all(bootPromises);
     }
 
     protected async bootPlatform() {
 
-        const platform = _.find(this.container.getAll<Platform>(suiteSymbols.Platform), platform => platform.current);
+        const currentPlatform = _.find(
+            this.container.getAll<Platform>(suiteSymbols.AvailablePlatform),
+            (platform: Platform) => platform.current
+        );
 
-        if(!platform) {
+        if(!currentPlatform) {
 
             throw new Error("Unable to determine current platform.");
         }
 
         this.container.bind<Platform>(suiteSymbols.CurrentPlatform)
-            .toConstantValue(platform);
+            .toConstantValue(currentPlatform);
 
         this.platform = this.container.get<Platform>(suiteSymbols.CurrentPlatform);
+
+        this.log = this.container.get<LogService>(logSymbols.LogService);
     }
 
     //
@@ -133,59 +142,52 @@ export abstract class Suite {
 
     public async run(): Promise<void> {
 
-        try {
+        if(!this.booted) {
 
-            if(!this.booted) {
-
-                await this.boot();
-            }
-
-            if(!_.isEmpty(this.apps)) {
-
-                throw new Error("Suite already run");
-            }
-
-            this.log(LogLevel.Debug, this.toString(), "Suite started");
-            // ToDo: Redux event.
-
-            this.buildApps();
-
-            await this.runApps();
+            await this.boot();
         }
-        catch(error) {
 
-            console.error(error.stack);
+        if(!_.isEmpty(this.apps)) {
+
+            this.log.log("Suite already run", null, LogLevel.Error);
         }
+
+        this.log.log("Suite started", null, LogLevel.Debug);
+        // ToDo: Redux event.
+
+        this.buildApps();
+
+        await this.runApps();
     }
 
     protected async runApps() {
 
-        try {
+        this.log.log("Running apps", null, LogLevel.Debug);
 
-            this.log(LogLevel.Debug, this.toString(), "Running apps");
+        const appPromises = _.map(this.apps, (app: App) => {
 
-            const appPromises = _.map(this.apps, app => {
+            this.log.log("Starting app", app, LogLevel.Info);
 
-                this.log(LogLevel.Debug, this.toString(), "Starting app: " + app.name);
+            try {
 
-                // ToDo: Capture what comes back, if it's a Promise, THEN start the heartbeat?
                 return app.run(this);
-            });
-
-            this.log(LogLevel.Debug, this.toString(), "All apps invoked");
-
-            if(!_.isEmpty(this.working)) {
-
-                this.log(LogLevel.Debug, this.toString(), "Asynchronous app detected");
-                this.startHeartbeat();
             }
+            catch(error) {
 
-            await Promise.all(appPromises);
-        }
-        catch(error) {
+                this.log.log(error.stack, app, LogLevel.Error);
+            }
+        });
 
-            this.log(LogLevel.Error, "app-error", error.stack);
+        this.log.log("All apps started", null, LogLevel.Debug);
+
+        if(!_.isEmpty(this.working)) {
+
+            this.log.log("An asynchronous app was detected", null, LogLevel.Info);
+            this.startHeartbeat();
         }
+
+        await Promise.all(appPromises);
+
     }
 
     public async stop(): Promise<void> {
@@ -196,7 +198,7 @@ export abstract class Suite {
         }
         catch(error) {
 
-            this.log(LogLevel.Error, "app-error", error.stack);
+            this.log.log(error.stack, null, LogLevel.Error);
         }
 
         return null;
@@ -204,30 +206,30 @@ export abstract class Suite {
 
     protected buildApps() {
 
-        this.log(LogLevel.Debug, this.toString(), "Building apps");
+        this.log.log("Building apps", null, LogLevel.Debug);
         this.apps = this.container.getAll<App>(appSymbols.App);
     }
 
     protected startHeartbeat() {
 
-        this.log(LogLevel.Debug, this.toString(), "Starting heartbeat");
+        this.log.log("Starting heartbeat", null, LogLevel.Debug);
         const heartBeat = setInterval(
             () => {
 
-                this.log(LogLevel.Debug, this.toString() + "heartbeat", "Beat...");
+                this.log.log("Beat...", null, LogLevel.Debug);
 
                 const workingApps = this.working;
 
                 if(_.isEmpty(workingApps)) {
 
-                    this.log(LogLevel.Debug, this.toString() + "heartbeat", "...Heart beat.");
+                    this.log.log("...Heart beat.", null, LogLevel.Debug);
 
                     clearInterval(heartBeat);
                     this.stop();
                 }
                 else {
 
-                    _.forEach(workingApps, app => this.log(LogLevel.Debug, this.toString(), `App ${app.name} is still working`));
+                    _.forEach(workingApps, (app: App) => this.log.log("Still working", app, LogLevel.Debug));
                 }
             },
             this.heartbeatInterval * 1000
@@ -241,20 +243,9 @@ export abstract class Suite {
 
         const childContainer = this.container.createChild();
 
-        const bootPromises = _.map(this.loadedServiceProviders, serviceProvider => serviceProvider.bootChild(childContainer));
+        const bootPromises = _.map(this.loadedServiceProviders, (serviceProvider: ServiceProvider) => serviceProvider.bootChild(childContainer));
         await Promise.all(bootPromises);
 
         return childContainer;
-    }
-
-    protected log(level: LogLevel, topic: string, message: any = null) {
-
-        this.platform.log(level, topic, message);
-    }
-
-    public toString() {
-
-        // Note: I'm not trying to invent some kind of URI-like convention here, but this is sortable and splittable and can be used for things like logs & user agents
-        return `protoculture:${this.platform.name}@${this.name}:${this.platform.environment.name}/${this.platform.environment.debug}#`;
     }
 }

@@ -8,7 +8,7 @@ import {createBusReducer, BusReducer} from "./BusReducer";
 
 export class ReduxServiceProvider<State> extends ServiceProvider {
 
-    public async boot(suite: Suite): Promise<void> {
+    public async boot(): Promise<void> {
 
     }
 
