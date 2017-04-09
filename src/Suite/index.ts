@@ -5,6 +5,6 @@ export {StaticPlatform, Platform} from "./Platform";
 export const suiteSymbols = {
     Suite: Symbol("Suite"),
     Environment: Symbol("Environment"),
-    AvailablePlatform: Symbol("Platform"),
+    AvailablePlatform: Symbol("AvailablePlatform"),
     CurrentPlatform: Symbol("CurrentPlatform"),
 };

@@ -1,9 +1,7 @@
 import * as _ from "lodash";
-import {decorate, injectable, Container, multiInject, inject} from "inversify";
-import {Suite} from "./Suite";
 import {appSymbols, StaticApp} from "./App";
-import {suiteSymbols} from "./Suite";
-import {StaticPlatform} from "./Suite/Platform";
+import {suiteSymbols, Suite, StaticPlatform, Platform} from "./Suite";
+import {decorate, injectable, multiInject, inject, Container} from "inversify";
 
 
 export interface StaticServiceProvider<ServiceProviderType extends ServiceProvider> {
@@ -33,11 +31,11 @@ export abstract class ServiceProvider {
     //
     // Utilities
 
-    protected bindPlatform<Platform extends StaticPlatform<any>>(platform: Platform) {
+    protected bindPlatform<PlatformType extends Platform>(platform: StaticPlatform<PlatformType>) {
 
         this.makeInjectable(platform);
 
-        this.suite.container.bind<Platform>(suiteSymbols.AvailablePlatform)
+        this.suite.container.bind(suiteSymbols.AvailablePlatform)
             .to(platform);
     }
 

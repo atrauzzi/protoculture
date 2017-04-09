@@ -1,5 +1,5 @@
 import {ServiceProvider} from "../";
-import {suiteSymbols} from "../Suite";
+import {suiteSymbols} from "./";
 import {App} from "../App";
 
 
