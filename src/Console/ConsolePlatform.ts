@@ -1,6 +1,6 @@
-import {Platform} from "../Suite/Platform";
+import {Platform} from "../Platform";
 import {LogLevel} from "../Log/LogLevel";
-import {Environment} from "../Suite/Environment";
+import {Environment} from "../Environment";
 
 
 declare const process: any;

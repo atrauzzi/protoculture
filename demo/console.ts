@@ -9,7 +9,7 @@ import {ConsoleServiceProvider} from "../src/Console/ConsoleServiceProvider";
 // Here's a boring console demo app.
 class BoringConsoleDemoApp extends App {
 
-    public name = "console-demo";
+    public name = "boring-app";
 
     protected async onRun(): Promise<void> {
 
@@ -21,7 +21,7 @@ class BoringConsoleDemoApp extends App {
 // Here's another app that is asynchronous. But still boring.
 class AsynchronousConsoleDemoApp extends App {
 
-    public name = "async-demo";
+    public name = "async-app";
 
     protected _working: boolean;
 
@@ -70,7 +70,7 @@ class ConsoleDemoServiceProvider extends ServiceProvider {
 // Here's a suite that acts as the composition root for the ServiceProvider.
 class ConsoleDemoSuite extends Suite {
 
-    public name = "console-demo";
+    public name = "boring-demo";
 
     protected get serviceProviders(): StaticServiceProvider<any>[] {
 
@@ -85,4 +85,4 @@ class ConsoleDemoSuite extends Suite {
 // And this is how we start it!
 
 const suite = new ConsoleDemoSuite();
-suite.run();
+suite.run().catch(console.log);

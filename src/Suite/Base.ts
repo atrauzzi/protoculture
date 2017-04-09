@@ -3,12 +3,13 @@ import "isomorphic-fetch";
 import "reflect-metadata";
 //
 import * as _ from "lodash";
+import {symbols} from "../";
 import {suiteSymbols} from "./";
 import {appSymbols, App} from "../App";
 import {Container, interfaces} from "inversify";
 import ContainerOptions = interfaces.ContainerOptions;
 import {ServiceProvider} from "../";
-import {Platform} from "./Platform";
+import {Platform} from "../Platform";
 import {LogLevel} from "../Log/LogLevel";
 import {StaticServiceProvider} from "../ServiceProvider";
 import {ProtocultureServiceProvider} from "./ProtocultureServiceProvider";
@@ -120,7 +121,7 @@ export abstract class Suite {
     protected async bootPlatform() {
 
         const currentPlatform = _.find(
-            this.container.getAll<Platform>(suiteSymbols.AvailablePlatform),
+            this.container.getAll<Platform>(symbols.AvailablePlatform),
             (platform: Platform) => platform.current
         );
 
@@ -129,10 +130,10 @@ export abstract class Suite {
             throw new Error("Unable to determine current platform.");
         }
 
-        this.container.bind<Platform>(suiteSymbols.CurrentPlatform)
+        this.container.bind<Platform>(symbols.CurrentPlatform)
             .toConstantValue(currentPlatform);
 
-        this.platform = this.container.get<Platform>(suiteSymbols.CurrentPlatform);
+        this.platform = this.container.get<Platform>(symbols.CurrentPlatform);
 
         this.log = this.container.get<LogService>(logSymbols.LogService);
     }

@@ -1,4 +1,4 @@
-import {LogLevel} from "../Log";
+import {LogLevel} from "./Log";
 
 
 export interface Environment {

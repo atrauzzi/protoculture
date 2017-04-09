@@ -33,9 +33,9 @@ export class LogService {
             logLineParts.push(`/${app.name}`);
         }
 
-        logLineParts.push("#");
+        logLineParts.push("# ");
         logLineParts.push(message);
 
-        return logLineParts.join();
+        return logLineParts.join("");
     }
 }

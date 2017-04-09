@@ -1,5 +1,5 @@
-import {ServiceProvider} from "../";
-import {suiteSymbols} from "./";
+import {symbols, ServiceProvider} from "../";
+import {suiteSymbols, Platform} from "./";
 import {App} from "../App";
 
 
@@ -9,9 +9,16 @@ export class ProtocultureServiceProvider extends ServiceProvider {
 
         this.makeInjectable(App);
 
-        this.makeInjectable(this.suite);
-
         this.suite.container.bind(suiteSymbols.Suite)
             .toConstantValue(this.suite);
+
+        this.suite.container
+            .bind(symbols.Environment)
+            .toDynamicValue((context) => context
+                .container
+                .get<Platform>(symbols.CurrentPlatform)
+                .environment
+            )
+        ;
     }
 }

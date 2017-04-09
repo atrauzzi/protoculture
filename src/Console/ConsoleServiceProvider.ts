@@ -1,6 +1,6 @@
 import {ServiceProvider} from "../ServiceProvider";
 import {ConsolePlatform} from "./ConsolePlatform";
-import {StaticPlatform} from "../Suite/Platform";
+import {StaticPlatform} from "../Platform";
 
 
 export class ConsoleServiceProvider extends ServiceProvider {

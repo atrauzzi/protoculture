@@ -1,4 +1,4 @@
-import {LogLevel} from "../Log/LogLevel";
+import {LogLevel} from "./Log/LogLevel";
 import {Environment} from "./Environment";
 
 

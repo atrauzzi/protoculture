@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import {appSymbols, StaticApp} from "./App";
-import {suiteSymbols, Suite, StaticPlatform, Platform} from "./Suite";
+import {symbols, StaticPlatform, Platform} from "./";
+import {Suite} from "./Suite";
 import {decorate, injectable, multiInject, inject, Container} from "inversify";
 
 
@@ -35,7 +36,7 @@ export abstract class ServiceProvider {
 
         this.makeInjectable(platform);
 
-        this.suite.container.bind(suiteSymbols.AvailablePlatform)
+        this.suite.container.bind(symbols.AvailablePlatform)
             .to(platform);
     }
 
