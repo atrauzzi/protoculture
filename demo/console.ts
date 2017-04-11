@@ -13,7 +13,7 @@ class BoringConsoleDemoApp extends App {
 
     protected async onRun(): Promise<void> {
 
-        console.log("This is from the boring console demo app!");
+        this.log("This is from the boring console demo app!");
     }
 }
 
@@ -41,13 +41,13 @@ class AsynchronousConsoleDemoApp extends App {
 
         const timeout = setTimeout(
             () => {
-                console.log(`${this.timeout} second timeout elapsed!`);
+                this.log(`${this.timeout} second timeout elapsed!`);
                 resolveDeferred();
             },
             this.timeout * 1000
         );
 
-        console.log(`${this.timeout} second timeout started.`);
+        this.log(`${this.timeout} second timeout started.`);
 
         await deferred;
 
@@ -85,4 +85,4 @@ class ConsoleDemoSuite extends Suite {
 // And this is how we start it!
 
 const suite = new ConsoleDemoSuite();
-suite.run().catch(console.log);
+suite.run().catch(console.error);

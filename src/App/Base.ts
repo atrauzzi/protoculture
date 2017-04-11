@@ -1,4 +1,5 @@
 import {Suite} from "../Suite";
+//import {LogLevel} from "../Log";
 
 
 export interface StaticApp<AppType extends App> {
@@ -14,10 +15,6 @@ export abstract class App {
 
     protected abstract async onRun(): Promise<void>;
 
-    public constructor() {
-
-    }
-
     public get working(): boolean {
 
         return false;
@@ -28,5 +25,10 @@ export abstract class App {
         this.suite = suite;
 
         await this.onRun();
+    }
+
+    protected log(message: any) {
+
+        this.suite.logger.log(message, this, null);
     }
 }

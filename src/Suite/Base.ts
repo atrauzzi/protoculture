@@ -38,9 +38,11 @@ export abstract class Suite {
     //
     // Internal
 
-    protected platform: Platform;
+    protected _platform: Platform;
 
     protected _container: Container;
+
+    protected _logger: LogService;
 
     protected loadedServiceProviders: ServiceProvider[];
 
@@ -48,10 +50,18 @@ export abstract class Suite {
 
     protected booted: boolean;
 
-    protected log: LogService;
-
     //
     // External
+
+    public get logger(): LogService {
+
+        return this._logger;
+    }
+
+    public get platform(): Platform {
+
+        return this._platform;
+    }
 
     public get container(): Container {
 
@@ -133,9 +143,9 @@ export abstract class Suite {
         this.container.bind<Platform>(symbols.CurrentPlatform)
             .toConstantValue(currentPlatform);
 
-        this.platform = this.container.get<Platform>(symbols.CurrentPlatform);
+        this._platform = this.container.get<Platform>(symbols.CurrentPlatform);
 
-        this.log = this.container.get<LogService>(logSymbols.LogService);
+        this._logger = this.container.get<LogService>(logSymbols.LogService);
     }
 
     //
@@ -150,10 +160,10 @@ export abstract class Suite {
 
         if(!_.isEmpty(this.apps)) {
 
-            this.log.log("Suite already run", null, LogLevel.Error);
+            this._logger.log("Suite already run", null, LogLevel.Error);
         }
 
-        this.log.log("Suite started", null, LogLevel.Debug);
+        this._logger.log("Suite started", null, LogLevel.Debug);
         // ToDo: Redux event.
 
         this.buildApps();
@@ -163,11 +173,11 @@ export abstract class Suite {
 
     protected async runApps() {
 
-        this.log.log("Running apps", null, LogLevel.Debug);
+        this._logger.log("Running apps", null, LogLevel.Debug);
 
         const appPromises = _.map(this.apps, (app: App) => {
 
-            this.log.log("Starting app", app, LogLevel.Info);
+            this._logger.log("Starting app", app, LogLevel.Info);
 
             try {
 
@@ -175,15 +185,15 @@ export abstract class Suite {
             }
             catch(error) {
 
-                this.log.log(error.stack, app, LogLevel.Error);
+                this._logger.log(error.stack, app, LogLevel.Error);
             }
         });
 
-        this.log.log("All apps started", null, LogLevel.Debug);
+        this._logger.log("All apps started", null, LogLevel.Debug);
 
         if(!_.isEmpty(this.working)) {
 
-            this.log.log("An asynchronous app was detected", null, LogLevel.Info);
+            this._logger.log("An asynchronous app was detected", null, LogLevel.Info);
             this.startHeartbeat();
         }
 
@@ -199,7 +209,7 @@ export abstract class Suite {
         }
         catch(error) {
 
-            this.log.log(error.stack, null, LogLevel.Error);
+            this._logger.log(error.stack, null, LogLevel.Error);
         }
 
         return null;
@@ -207,30 +217,30 @@ export abstract class Suite {
 
     protected buildApps() {
 
-        this.log.log("Building apps", null, LogLevel.Debug);
+        this._logger.log("Building apps", null, LogLevel.Debug);
         this.apps = this.container.getAll<App>(appSymbols.App);
     }
 
     protected startHeartbeat() {
 
-        this.log.log("Starting heartbeat", null, LogLevel.Debug);
+        this._logger.log("Starting heartbeat", null, LogLevel.Debug);
         const heartBeat = setInterval(
             () => {
 
-                this.log.log("Beat...", null, LogLevel.Debug);
+                this._logger.log("Beat...", null, LogLevel.Debug);
 
                 const workingApps = this.working;
 
                 if(_.isEmpty(workingApps)) {
 
-                    this.log.log("...Heart beat.", null, LogLevel.Debug);
+                    this._logger.log("...Heart beat.", null, LogLevel.Debug);
 
                     clearInterval(heartBeat);
                     this.stop();
                 }
                 else {
 
-                    _.forEach(workingApps, (app: App) => this.log.log("Still working", app, LogLevel.Debug));
+                    _.forEach(workingApps, (app: App) => this._logger.log("Still working", app, LogLevel.Debug));
                 }
             },
             this.heartbeatInterval * 1000
