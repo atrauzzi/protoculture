@@ -11,7 +11,7 @@ class BoringConsoleDemoApp extends App {
 
     public name = "boring-app";
 
-    protected async onRun(): Promise<void> {
+    public async run(): Promise<void> {
 
         this.log("This is from the boring console demo app!");
     }
@@ -32,7 +32,7 @@ class AsynchronousConsoleDemoApp extends App {
         return this._working;
     }
 
-    protected async onRun(): Promise<void> {
+    public async run(): Promise<void> {
 
         this._working = true;
 

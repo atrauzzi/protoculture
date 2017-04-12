@@ -16,6 +16,7 @@
         "suppressImplicitAnyIndexErrors": true,
         "sourceMap": true,
         "outDir": "lib",
+        "skipLibCheck": true,
         "lib": [
             "dom",
             "es5",

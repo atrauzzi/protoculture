@@ -181,7 +181,8 @@ export abstract class Suite {
 
             try {
 
-                return app.run(this);
+                app.suite = this;
+                return app.run();
             }
             catch(error) {
 
