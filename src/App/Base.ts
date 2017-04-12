@@ -1,5 +1,5 @@
 import {Suite} from "../Suite";
-import {LogLevel} from "../Log";
+import {LogLevel} from "../Log/LogLevel";
 
 
 export interface StaticApp<AppType extends App> {
@@ -35,7 +35,7 @@ export abstract class App {
         throw new Error("Not implemented!");
     }
 
-    protected log(message: any, level: LogLevel = null) {
+    protected log(message: any, level: LogLevel = LogLevel.Info) {
 
         this.suite.logger.log(message, this, level);
     }

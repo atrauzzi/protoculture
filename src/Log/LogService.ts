@@ -18,11 +18,11 @@ export class LogService {
 
         if(this.environment.logLevel >= level || this.environment.debug) {
 
-            this.platform.log(this.buildLogMessage(message, level, app), level);
+            this.platform.log(this.buildLogMessage(message, app), level);
         }
     }
 
-    protected buildLogMessage(message: any, level: LogLevel, app: App = null): string {
+    protected buildLogMessage(message: any, app: App = null): string {
 
         const logLineParts = [
             `protoculture@${this.platform.name}:${this.suite.name}`

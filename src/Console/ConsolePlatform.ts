@@ -19,7 +19,7 @@ export class ConsolePlatform implements Platform {
         return {
             debug: true,
             name: undefined,
-            logLevel: LogLevel.Debug,
+            logLevel: LogLevel.Info,
         }
     }
 
