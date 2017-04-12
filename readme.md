@@ -6,19 +6,21 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 ## About
-Protoculture is a _slightly opinionated_ framework for creating ECMAScript applications.
+Protoculture is a _slightly opinionated_ application framework for creating ECMAScript applications.  It sits between
+applications libraries and process managers, acting as a layer to build abstractions on top of.
 
 The best way to understand how Protoculture works is to think about its main pillars:
 
+ - Service Providers
  - Suites
  - Platforms
  - Apps
- - Service Providers
  
-The slight opinionation of Protoculture comes from:
+The _slight_ opinionation of Protoculture comes from:
 
  - The powerful [inversify](http://inversify.io) dependency injection system, used to facilitate better organization of applications
- - A [Redux](http://redux.js.org), service provider for a popular and well documented set of conventions for data handling
+ - [Redux](http://redux.js.org) service provider for a popular and well documented set of conventions for data handling
+ - Planned integrations with hosting and process management infrastructure like [PM2](http://pm2.keymetrics.io) and [ApplicationInsights](https://github.com/Microsoft/ApplicationInsights-node.js)
 
 Beyond that, Protoculture assumes nothing about your situation.
 
@@ -71,7 +73,7 @@ Protoculture is created by Alexander Trauzzi and is available under the Apache 2
 
 ### History
 
-If you look at the history of this package for versions `1.0.15` and before, it probably will look a fair bit different.
+If you look at the history of this package for versions `1.0.15` and before, it probably will look quite different.
 
 The original idea for protoculture was that it would bundle conventions for TypeScript, React, Redux applications.
 
