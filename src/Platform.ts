@@ -16,4 +16,6 @@ export interface Platform {
     name: string;
 
     log(message: string, level: LogLevel): void;
+
+    boot?(name?: string): Promise<void>;
 }

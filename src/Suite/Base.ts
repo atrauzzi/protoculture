@@ -140,11 +140,16 @@ export abstract class Suite {
             throw new Error("Unable to determine current platform.");
         }
 
+        if(currentPlatform.boot) {
+
+            await currentPlatform.boot(this.name);
+        }
+
         this.container.bind<Platform>(symbols.CurrentPlatform)
             .toConstantValue(currentPlatform);
 
         this._platform = this.container.get<Platform>(symbols.CurrentPlatform);
-
+        // With a platform selected and booted, logging is now available.
         this._logger = this.container.get<LogService>(logSymbols.LogService);
     }
 
