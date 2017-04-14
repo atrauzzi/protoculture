@@ -2,9 +2,9 @@ import {Suite} from "../Suite";
 import {LogLevel} from "../Log/LogLevel";
 
 
-export interface StaticApp<AppType extends App> {
+export interface StaticApp<AppType implements App> {
 
-    new(): AppType;
+    new(...args: any[]): AppType;
 }
 
 export interface App {
