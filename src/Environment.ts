@@ -1,7 +1,7 @@
 import {LogLevel} from "./Log";
 
 
-export type Environment<With> = {
+export type Environment<With> = BaseEnvironment & {
 
     [P in keyof With]?: With[P];
 };
