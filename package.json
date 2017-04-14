@@ -3,7 +3,7 @@
   "author": "Alexander Trauzzi <atrauzzi@gmail.com>",
   "version": "0.0.0-development",
   "license": "Apache-2.0",
-  "description": "Stay tuned...",
+  "description": "A slightly opinionated application framework for creating ECMAScript applications.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
@@ -28,6 +28,7 @@
   "types": "./lib/index.d.ts",
   "dependencies": {
     "@types/lodash": "^4.14.61",
+    "@types/node": "^7.0.12",
     "@types/redux": "^3.6.31",
     "@types/redux-thunk": "^2.1.31",
     "@types/reflect-metadata": "^0.0.5",
