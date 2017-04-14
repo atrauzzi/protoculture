@@ -7,7 +7,7 @@
 
 ## About
 Protoculture is a _slightly opinionated_ application framework for creating ECMAScript applications.  It sits between
-applications libraries and process managers, acting as a layer to build abstractions on top of.
+your chosen libraries and process managers, acting as a layer to organize your abstractions.
 
 The best way to understand how Protoculture works is to think about its main pillars:
 
@@ -22,10 +22,8 @@ The _slight_ opinionation of Protoculture comes from:
  - [Redux](http://redux.js.org) service provider for a popular and well documented set of conventions for data handling
  - Planned integrations with hosting and process management infrastructure like [PM2](http://pm2.keymetrics.io) and [ApplicationInsights](https://github.com/Microsoft/ApplicationInsights-node.js)
 
-Beyond that, Protoculture assumes nothing about your situation.
-
 ### In Detail
-While the layering Protoculture provides has similar if not identical siblings across other languages and frameworks, 
+The layering Protoculture provides has similar if not identical siblings in other languages and runtimes, 
 its big advantage is in how everything is tied together.  In that sense, Protoculture is not a full framework, but an 
 application framework.
 
@@ -36,7 +34,7 @@ use it from regular ES.
 Service providers are responsible for telling the dependency injection system about new classes and functionality. All
 `ServiceProvider` instances are created when a `Suite` is booted.  They are then asked to make registrations against the context.
 
-If you've used Laravel, these should be very familiar.
+If you've used [Laravel](http://laravel.com), these should be very familiar.
 
 #### Suites
 Suites represent the topmost entrypoint for a grouping of Apps.  Your entrypoint scripts should be able to instantiate 
@@ -60,6 +58,10 @@ contains any asynchronous apps, it will automatically set up a heartbeat.  This 
 long running processes or are using a library that opens up sockets.  When all applications are done executing, Protoculture 
 will ask every app to finish up.  You don't have to manage a thing!
 
+## Meta
+
+Protoculture is created by Alexander Trauzzi and is available under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).
+
 ### Inspiration
 
  - Laravel
@@ -67,9 +69,16 @@ will ask every app to finish up.  You don't have to manage a thing!
  - Other cool things in the ES community
  - Maybe some Scala?
 
-## Meta
+### Oh man, _not another javascript framework_
 
-Protoculture is created by Alexander Trauzzi and is available under the Apache 2.0 license.
+I get it, we all know about [JavaScript framework fatigue](http://www.commitstrip.com/wp-content/uploads/2015/09/Strip-Prendre-le-train-en-marche-650-finalenglish1.jpg).
+
+Cynicism over JavaScript is a super hip joke; but this kind of negativity can get the better of us. Protoculture 
+enters the slightly empty space of application frameworks.  It is not a middleware platform and is intended 
+to be universal.  Simply put, the evolution of the JavaScript ecosystem has been _because_ of all the _yet anothers_.
+
+Everything inside of protoculture has been distilled out of real production needs. I invite you to try it out and 
+report any ideas or issues in a ticket.
 
 ### History
 

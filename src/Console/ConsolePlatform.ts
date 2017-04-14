@@ -1,6 +1,6 @@
 import {Platform} from "../Platform";
 import {LogLevel} from "../Log/LogLevel";
-import {Environment} from "../Environment";
+import {BaseEnvironment} from "../Environment";
 
 
 declare const process: any;
@@ -14,7 +14,7 @@ export class ConsolePlatform implements Platform {
         return !!process;
     }
 
-    public get environment(): Environment {
+    public get environment(): BaseEnvironment {
 
         return {
             debug: true,

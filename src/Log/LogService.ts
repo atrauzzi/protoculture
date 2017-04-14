@@ -1,14 +1,15 @@
 import {App} from "../App";
 import {Suite} from "../Suite";
 import {LogLevel} from "./LogLevel";
-import {Environment, Platform} from "../Suite";
+import {Platform} from "../Suite";
+import {BaseEnvironment} from "../";
 
 
 export class LogService {
 
     public constructor(
         protected suite: Suite,
-        protected environment: Environment,
+        protected environment: BaseEnvironment,
         protected platform: Platform
     ) {
 

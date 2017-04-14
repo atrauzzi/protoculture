@@ -22,8 +22,7 @@
   },
   "homepage": "https://github.com/atrauzzi/protoculture#readme",
   "devDependencies": {
-    "semantic-release": "^6.3.2",
-    "typescript": "^2.2.2"
+    "semantic-release": "^6.3.2"
   },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -38,6 +37,8 @@
     "isomorphic-fetch": "^2.2.1",
     "redux-thunk": "^2.1.0",
     "reflect-metadata": "^0.1.10",
+    "ts-node": "^3.0.2",
+    "typescript": "^2.2.2",
     "urlsearchparams": "^0.1.1",
     "whatwg-fetch": "^1.1.0"
   }

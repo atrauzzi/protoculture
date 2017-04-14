@@ -7,6 +7,8 @@ export {LogLevel} from "./Log/LogLevel";
 export {ConsoleServiceProvider} from "./Console/ConsoleServiceProvider";
 export {ReduxServiceProvider} from "./Redux/ReduxServiceProvider";
 
+export {Environment, BaseEnvironment} from "./Environment";
+
 export const symbols = {
     Environment: Symbol("Environment"),
     AvailablePlatform: Symbol("AvailablePlatform"),
