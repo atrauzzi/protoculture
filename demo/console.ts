@@ -1,13 +1,21 @@
 #!/usr/bin/env ts-node
-import {ServiceProvider, StaticServiceProvider} from "../src";
-import {App} from "../src/App";
-import {Suite} from "../src/Suite";
-import {ConsoleServiceProvider} from "../src/Console/ConsoleServiceProvider";
+import {ServiceProvider, StaticServiceProvider, ConsoleServiceProvider, BaseApp, Suite} from "../src";
 
 
 //
+// This is how we declare a service provider.
+class ConsoleDemoServiceProvider extends ServiceProvider {
+
+    public async boot(): Promise<void> {
+
+        this.bindApp(BoringConsoleDemoApp);
+        this.bindApp(AsynchronousConsoleDemoApp);
+    }
+}
+
+//
 // Here's a boring console demo app.
-class BoringConsoleDemoApp extends App {
+class BoringConsoleDemoApp extends BaseApp {
 
     public name = "boring-app";
 
@@ -19,7 +27,7 @@ class BoringConsoleDemoApp extends App {
 
 //
 // Here's another app that is asynchronous. But still boring.
-class AsynchronousConsoleDemoApp extends App {
+class AsynchronousConsoleDemoApp extends BaseApp {
 
     public name = "async-app";
 
@@ -52,17 +60,6 @@ class AsynchronousConsoleDemoApp extends App {
         await deferred;
 
         this._working = false;
-    }
-}
-
-//
-// This is how we declare a service provider.
-class ConsoleDemoServiceProvider extends ServiceProvider {
-
-    public async boot(): Promise<void> {
-
-        this.bindApp(BoringConsoleDemoApp);
-        this.bindApp(AsynchronousConsoleDemoApp);
     }
 }
 

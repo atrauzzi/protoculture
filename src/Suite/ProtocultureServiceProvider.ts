@@ -1,13 +1,12 @@
-import {symbols, ServiceProvider} from "../";
+import {symbols, ServiceProvider, BaseApp} from "../";
 import {suiteSymbols, Platform} from "./";
-import {App} from "../App";
 
 
 export class ProtocultureServiceProvider extends ServiceProvider {
 
     public async boot(): Promise<void> {
 
-        this.makeInjectable(App);
+        this.makeInjectable(BaseApp);
 
         this.suite.container.bind(suiteSymbols.Suite)
             .toConstantValue(this.suite);

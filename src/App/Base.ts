@@ -7,7 +7,20 @@ export interface StaticApp<AppType extends App> {
     new(): AppType;
 }
 
-export abstract class App {
+export interface App {
+
+    readonly name: string;
+
+    readonly working: boolean;
+
+    // ToDo: Shift over to property/setter injection - https://github.com/inversify/InversifyJS/issues/531
+    suite: Suite;
+
+    run(): Promise<void>;
+}
+
+// Provided as a reference.  If you don't mind calling `super()`, feel free to use it!
+export abstract class BaseApp implements App {
 
     private _suite: Suite;
 

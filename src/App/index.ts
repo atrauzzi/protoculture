@@ -1,4 +1,4 @@
-export {StaticApp, App} from "./Base";
+export {StaticApp, App, BaseApp} from "./Base";
 
 export const appSymbols = {
     App: Symbol("App"),
