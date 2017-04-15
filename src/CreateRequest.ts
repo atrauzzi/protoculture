@@ -49,7 +49,7 @@ export interface RequestOptions {
     accept: string;
 }
 
-export async function createRequest<ResponseData>(uri: string, options?: Partial<RequestOptions>) {
+export async function createRequest<ResponseData>(uri: string, options: Partial<RequestOptions> = {}) {
 
     const defaultOptions: Partial<RequestOptions> = {
         method: Method.Get,
