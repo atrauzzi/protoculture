@@ -8,6 +8,7 @@ export class LogServiceProvider extends ServiceProvider {
 
     public async boot(): Promise<void> {
 
+        this.makeInjectable(LogService);
         this.bindConstructor<LogService>(logSymbols.LogService, LogService);
 
         this.bindConstructorParameter(suiteSymbols.Suite, LogService, 0);
