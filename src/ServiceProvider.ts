@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import {appSymbols, StaticApp} from "./App";
-import {symbols, StaticPlatform, Platform} from "./";
+import {symbols, StaticPlatform, Platform} from "./index";
 import {Suite} from "./Suite";
 import {decorate, injectable, multiInject, inject, Container} from "inversify";
 

@@ -1,5 +1,5 @@
 import {ServiceProvider} from "../ServiceProvider";
-import {reduxSymbols} from "./";
+import {reduxSymbols} from "./index";
 import {Suite} from "../Suite";
 import {Container} from "inversify";
 import {createStore, Store} from "redux";

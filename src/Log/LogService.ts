@@ -2,7 +2,7 @@ import {App} from "../App";
 import {Suite} from "../Suite";
 import {LogLevel} from "./LogLevel";
 import {Platform} from "../Suite";
-import {BaseEnvironment} from "../";
+import {BaseEnvironment} from "../index";
 
 
 export class LogService {

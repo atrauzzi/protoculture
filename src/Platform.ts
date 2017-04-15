@@ -1,5 +1,5 @@
 import {LogLevel} from "./Log/LogLevel";
-import {BaseEnvironment} from "./";
+import {BaseEnvironment} from "./index";
 
 
 export interface StaticPlatform<PlatformType extends Platform> {

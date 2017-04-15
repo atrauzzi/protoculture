@@ -1,7 +1,7 @@
 import {ServiceProvider} from "../ServiceProvider";
-import {symbols} from "../";
+import {symbols} from "../index";
 import {suiteSymbols} from "../Suite";
-import {logSymbols, LogService} from "./";
+import {logSymbols, LogService} from "./index";
 
 
 export class LogServiceProvider extends ServiceProvider {

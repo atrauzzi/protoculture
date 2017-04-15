@@ -3,12 +3,11 @@ import "isomorphic-fetch";
 import "reflect-metadata";
 //
 import * as _ from "lodash";
-import {symbols} from "../";
-import {suiteSymbols} from "./";
+import {symbols, ServiceProvider} from "../index";
+import {suiteSymbols} from "./index";
 import {appSymbols, App} from "../App";
 import {Container, interfaces} from "inversify";
 import ContainerOptions = interfaces.ContainerOptions;
-import {ServiceProvider} from "../";
 import {Platform} from "../Platform";
 import {LogLevel} from "../Log/LogLevel";
 import {StaticServiceProvider} from "../ServiceProvider";

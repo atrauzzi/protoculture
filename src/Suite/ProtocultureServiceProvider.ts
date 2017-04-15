@@ -1,5 +1,5 @@
-import {symbols, ServiceProvider, BaseApp} from "../";
-import {suiteSymbols, Platform} from "./";
+import {symbols, ServiceProvider, BaseApp} from "../index";
+import {suiteSymbols, Platform} from "./index";
 
 
 export class ProtocultureServiceProvider extends ServiceProvider {
