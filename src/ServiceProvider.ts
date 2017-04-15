@@ -42,6 +42,8 @@ export abstract class ServiceProvider {
 
     protected bindApp<App extends StaticApp<any>>(app: App, identifier?: symbol): void {
 
+        this.makeInjectable(app);
+
         this.bindConstructor<App>(appSymbols.App, app);
 
         if(identifier) {
@@ -69,8 +71,6 @@ export abstract class ServiceProvider {
     }
 
     protected bindConstructor<Type>(symbol: symbol, staticType: {new(...args: any[]): Type}) {
-
-        this.makeInjectable(staticType);
 
         this.suite.container.bind<Type>(symbol)
             .to(staticType);
