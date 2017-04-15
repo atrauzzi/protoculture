@@ -40,9 +40,14 @@ export abstract class ServiceProvider {
             .to(platform);
     }
 
-    protected bindApp<App extends StaticApp<any>>(app: App): void {
+    protected bindApp<App extends StaticApp<any>>(app: App, identifier?: symbol): void {
 
         this.bindConstructor<App>(appSymbols.App, app);
+
+        if(identifier) {
+
+            this.bindConstructor(identifier, app);
+        }
     }
 
     protected makeInjectable(object: any): void {
