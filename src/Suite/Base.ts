@@ -166,14 +166,29 @@ export abstract class Suite {
         if(!_.isEmpty(this.apps)) {
 
             this._logger.log("Suite already run", null, LogLevel.Error);
+            
+            return;
         }
 
         this._logger.log("Suite started", null, LogLevel.Debug);
-        // ToDo: Redux event.
+        
+        // ToDo: Redux event?
 
-        this.buildApps();
+        try {
 
-        await this.runApps();
+            await this.buildApps();
+        }
+        catch(error) {
+
+            this._logger.log(`Unable to build apps: ${error.trace}`, null, LogLevel.Error);
+        }
+
+        try {
+            await this.runApps();
+        }
+        catch(error) {
+            this._logger.log(`Error running apps: ${error.trace}`, null, LogLevel.Error);
+        }
     }
 
     protected async runApps() {
