@@ -42,9 +42,11 @@ export class WebPlatform implements Platform {
         const logMessage = `${levelName} ${message}`;
 
         if(level >= LogLevel.Error) {
+
             console.error(logMessage);
         }
         else {
+
             console.log(logMessage);
         }
     }

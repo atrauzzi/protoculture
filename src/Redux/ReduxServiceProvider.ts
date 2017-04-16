@@ -22,8 +22,15 @@ export class ReduxServiceProvider extends ServiceProvider {
 
     protected busReducerFactory(context: interfaces.Context) {
 
-        const busReducers = context.container.getAll<BusReducer>(reduxSymbols.BusReducer);
+        let busReducers: BusReducer[];
 
+        try {
+            busReducers = context.container.getAll<BusReducer>(reduxSymbols.BusReducer);
+        }
+        catch(error) {
+            busReducers = [];
+        }
+        
         return this.createBusReducerStore(busReducers);
     }
 
