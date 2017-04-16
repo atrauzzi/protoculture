@@ -11,6 +11,7 @@ export {WebServiceProvider} from "./Web/WebServiceProvider";
 export {Environment, BaseEnvironment} from "./Environment";
 
 export {createRequest, requestJson} from "./CreateRequest";
+export {lazyLoad} from "./Web/LazyLoad";
 
 export const symbols = {
     Environment: Symbol("Environment"),
