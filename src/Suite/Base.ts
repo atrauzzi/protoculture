@@ -182,14 +182,14 @@ export abstract class Suite {
         }
         catch(error) {
 
-            this._logger.log(`Unable to build apps: ${error.trace}`, null, LogLevel.Error);
+            this._logger.log(`Unable to build apps: ${error}`, null, LogLevel.Error);
         }
 
         try {
             await this.runApps();
         }
         catch(error) {
-            this._logger.log(`Error running apps: ${error.trace}`, null, LogLevel.Error);
+            this._logger.log(`Error running apps: ${error}`, null, LogLevel.Error);
         }
     }
 
