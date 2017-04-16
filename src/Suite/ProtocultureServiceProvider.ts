@@ -1,4 +1,4 @@
-import {symbols, ServiceProvider, BaseApp} from "../index";
+import { symbols, ServiceProvider, BaseApp, Environment } from "../index";
 import {suiteSymbols, Platform} from "./index";
 
 
@@ -12,7 +12,7 @@ export class ProtocultureServiceProvider extends ServiceProvider {
             .toConstantValue(this.suite);
 
         this.suite.container
-            .bind(symbols.Environment)
+            .bind<Environment<any>>(symbols.Environment)
             .toDynamicValue((context) => context
                 .container
                 .get<Platform>(symbols.CurrentPlatform)
