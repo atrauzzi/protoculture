@@ -3,7 +3,8 @@ import * as platform from "platform";
 import {Platform} from "../Platform";
 import {LogLevel} from "../Log/LogLevel";
 import {BaseEnvironment} from "../Environment";
-import {Method, requestJson} from "../CreateRequest";
+import { Method, requestJson } from "../CreateRequest";
+import { Suite } from "../index";
 
 
 export class WebPlatform implements Platform {
@@ -12,23 +13,16 @@ export class WebPlatform implements Platform {
 
     protected env: Partial<BaseEnvironment>;
 
+    public suite: Suite;
+
     public get current() {
 
         return !!platform.ua;
     }
 
-    public async boot(suite?: string) {
+    public async boot() {
 
-        const envFilename = [
-            "/env",
-        ];
-
-        if(suite) {
-
-            envFilename.push(`.${_.kebabCase(suite)}`);
-        }
-
-        this.env = await requestJson<BaseEnvironment>(`${envFilename}.json`);
+        this.env = await requestJson<BaseEnvironment>(`/${_.kebabCase(this.suite.name)}.env.json`);
     }
 
     public get environment(): BaseEnvironment {

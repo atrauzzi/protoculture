@@ -139,9 +139,12 @@ export abstract class Suite {
             throw new Error("Unable to determine current platform.");
         }
 
+        // ToDo: Property injection!
+        currentPlatform.suite = this;
+
         if(currentPlatform.boot) {
 
-            await currentPlatform.boot(this.name);
+            await currentPlatform.boot();
         }
 
         this.container.bind<Platform>(symbols.CurrentPlatform)
