@@ -41,13 +41,16 @@ export class WebPlatform implements Platform {
         const levelName = `${LogLevel[level]} -`;
         const logMessage = `${levelName} ${message}`;
 
-        if(level >= LogLevel.Error) {
+        switch(level) {
 
-            console.error(logMessage);
-        }
-        else {
+            case LogLevel.Debug:
+            case LogLevel.Info:
+                console.log(logMessage);
+            break;
 
-            console.log(logMessage);
+            default:
+                console.error(logMessage);
+            break;
         }
     }
 }
