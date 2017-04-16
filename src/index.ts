@@ -13,6 +13,8 @@ export {Environment, BaseEnvironment} from "./Environment";
 export {createRequest, requestJson} from "./CreateRequest";
 export {lazyLoad} from "./Web/LazyLoad";
 
+export {reduxSymbols} from "./Redux/index";
+
 export const symbols = {
     Environment: Symbol("Environment"),
     AvailablePlatform: Symbol("AvailablePlatform"),
