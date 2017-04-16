@@ -57,6 +57,8 @@ export async function createRequest<ResponseData>(uri: string, options: Partial<
         accept: ContentType.Json,
     };
 
+    options = _.merge(defaultOptions, options);
+
     const headers = {
         "accept": options.accept,
     };
@@ -111,8 +113,11 @@ export async function createRequest<ResponseData>(uri: string, options: Partial<
     });
 }
 
-export async function requestJson<RequestData>(uri: string, options?: Partial<RequestOptions>): Promise<RequestData> {
+export async function requestJson<RequestData>(uri: string, options: Partial<RequestOptions> = {}): Promise<RequestData> {
     
+    options.contentType = ContentType.Json;
+    options.accept = ContentType.Json;
+
     const request = await createRequest(uri, options);
 
     return await request.json();
