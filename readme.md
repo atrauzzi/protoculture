@@ -7,7 +7,8 @@
 
 ## About
 Protoculture is a _slightly opinionated_ application framework for creating ECMAScript applications.  It sits between
-your chosen libraries and process managers, acting as a layer to organize your abstractions.
+your chosen libraries and process managers, acting as a layer to organize your abstractions.  Everything protoculture does aims to 
+help structure your TypeScript/ES codebase, make it easier for multiple people to work on and reduce cognitive overhead.
 
 The best way to understand how Protoculture works is to think about its main pillars:
 
@@ -18,8 +19,8 @@ The best way to understand how Protoculture works is to think about its main pil
  
 The _slight_ opinionation of Protoculture comes from:
 
- - The powerful [inversify](http://inversify.io) dependency injection system, used to facilitate better organization of applications
- - [Redux](http://redux.js.org) service provider for a popular and well documented set of conventions for data handling
+ - The powerful [inversify](http://inversify.io) dependency injection system
+ - A bundled [Redux](http://redux.js.org) service provider for a popular and well documented set of conventions for data handling
  - Planned integrations with hosting and process management infrastructure like [PM2](http://pm2.keymetrics.io) and [ApplicationInsights](https://github.com/Microsoft/ApplicationInsights-node.js)
 
 ### In Detail
@@ -41,8 +42,10 @@ Suites represent the topmost entrypoint for a grouping of Apps.  Your entrypoint
 a suite and call the `run` method on it with little fuss.  You configure your suite by way of the `Platform`, `App` 
 and `ServiceProvider` types.
 
-Another role of the `Suite` is to act as a language-level root for bundling an entire dependency graph.  This is most 
+The final role of the `Suite` is to act as a language-level root for bundling an entire dependency graph.  This is most 
 useful when authoring browser applications.
+Because suites are the first thing run in a protoculture application, the suite module automatically includes 
+popular fetch, promise and reflect-metadata polyfills.
 
 #### Platforms
 Platforms represent the means by which you wish to populate the environment that Protoculture will make available.
@@ -61,6 +64,13 @@ will ask every app to finish up.  You don't have to manage a thing!
 ## Meta
 
 Protoculture is created by Alexander Trauzzi and is available under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).
+
+### Integrations
+
+ - [Redux](src/Redux)
+ - [hapi](https://github.com/atrauzzi/protoculture-hapi)
+ - [Web Browsers](src/Web)
+ - [Console](src/Console)
 
 ### Inspiration
 
