@@ -19,16 +19,17 @@ The best way to understand how Protoculture works is to think about its main pil
  
 The _slight_ opinionation of Protoculture comes from:
 
+ - Being authored in TypeScript
  - The powerful [inversify](http://inversify.io) dependency injection system
  - A bundled [Redux](http://redux.js.org) service provider for a popular and well documented set of conventions for data handling
  - Planned integrations with hosting and process management infrastructure like [PM2](http://pm2.keymetrics.io) and [ApplicationInsights](https://github.com/Microsoft/ApplicationInsights-node.js)
 
 ### In Detail
 The layering Protoculture provides has similar if not identical siblings in other languages and runtimes, 
-its big advantage is in how everything is tied together.  In that sense, Protoculture is not a full framework, but an 
+its big advantage is in how everything is tied together.  In that sense, protoculture is not a full framework, but an 
 application framework.
 
-Protoculture builds upon the standard ES Promise APIs.  While Protoculture is authored in TypeScript, you can definitely 
+Protoculture builds upon the standard ES Promise APIs and while Protoculture is authored in TypeScript, you can definitely 
 use it from regular ES.
 
 #### Service Providers
