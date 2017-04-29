@@ -16,7 +16,7 @@ export class ReduxServiceProvider extends ServiceProvider {
 
     public async bootChild(container: Container): Promise<void> {
 
-        container.rebind<Redux.Store<any>>(reduxSymbols.Store)
+        container.bind<Redux.Store<any>>(reduxSymbols.Store)
             .toDynamicValue((context) => this.busReducerFactory(context));
     }
 
@@ -25,9 +25,11 @@ export class ReduxServiceProvider extends ServiceProvider {
         let busReducers: BusReducer[];
 
         try {
+
             busReducers = context.container.getAll<BusReducer>(reduxSymbols.BusReducer);
         }
         catch(error) {
+
             busReducers = [];
         }
         
