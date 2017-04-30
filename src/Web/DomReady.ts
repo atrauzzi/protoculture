@@ -17,5 +17,10 @@ export function domReady() {
         }
     };
 
+    if(document.readyState === "complete") {
+        
+        resolveDeferred();
+    }
+
     return deferred;
 }
