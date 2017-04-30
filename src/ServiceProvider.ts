@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import {appSymbols, StaticApp} from "./App";
 import {symbols, StaticPlatform, Platform} from "./index";
 import {Suite} from "./Suite";
-import {decorate, injectable, multiInject, inject, Container} from "inversify";
+import {decorate, injectable, multiInject, inject, Container, interfaces} from "inversify";
 
 
 export interface StaticServiceProvider<ServiceProviderType extends ServiceProvider> {
@@ -40,16 +40,11 @@ export abstract class ServiceProvider {
             .to(platform);
     }
 
-    protected bindApp<App extends StaticApp<any>>(app: App, identifier?: symbol): void {
+    protected bindApp<App extends StaticApp<any>>(app: App) {
 
         this.makeInjectable(app);
 
-        this.bindConstructor<App>(appSymbols.App, app);
-
-        if(identifier) {
-
-            this.bindConstructor(identifier, app);
-        }
+        return this.bindConstructor<App>(appSymbols.App, app);
     }
 
     protected makeInjectable(object: any): void {
@@ -70,9 +65,9 @@ export abstract class ServiceProvider {
         //tagProperty(target, property, metadata);
     }
 
-    protected bindConstructor<Type>(symbol: symbol, staticType: {new(...args: any[]): Type}) {
+    protected bindConstructor<Type>(symbol: symbol, staticType: {new(...args: any[]): Type}): interfaces.BindingWhenOnSyntax<Type> {
 
-        this.suite.container.bind<Type>(symbol)
+        return this.suite.container.bind<Type>(symbol)
             .to(staticType);
     }
 
