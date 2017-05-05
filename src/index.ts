@@ -1,4 +1,4 @@
-export {App, BaseApp} from "./App";
+export {StaticApp, App, BaseApp} from "./App";
 export {StaticPlatform, Platform} from "./Platform";
 export {ServiceProvider, StaticServiceProvider} from "./ServiceProvider";
 export {Suite} from "./Suite";
