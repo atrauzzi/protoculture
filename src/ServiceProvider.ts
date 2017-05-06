@@ -52,19 +52,6 @@ export abstract class ServiceProvider {
         decorate(injectable(), object);
     }
 
-    protected makePropertyInjectable(target: any, property: string, typeSymbol: symbol, typeValue: any = null) {
-
-        const metadata: any = {
-            key: typeSymbol
-        };
-
-        if(typeValue) {
-            metadata.value = typeValue
-        }
-
-        //tagProperty(target, property, metadata);
-    }
-
     protected bindConstructor<Type>(symbol: symbol, staticType: {new(...args: any[]): Type}): interfaces.BindingWhenOnSyntax<Type> {
 
         return this.suite.container.bind<Type>(symbol)

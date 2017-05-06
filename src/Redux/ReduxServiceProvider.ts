@@ -1,8 +1,8 @@
 import {ServiceProvider} from "../ServiceProvider";
+import {Container, interfaces} from "inversify";
+import {createStore, compose as reduxCompose, applyMiddleware, Store, Reducer, StoreEnhancer, Middleware} from "redux";
 import {reduxSymbols} from "./index";
 import {Suite} from "../Suite";
-import { Container, interfaces } from "inversify";
-import {createStore, Store} from "redux";
 import {createBusReducer, BusReducer} from "./BusReducer";
 
 
@@ -10,8 +10,12 @@ export class ReduxServiceProvider extends ServiceProvider {
 
     public async boot(): Promise<void> {
 
+        this.suite.container.bind<typeof reduxCompose>(reduxSymbols.Compose)
+            .toConstantValue(reduxCompose);
+
         this.suite.container.bind<Redux.Store<any>>(reduxSymbols.Store)
-            .toDynamicValue((container) => this.busReducerFactory(container));
+            .toDynamicValue((container) => this.busReducerFactory(container))
+            .inSingletonScope();
     }
 
     public async bootChild(container: Container): Promise<void> {
@@ -39,6 +43,28 @@ export class ReduxServiceProvider extends ServiceProvider {
     // ToDo: Other kinds of reducers can totally be a thing by inspecting a config and or creating a different service provider!
     protected createBusReducerStore(busReducers: BusReducer[]): Store<any> {
 
-        return createStore<any>(createBusReducer<any>(busReducers));
+        return this.createStore<any>(createBusReducer<any>(busReducers));
+    }
+
+    protected createStore<State>(reducer: Reducer<State>) {
+
+        const compose = this.suite.container.get<typeof reduxCompose>(reduxSymbols.Compose);
+
+        return createStore<State>(
+            reducer,
+            compose(applyMiddleware(...this.middlewares))
+        );
+    }
+
+    protected get middlewares() {
+        
+        try {
+            
+            return this.suite.container.getAll<Middleware>(reduxSymbols.Middleware);
+        }
+        catch(error) {
+
+            return [];
+        }
     }
 }

@@ -17,6 +17,8 @@ export {domReady} from "./Web/DomReady";
 export {appSymbols} from "./App/index";
 export {reduxSymbols} from "./Redux/index";
 
+export {BusReducer} from "./Redux/BusReducer";
+
 export const symbols = {
     Environment: Symbol("Environment"),
     AvailablePlatform: Symbol("AvailablePlatform"),

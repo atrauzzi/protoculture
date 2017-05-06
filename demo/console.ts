@@ -1,5 +1,17 @@
 #!/usr/bin/env ts-node
-import {ServiceProvider, StaticServiceProvider, ConsoleServiceProvider, BaseApp, Suite} from "../src";
+import * as _ from "lodash";
+import { 
+    reduxSymbols, 
+    ServiceProvider, 
+    StaticServiceProvider, 
+    ConsoleServiceProvider, 
+    BaseApp, 
+    Suite, 
+    App, 
+    LogLevel, 
+    BusReducer,
+} from "../src";
+import { Store, Action } from "redux";
 
 
 //
@@ -10,6 +22,35 @@ class ConsoleDemoServiceProvider extends ServiceProvider {
 
         this.bindApp(BoringConsoleDemoApp);
         this.bindApp(AsynchronousConsoleDemoApp);
+        this.bindApp(ReduxConsoleDemoApp);
+        this.bindConstructorParameter(reduxSymbols.Store, ReduxConsoleDemoApp, 0);
+        this.bindConstructorParameter(reduxSymbols.Store, AsynchronousConsoleDemoApp, 0);
+
+        this.suite.container.bind<BusReducer>(reduxSymbols.BusReducer)
+            .toConstantValue({
+                action: "test",
+                reducer: (state: any, action: Action) => {
+
+                    if(_.isEmpty(state)) {
+                        return {
+                            counter: 1,
+                        };
+                    }
+                    
+                    return {
+                        counter: ++state.counter,
+                    };
+                }
+            });
+
+        this.suite.container.bind<BusReducer>(reduxSymbols.BusReducer)
+            .toConstantValue({
+                action: "done",
+                reducer: (state: any, action: Action) => {
+
+                    return { ...state, done: true };
+                }
+            });
     }
 }
 
@@ -27,13 +68,19 @@ class BoringConsoleDemoApp extends BaseApp {
 
 //
 // Here's another app that is asynchronous. But still boring.
-class AsynchronousConsoleDemoApp extends BaseApp {
+class AsynchronousConsoleDemoApp implements App {
 
     public name = "async-app";
 
     protected _working: boolean;
 
     protected timeout = 20;
+
+    public suite: Suite;
+
+    public constructor(protected store: Store<any>) {
+
+    }
 
     public get working(): boolean {
 
@@ -49,19 +96,69 @@ class AsynchronousConsoleDemoApp extends BaseApp {
 
         const timeout = setTimeout(
             () => {
-                this.log(`${this.timeout} second timeout elapsed!`);
+                this.suite.logger.log(`${this.timeout} second timeout elapsed!`, this);
                 resolveDeferred();
             },
             this.timeout * 1000
         );
 
-        this.log(`${this.timeout} second timeout started.`);
+        this.suite.logger.log(`${this.timeout} second timeout started.`, this);
 
         await deferred;
+
+        this.store.dispatch({
+            type: "done",
+        });
+
+        const count = this.store.getState().counter;
+
+        this.suite.logger.log(`The Redux app triggered: ${count} times!`, this);
 
         this._working = false;
     }
 }
+
+//
+// This app triggers Redux actions every 200ms!
+class ReduxConsoleDemoApp implements App {
+    
+    public name = "redux-app";
+
+    public working: boolean = false;
+    
+    public suite: Suite;
+
+    protected interval: NodeJS.Timer;
+
+    public constructor(protected store: Store<any>) {
+
+    }
+
+    public async run(): Promise<void> {
+
+        this.interval = setInterval(
+            () => this.tick(),
+            200
+        );
+    }
+
+    protected tick() {
+        
+        if(_.get(this.store.getState(), "done")) {
+
+            clearInterval(this.interval);
+
+            this.suite.logger.log("All done!", this);
+        }
+        else {
+
+            this.store.dispatch({
+                type: "test"
+            });
+        }
+    }
+}
+        //const compose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || reduxCompose;
 
 //
 // Here's a suite that acts as the composition root for the ServiceProvider.
