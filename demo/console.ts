@@ -26,6 +26,7 @@ class ConsoleDemoServiceProvider extends ServiceProvider {
         this.bindConstructorParameter(reduxSymbols.Store, ReduxConsoleDemoApp, 0);
         this.bindConstructorParameter(reduxSymbols.Store, AsynchronousConsoleDemoApp, 0);
 
+        // This is how you can add reducers. Imagine them coming from separate modules!
         this.suite.container.bind<BusReducer>(reduxSymbols.BusReducer)
             .toConstantValue({
                 action: "test",
@@ -124,7 +125,7 @@ class ReduxConsoleDemoApp implements App {
     
     public name = "redux-app";
 
-    public working: boolean = false;
+    public working: boolean = true;
     
     public suite: Suite;
 
@@ -136,10 +137,7 @@ class ReduxConsoleDemoApp implements App {
 
     public async run(): Promise<void> {
 
-        this.interval = setInterval(
-            () => this.tick(),
-            200
-        );
+        this.interval = setInterval(() => this.tick(), 200);
     }
 
     protected tick() {
@@ -147,6 +145,8 @@ class ReduxConsoleDemoApp implements App {
         if(_.get(this.store.getState(), "done")) {
 
             clearInterval(this.interval);
+
+            this.working = false;
 
             this.suite.logger.log("All done!", this);
         }
