@@ -158,7 +158,6 @@ class ReduxConsoleDemoApp implements App {
         }
     }
 }
-        //const compose = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || reduxCompose;
 
 //
 // Here's a suite that acts as the composition root for the ServiceProvider.
