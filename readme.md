@@ -6,9 +6,8 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 ## About
-Protoculture is a _slightly opinionated_ application framework for creating ECMAScript applications.  It sits between
-your chosen libraries and process managers, acting as a layer to organize your abstractions.  Everything protoculture does aims to 
-help structure your TypeScript/ES codebase, make it easier for multiple people to work on and reduce cognitive overhead.
+Protoculture is a _slightly opinionated_ ECMAScript applications framework.  It sits between your chosen libraries and process managers acting as a layer to organize your abstractions.
+Everything protoculture does aims to help structure your TypeScript/ES codebase, reducing cognitive overhead and making it easier for multiple people to work together.
 
 The best way to understand how Protoculture works is to think about its main pillars:
 
@@ -20,6 +19,7 @@ The best way to understand how Protoculture works is to think about its main pil
 The _slight_ opinionation of Protoculture comes from:
 
  - Being authored in TypeScript
+ - Asynchronous-first via `await` & the [standard Promise APIs](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
  - The powerful [inversify](http://inversify.io) dependency injection system
  - A bundled [Redux](http://redux.js.org) service provider for a popular and well documented set of conventions for data handling
  - Planned integrations with hosting and process management infrastructure like [PM2](http://pm2.keymetrics.io) and [ApplicationInsights](https://github.com/Microsoft/ApplicationInsights-node.js)
@@ -29,8 +29,7 @@ The layering Protoculture provides has similar if not identical siblings in othe
 its big advantage is in how everything is tied together.  In that sense, protoculture is not a full framework, but an 
 application framework.
 
-Protoculture builds upon the standard ES Promise APIs and while Protoculture is authored in TypeScript, you can definitely 
-use it from regular ES.
+While Protoculture is authored in TypeScript, you can definitely use it from regular ES as well.
 
 #### Service Providers
 Service providers are responsible for telling the dependency injection system about new classes and functionality. All
@@ -70,6 +69,7 @@ Protoculture is created by Alexander Trauzzi and is available under the [Apache 
 
  - [Redux](src/Redux)
  - [hapi](https://github.com/atrauzzi/protoculture-hapi)
+ - [react](https://github.com/atrauzzi/protoculture-react)
  - [Web Browsers](src/Web)
  - [Console](src/Console)
 
