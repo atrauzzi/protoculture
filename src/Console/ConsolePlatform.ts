@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import {Platform} from "../Platform";
 import {LogLevel} from "../Log/LogLevel";
-import { BaseEnvironment } from "../Environment";
+import { Environment } from "../Environment";
 import { Suite } from "../index";
 
 
@@ -16,9 +16,9 @@ export class ConsolePlatform implements Platform {
         return !!process;
     }
 
-    public get environment(): BaseEnvironment {
+    public get environment(): Environment {
 
-        const defaultEnvironment: BaseEnvironment = {
+        const defaultEnvironment: Environment = {
             debug: true,
             name: undefined,
             logLevel: LogLevel.Info,

@@ -1,8 +1,8 @@
 import * as _ from "lodash";
 import * as platform from "platform";
-import {Platform} from "../Platform";
-import {LogLevel} from "../Log/LogLevel";
-import {BaseEnvironment} from "../Environment";
+import { Platform } from "../Platform";
+import { LogLevel } from "../Log/LogLevel";
+import { Environment } from "../Environment";
 import { Method, requestJson } from "../CreateRequest";
 import { Suite } from "../index";
 
@@ -11,7 +11,7 @@ export class WebPlatform implements Platform {
 
     public name = "web";
 
-    protected env: Partial<BaseEnvironment>;
+    protected env: Partial<Environment>;
 
     public suite: Suite;
 
@@ -22,12 +22,12 @@ export class WebPlatform implements Platform {
 
     public async boot() {
 
-        this.env = await requestJson<BaseEnvironment>(`/${_.kebabCase(this.suite.name)}.env.json`);
+        this.env = await requestJson<Environment>(`/${_.kebabCase(this.suite.name)}.env.json`);
     }
 
-    public get environment(): BaseEnvironment {
+    public get environment(): Environment {
 
-        const defaultEnvironment: BaseEnvironment = {
+        const defaultEnvironment: Environment = {
             debug: true,
             name: undefined,
             logLevel: LogLevel.Info,

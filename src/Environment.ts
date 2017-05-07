@@ -1,12 +1,9 @@
-import {LogLevel} from "./Log";
+import { LogLevel } from "./Log";
 
 
-export type Environment<With> = BaseEnvironment & {
+export interface Environment {
 
-    [P in keyof With]?: With[P];
-};
-
-export interface BaseEnvironment {
+    [index: string]: any;
 
     logLevel: LogLevel;
     name: string;
