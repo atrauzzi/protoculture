@@ -1,6 +1,6 @@
 export { StaticApp, App, BaseApp } from "./App";
 export { StaticPlatform, Platform } from "./Platform";
-export { ServiceProvider, StaticServiceProvider } from "./ServiceProvider";
+export { ServiceProviderContract, ServiceProvider, StaticServiceProvider } from "./ServiceProvider";
 export { Suite } from "./Suite";
 export { LogLevel } from "./Log/LogLevel";
 
