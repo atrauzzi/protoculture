@@ -8,6 +8,18 @@ import {createBusReducer, BusReducer} from "./BusReducer";
 
 export class ReduxServiceProvider extends ServiceProvider {
 
+    protected get middlewares() {
+        
+        try {
+            
+            return this.suite.container.getAll<Middleware>(reduxSymbols.Middleware);
+        }
+        catch(error) {
+
+            return [];
+        }
+    }
+
     public async boot(): Promise<void> {
 
         this.suite.container.bind<typeof reduxCompose>(reduxSymbols.Compose)
@@ -54,17 +66,5 @@ export class ReduxServiceProvider extends ServiceProvider {
             reducer,
             compose(applyMiddleware(...this.middlewares))
         );
-    }
-
-    protected get middlewares() {
-        
-        try {
-            
-            return this.suite.container.getAll<Middleware>(reduxSymbols.Middleware);
-        }
-        catch(error) {
-
-            return [];
-        }
     }
 }
