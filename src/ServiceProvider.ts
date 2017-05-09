@@ -10,7 +10,11 @@ export interface StaticServiceProvider<ServiceProviderType extends ServiceProvid
     new(suite: Suite): ServiceProviderType;
 }
 
-export abstract class ServiceProvider {
+export interface ServiceProviderContract {
+
+}
+
+export abstract class ServiceProvider implements ServiceProviderContract {
 
     protected suite: Suite;
 
