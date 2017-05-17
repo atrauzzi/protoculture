@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import { symbols, ServiceProvider, BaseApp, Environment } from "../index";
 import { suiteSymbols, Platform } from "./index";
+import { Dictionary } from "lodash";
 
 
 export class ProtocultureServiceProvider extends ServiceProvider {
@@ -21,9 +22,14 @@ export class ProtocultureServiceProvider extends ServiceProvider {
                     .get<Platform>(symbols.CurrentPlatform)
                     .environment;
 
-                return _.mapKeys(environment, (key: string) => 
-                    // ToDo: I'm not aware of any way to tell lodash to return an environment here.
-                    _.camelCase(key)) as Environment;
+                return _.reduce(environment, (prev: Dictionary<string>, value: string, key: string) => {
+                    
+                    prev = _.isObject(prev) ? prev : {};
+                    
+                    prev[_.camelCase(key)] = value;
+
+                    return prev;
+                }) as Environment;
             })
             .inSingletonScope()
         ;

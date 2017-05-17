@@ -133,7 +133,7 @@ export abstract class Suite {
             this.container.getAll<Platform>(symbols.AvailablePlatform),
             (platform: Platform) => platform.current
         );
-
+console.log(currentPlatform);
         if(!currentPlatform) {
 
             throw new Error("Unable to determine current platform.");
