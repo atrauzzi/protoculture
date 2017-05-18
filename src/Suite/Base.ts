@@ -122,9 +122,11 @@ export abstract class Suite {
 
     protected async bootServiceProviders() {
 
-        const bootPromises = _.map(this.loadedServiceProviders, (serviceProvider: ServiceProvider) => serviceProvider.boot());
-
-        await Promise.all(bootPromises);
+        await _.reduce(
+            this.loadedServiceProviders, 
+            (previous: Promise<void>, current) => previous.then(() => current.boot()),
+            new Promise<void>((resolve) => resolve())
+        );
     }
 
     protected async bootPlatform() {
@@ -133,7 +135,7 @@ export abstract class Suite {
             this.container.getAll<Platform>(symbols.AvailablePlatform),
             (platform: Platform) => platform.current
         );
-console.log(currentPlatform);
+
         if(!currentPlatform) {
 
             throw new Error("Unable to determine current platform.");
