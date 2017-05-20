@@ -24,7 +24,7 @@ export class LogService {
         }
     }
 
-    protected buildLogMessage(message: any, app: App = null): string {
+    protected buildLogMessage(message: any, app: App = null): string[] {
 
         const messageLines = _.isString(message)
             ? message.split("\n")
@@ -32,9 +32,7 @@ export class LogService {
 
         const logLinePrefix = this.buildLogLinePrefix(app);
 
-        return _
-            .map(messageLines, (messageLine) => `${logLinePrefix}${messageLine}`)
-            .join("");
+        return _.map(messageLines, (messageLine) => `${logLinePrefix}${messageLine}`);
     }
 
     protected buildLogLinePrefix(app: App) {

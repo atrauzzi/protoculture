@@ -36,10 +36,15 @@ export class WebPlatform implements Platform {
         return _.assign(defaultEnvironment, this.env);
     }
 
-    public log(message: string, level: LogLevel) {
+    public log(messageLines: string[], level: LogLevel) {
+
+        _.forEach(messageLines, (messageLine) => this.logLine(messageLine, level));
+    }
+
+    public logLine(messageLine: string, level: LogLevel) {
 
         const levelName = `${LogLevel[level]} -`;
-        const logMessage = `${levelName} ${message}`;
+        const logMessage = `${levelName} ${messageLine}`;
 
         switch(level) {
 

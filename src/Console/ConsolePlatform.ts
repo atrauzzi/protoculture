@@ -27,10 +27,10 @@ export class ConsolePlatform implements Platform {
         return _.assign(defaultEnvironment, process.env);
     }
 
-    public log(message: string, level: LogLevel) {
+    public log(messageLines: string[], level: LogLevel) {
 
         const levelName = `${LogLevel[level]} -`;
 
-        console.log(`${levelName} ${message}`);
+        _.each(messageLines, (messageLine) => console.log(`${levelName} ${messageLine}`));
     }
 }

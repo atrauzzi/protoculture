@@ -17,7 +17,7 @@ export interface Platform {
 
     suite: Suite;
 
-    log(message: string, level: LogLevel): void;
+    log(message: string[], level: LogLevel): void;
 
     boot?(name?: string): Promise<void>;
 }
