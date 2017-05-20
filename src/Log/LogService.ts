@@ -1,3 +1,4 @@
+import * as _ from "lodash";
 import { App } from "../App";
 import { Suite } from "../Suite";
 import { LogLevel } from "./LogLevel";
@@ -15,7 +16,7 @@ export class LogService {
 
     }
 
-    public log(message: any, app: App = null, level: LogLevel = LogLevel.Info) {
+    public log(message: any, app: App, level: LogLevel = LogLevel.Info) {
 
         if(this.environment.logLevel >= level || this.environment.debug) {
 
@@ -25,18 +26,30 @@ export class LogService {
 
     protected buildLogMessage(message: any, app: App = null): string {
 
-        const logLineParts = [
+        const messageLines = _.isString(message)
+            ? message.split("\n")
+            : [message];
+
+        const logLinePrefix = this.buildLogLinePrefix(app);
+
+        return _
+            .map(messageLines, (messageLine) => `${logLinePrefix}${messageLine}`)
+            .join("");
+    }
+
+    protected buildLogLinePrefix(app: App) {
+
+        const logLinePrefixParts = [
             `protoculture@${this.platform.name}:${this.suite.name}`
         ];
 
         if(app) {
 
-            logLineParts.push(`/${app.name}`);
+            logLinePrefixParts.push(`/${app.name}`);
         }
 
-        logLineParts.push("# ");
-        logLineParts.push(message);
+        logLinePrefixParts.push("# ");
 
-        return logLineParts.join("");
+        return logLinePrefixParts.join("");
     }
 }
