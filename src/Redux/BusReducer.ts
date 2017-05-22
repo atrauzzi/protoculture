@@ -13,7 +13,7 @@ export function createBusReducer<State>(busReducers: BusReducer[]) {
 
     const indexedReducers = {};
 
-    _.forEach(busReducers, busReducer => {
+    _.forEach(busReducers, (busReducer) => {
 
         indexedReducers[busReducer.action] = indexedReducers[busReducer.action] || [];
         indexedReducers[busReducer.action].push(busReducer.reducer);
@@ -24,8 +24,8 @@ export function createBusReducer<State>(busReducers: BusReducer[]) {
         let finalState = state;
 
         _.get<Reducer<State>[]>(indexedReducers, action.type, [])
-            .forEach(childReducer => finalState = childReducer(finalState, action));
+            .forEach((childReducer) => finalState = childReducer(finalState, action));
 
         return finalState;
-    }
+    };
 }

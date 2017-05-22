@@ -4,7 +4,7 @@ import { Platform } from "../Platform";
 import { LogLevel } from "../Log/LogLevel";
 import { Environment } from "../Environment";
 import { Method, requestJson } from "../CreateRequest";
-import { Suite } from "../index";
+import { Suite, reduxSymbols } from "../index";
 
 
 export class WebPlatform implements Platform {
@@ -15,6 +15,11 @@ export class WebPlatform implements Platform {
 
     protected env: Partial<Environment>;
 
+    public async boot() {
+
+        this.bindInitialState();
+    }
+
     public get current() {
 
         return !!platform.ua;
@@ -22,13 +27,7 @@ export class WebPlatform implements Platform {
 
     public get environment(): Environment {
 
-        const defaultEnvironment: Environment = {
-            debug: true,
-            name: undefined,
-            logLevel: LogLevel.Info,
-        };
-
-        return _.assign(defaultEnvironment, this.env);
+        return null;
     }
 
     public log(messageLines: string[], level: LogLevel) {
@@ -41,18 +40,41 @@ export class WebPlatform implements Platform {
         const levelName = `${LogLevel[level]} -`;
         const logMessage = `${levelName} ${messageLine}`;
 
-        switch(level) {
+        switch (level) {
 
             case LogLevel.Debug:
             case LogLevel.Info:
                 // tslint:disable-next-line:no-console
                 console.log(logMessage);
-            break;
+                break;
 
             default:
                 // tslint:disable-next-line:no-console
                 console.error(logMessage);
-            break;
+                break;
+        }
+    }
+
+    protected bindInitialState() {
+
+        const initialState = this.findInitialState();
+
+        this.suite.container.bind(reduxSymbols.InitialState)
+            .to(initialState)
+            .inSingletonScope();
+    }
+
+    protected findInitialState() {
+
+        const stateElement = document.getElementsByName("state")[0];
+
+        try {
+
+            return JSON.parse(stateElement.nodeValue);
+        }
+        catch (error) {
+
+            return null;
         }
     }
 }

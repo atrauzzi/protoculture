@@ -5,4 +5,5 @@ export const reduxSymbols = {
     Compose: Symbol("Compose"),
     Middleware: Symbol("Middleware"),
     BusReducer: Symbol("BusReducer"),
+    InitialState: Symbol("InitialState"),
 };
