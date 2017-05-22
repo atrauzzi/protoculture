@@ -11,18 +11,13 @@ export class WebPlatform implements Platform {
 
     public name = "web";
 
-    protected env: Partial<Environment>;
-
     public suite: Suite;
+
+    protected env: Partial<Environment>;
 
     public get current() {
 
         return !!platform.ua;
-    }
-
-    public async boot() {
-
-        this.env = await requestJson<Environment>(`/${_.kebabCase(this.suite.name)}.env.json`);
     }
 
     public get environment(): Environment {
@@ -50,10 +45,12 @@ export class WebPlatform implements Platform {
 
             case LogLevel.Debug:
             case LogLevel.Info:
+                // tslint:disable-next-line:no-console
                 console.log(logMessage);
             break;
 
             default:
+                // tslint:disable-next-line:no-console
                 console.error(logMessage);
             break;
         }
