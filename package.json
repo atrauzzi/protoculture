@@ -6,7 +6,8 @@
   "description": "A slightly opinionated application framework for creating ECMAScript applications.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

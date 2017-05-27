@@ -16,7 +16,7 @@ install:
   - docker-compose run --rm cli yarn install
 
 script:
-  - docker-compose run --rm cli tsc
+  - docker-compose run --rm cli yarn build
 
 after_success:
   - npm run semantic-release
