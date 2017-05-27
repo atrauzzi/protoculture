@@ -8,10 +8,15 @@ import { Environment } from "../index";
 
 export class LogService {
 
+    protected static readonly defaultEnvironment = {
+        logLevel: LogLevel.Fatal,
+        debug: false,
+    };
+
     public constructor(
         protected bundle: Bundle,
-        protected environment: Environment,
-        protected platform: Platform
+        protected platform: Platform,
+        protected environment: Environment = LogService.defaultEnvironment
     ) {
 
     }

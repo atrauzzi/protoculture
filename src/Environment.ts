@@ -6,7 +6,6 @@ export interface Environment {
     [index: string]: any;
 
     logLevel: LogLevel;
-    name: string;
 
     debug: boolean;
 }

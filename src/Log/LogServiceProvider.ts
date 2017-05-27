@@ -12,7 +12,7 @@ export class LogServiceProvider extends ServiceProvider {
         this.bindConstructor<LogService>(logSymbols.LogService, LogService);
 
         this.bindConstructorParameter(bundleSymbols.Bundle, LogService, 0);
-        this.bindConstructorParameter(symbols.Environment, LogService, 1);
-        this.bindConstructorParameter(symbols.CurrentPlatform, LogService, 2);
+        this.bindConstructorParameter(symbols.CurrentPlatform, LogService, 1);
+        this.bindConstructorParameter(symbols.Environment, LogService, 2);
     }
 }
