@@ -18,7 +18,7 @@ export class LogService {
 
     public log(message: any, app: App, level: LogLevel = LogLevel.Info) {
 
-        if(this.environment.logLevel >= level || this.environment.debug) {
+        if (this.environment.logLevel >= level || this.environment.debug) {
 
             this.platform.log(this.buildLogMessage(message, app), level);
         }
@@ -41,7 +41,7 @@ export class LogService {
             `protoculture@${this.platform.name}:${this.suite.name}`
         ];
 
-        if(app) {
+        if (app) {
 
             logLinePrefixParts.push(`/${app.name}`);
         }
