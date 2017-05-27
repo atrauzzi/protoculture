@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-//import * as cookie from "cookie";
+// import * as cookie from "cookie";
 
 
 // ToDo: Reenable query strings.
@@ -10,7 +10,7 @@ export const Method = {
     Get: "GET",
     Post: "POST",
     Delete: "DELETE",
-}
+};
 
 export const ContentType = {
     Json: "application/json",
@@ -33,12 +33,13 @@ function asMultipart(data: any) {
 
     const formData = new FormData();
     _.each(data, formData.append);
+
     return formData;
 }
 
 export interface RequestOptions {
 
-    method: string,
+    method: string;
     contentType: string;
 
     data: any;
@@ -60,7 +61,7 @@ export async function createRequest<ResponseData>(uri: string, options: Partial<
     options = _.merge(defaultOptions, options);
 
     const headers = {
-        "accept": options.accept,
+        accept: options.accept,
     };
 
     // let queryString: string;
@@ -71,14 +72,14 @@ export async function createRequest<ResponseData>(uri: string, options: Partial<
     //     uri = uri + "?" + queryString;
     // }
 
-    if(options.data && options.method === Method.Post) {
+    if (options.data && options.method === Method.Post) {
 
         switch (options.contentType) {
 
             case ContentType.Json:
                 body = asJson(options.data);
                 headers["Content-Type"] = "application/json";
-            break;
+                break;
 
             // case ContentType.Urlencoded:
             //     body = asUrlEncoded(data);
@@ -88,7 +89,7 @@ export async function createRequest<ResponseData>(uri: string, options: Partial<
             case ContentType.Multipart:
                 body = asMultipart(options.data);
                 headers["Content-Type"] = "multipart/form-data";
-            break;
+                break;
         }
     }
 
@@ -108,13 +109,13 @@ export async function createRequest<ResponseData>(uri: string, options: Partial<
     return await fetch(uri, {
         method: options.method,
         headers: new Headers(headers),
-        body: body,
+        body,
         credentials: "include",
     });
 }
 
 export async function requestJson<RequestData>(uri: string, options: Partial<RequestOptions> = {}): Promise<RequestData> {
-    
+
     options.contentType = ContentType.Json;
     options.accept = ContentType.Json;
 

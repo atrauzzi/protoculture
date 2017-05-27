@@ -2,12 +2,12 @@ import * as _ from "lodash";
 import {Platform} from "../Platform";
 import {LogLevel} from "../Log/LogLevel";
 import { Environment } from "../Environment";
-import { Suite } from "../index";
+import { Bundle } from "../index";
 
 
 export class ConsolePlatform implements Platform {
 
-    public suite: Suite;
+    public bundle: Bundle;
 
     public name = "console";
 
@@ -31,6 +31,7 @@ export class ConsolePlatform implements Platform {
 
         const levelName = `${LogLevel[level]} -`;
 
+        // tslint:disable-next-line:no-console
         _.each(messageLines, (messageLine) => console.log(`${levelName} ${messageLine}`));
     }
 }

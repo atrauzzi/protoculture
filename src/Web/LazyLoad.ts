@@ -1,5 +1,3 @@
-
-
 export async function lazyLoad(uri: string) {
 
     let resolveDeferred: (event: Event) => void;
@@ -14,9 +12,9 @@ export async function lazyLoad(uri: string) {
     scriptTag.type = "text/javascript";
     scriptTag.async = true;
     scriptTag.defer = true;
-    
+
     scriptTag.onload = (event: Event) => {
-        
+
         resolveDeferred(event);
     };
 

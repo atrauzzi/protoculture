@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "build": "tsc"
+    "build": "tsc",
+    "demo": "ts-node --no-cache ./demo/console.ts"
   },
   "repository": {
     "type": "git",

@@ -20,6 +20,9 @@
         "one-line": false,
         "max-line-length": false,
         "array-type": [true, "array"],
+        "variable-name": [
+            "allow-leading-underscore"
+        ],
         "trailing-comma": [true, {
             "objects": "always",
             "arrays": "always",

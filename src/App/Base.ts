@@ -1,4 +1,4 @@
-import {Suite} from "../Suite";
+import {Bundle} from "../Bundle";
 import {LogLevel} from "../Log/LogLevel";
 
 
@@ -14,7 +14,7 @@ export interface App {
     readonly working: boolean;
 
     // ToDo: Shift over to property/setter injection - https://github.com/inversify/InversifyJS/issues/531
-    suite: Suite;
+    bundle: Bundle;
 
     run(): Promise<void>;
 }
@@ -22,20 +22,20 @@ export interface App {
 // Provided as a reference.  If you don't mind calling `super()`, feel free to use it!
 export abstract class BaseApp implements App {
 
-    private _suite: Suite;
+    private _bundle: Bundle;
 
     public abstract get name(): string;
 
     // ToDo: Shift over to property/setter injection - https://github.com/inversify/InversifyJS/issues/531
-    public set suite(suite: Suite) {
+    public set bundle(bundle: Bundle) {
 
-        this._suite = suite;
+        this._bundle = bundle;
     }
 
     // ToDo: Once property/setter injection is done, make this protected.
-    public get suite(): Suite {
+    public get bundle(): Bundle {
 
-        return this._suite;
+        return this._bundle;
     }
 
     public get working(): boolean {
@@ -50,6 +50,6 @@ export abstract class BaseApp implements App {
 
     protected log(message: any, level: LogLevel = LogLevel.Info) {
 
-        this.suite.logger.log(message, this, level);
+        this.bundle.logger.log(message, this, level);
     }
 }

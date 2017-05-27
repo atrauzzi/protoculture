@@ -1,13 +1,13 @@
 import * as _ from "lodash";
 import {appSymbols, StaticApp} from "./App";
 import {symbols, StaticPlatform, Platform} from "./index";
-import {Suite} from "./Suite";
+import {Bundle} from "./Bundle";
 import {decorate, injectable, multiInject, inject, Container, interfaces} from "inversify";
 
 
 export interface StaticServiceProvider<ServiceProviderType extends ServiceProvider> {
 
-    new(suite: Suite): ServiceProviderType;
+    new(bundle: Bundle): ServiceProviderType;
 }
 
 export interface ServiceProviderContract {
@@ -16,11 +16,11 @@ export interface ServiceProviderContract {
 
 export abstract class ServiceProvider implements ServiceProviderContract {
 
-    protected suite: Suite;
+    protected bundle: Bundle;
 
-    public constructor(suite: Suite) {
+    public constructor(bundle: Bundle) {
 
-        this.suite = suite;
+        this.bundle = bundle;
     }
 
     public async boot(): Promise<void> {
@@ -40,7 +40,7 @@ export abstract class ServiceProvider implements ServiceProviderContract {
 
         this.makeInjectable(platform);
 
-        this.suite.container.bind(symbols.AvailablePlatform)
+        this.bundle.container.bind(symbols.AvailablePlatform)
             .to(platform);
     }
 
@@ -58,13 +58,13 @@ export abstract class ServiceProvider implements ServiceProviderContract {
 
     protected bindConstructor<Type>(symbol: symbol, staticType: {new(...args: any[]): Type}): interfaces.BindingWhenOnSyntax<Type> {
 
-        return this.suite.container.bind<Type>(symbol)
+        return this.bundle.container.bind<Type>(symbol)
             .to(staticType);
     }
 
     protected bindConstructorParameter(symbol: symbol | symbol[], staticType: any, position: number) {
 
-        if(_.isArray(symbol)) {
+        if (_.isArray(symbol)) {
 
             decorate(multiInject(symbol[0]), staticType, position);
         }

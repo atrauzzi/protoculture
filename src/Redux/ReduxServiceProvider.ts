@@ -3,7 +3,7 @@ import {Container, interfaces} from "inversify";
 import {createStore, compose as reduxCompose, applyMiddleware, Store, Reducer, StoreEnhancer, Middleware} from "redux";
 import { LogLevel } from "../index";
 import {reduxSymbols} from "./index";
-import {Suite} from "../Suite";
+import {Bundle} from "../Bundle";
 import {createBusReducer, BusReducer} from "./BusReducer";
 
 
@@ -13,7 +13,7 @@ export class ReduxServiceProvider extends ServiceProvider {
 
         try {
 
-            return this.suite.container.getAll<Middleware>(reduxSymbols.Middleware);
+            return this.bundle.container.getAll<Middleware>(reduxSymbols.Middleware);
         }
         catch (error) {
 
@@ -23,10 +23,10 @@ export class ReduxServiceProvider extends ServiceProvider {
 
     public async boot(): Promise<void> {
 
-        this.suite.container.bind<typeof reduxCompose>(reduxSymbols.Compose)
+        this.bundle.container.bind<typeof reduxCompose>(reduxSymbols.Compose)
             .toConstantValue(reduxCompose);
 
-        this.suite.container.bind<Redux.Store<any>>(reduxSymbols.Store)
+        this.bundle.container.bind<Redux.Store<any>>(reduxSymbols.Store)
             .toDynamicValue((context) => this.busReducerStoreFactory(context.container))
             .inSingletonScope();
     }
@@ -45,7 +45,7 @@ export class ReduxServiceProvider extends ServiceProvider {
         }
         catch (error) {
 
-            this.suite.logger.log("No initial state was found", null, LogLevel.Info);
+            this.bundle.logger.log("No initial state was found", null, LogLevel.Info);
 
             return null;
         }
@@ -74,7 +74,7 @@ export class ReduxServiceProvider extends ServiceProvider {
 
     protected createStore<State>(reducer: Reducer<State>, initialState?: State) {
 
-        const compose = this.suite.container.get<typeof reduxCompose>(reduxSymbols.Compose);
+        const compose = this.bundle.container.get<typeof reduxCompose>(reduxSymbols.Compose);
 
         return createStore<State>(
             reducer,

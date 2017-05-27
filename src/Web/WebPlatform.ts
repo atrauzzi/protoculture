@@ -4,14 +4,14 @@ import { Platform } from "../Platform";
 import { LogLevel } from "../Log/LogLevel";
 import { Environment } from "../Environment";
 import { Method, requestJson } from "../CreateRequest";
-import { Suite, reduxSymbols } from "../index";
+import { Bundle, reduxSymbols } from "../index";
 
 
 export class WebPlatform implements Platform {
 
     public name = "web";
 
-    public suite: Suite;
+    public bundle: Bundle;
 
     protected env: Partial<Environment>;
 
@@ -59,7 +59,7 @@ export class WebPlatform implements Platform {
 
         const initialState = this.findInitialState();
 
-        this.suite.container.bind(reduxSymbols.InitialState)
+        this.bundle.container.bind(reduxSymbols.InitialState)
             .to(initialState)
             .inSingletonScope();
     }

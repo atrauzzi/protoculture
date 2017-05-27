@@ -12,7 +12,7 @@ Everything protoculture does aims to help structure your TypeScript/ES codebase,
 The best way to understand how Protoculture works is to think about its main pillars:
 
  - Service Providers
- - Suites
+ - Bundles
  - Platforms
  - Apps
  
@@ -33,18 +33,18 @@ While Protoculture is authored in TypeScript, you can definitely use it from reg
 
 #### Service Providers
 Service providers are responsible for telling the dependency injection system about new classes and functionality. All
-`ServiceProvider` instances are created when a `Suite` is booted.  They are then asked to make registrations against the context.
+`ServiceProvider` instances are created when a `Bundle` is booted.  They are then asked to make registrations against the context.
 
 If you've used [Laravel](http://laravel.com), these should be very familiar.
 
-#### Suites
-Suites represent the topmost entrypoint for a grouping of Apps.  Your entrypoint scripts should be able to instantiate 
-a suite and call the `run` method on it with little fuss.  You configure your suite by way of the `Platform`, `App` 
+#### Bundles
+Bundles represent the topmost entrypoint for a grouping of Apps.  Your entrypoint scripts should be able to instantiate 
+a bundle and call the `run` method on it with little fuss.  You configure your bundle by way of the `Platform`, `App` 
 and `ServiceProvider` types.
 
-The final role of the `Suite` is to act as a language-level root for bundling an entire dependency graph.  This is most 
+The final role of the `Bundle` is to act as a language-level root for bundling an entire dependency graph.  This is most 
 useful when authoring browser applications.
-Because suites are the first thing run in a protoculture application, the suite module automatically includes 
+Because bundles are the first thing run in a protoculture application, the bundle module automatically includes 
 popular fetch, promise and reflect-metadata polyfills.
 
 #### Platforms
@@ -53,10 +53,10 @@ Platforms are free to do any kind of bootstrap you need and should be used to he
 
 #### Apps
 Apps are probably the easiest level of encapsulation to think about.  If you were making a console application, you 
-would treat the entrypoint in the `App` class as your `main`.  A `Suite` can also be made up of multiple applications.  
-This is especially true when working in the browser as you may have multiple suites that get minified that wish to reuse apps!
+would treat the entrypoint in the `App` class as your `main`.  A `Bundle` can also be made up of multiple applications.  
+This is especially true when working in the browser as you may have multiple bundles that get minified that wish to reuse apps!
 
-Remember, Protoculture is asynchronous!  That means your apps can be too.  If a Protoculture suite detects that it 
+Remember, Protoculture is asynchronous!  That means your apps can be too.  If a Protoculture bundle detects that it 
 contains any asynchronous apps, it will automatically set up a heartbeat.  This is extremely useful for when you have  
 long running processes or are using a library that opens up sockets.  When all applications are done executing, Protoculture 
 will ask every app to finish up.  You don't have to manage a thing!

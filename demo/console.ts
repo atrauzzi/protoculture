@@ -1,19 +1,20 @@
 #!/usr/bin/env ts-node
 import * as _ from "lodash";
-import { 
-    reduxSymbols, 
-    ServiceProvider, 
-    StaticServiceProvider, 
-    ConsoleServiceProvider, 
-    BaseApp, 
-    Suite, 
-    App, 
-    LogLevel, 
+import {
+    reduxSymbols,
+    ServiceProvider,
+    StaticServiceProvider,
+    ConsoleServiceProvider,
+    BaseApp,
+    Bundle,
+    App,
+    LogLevel,
     BusReducer,
 } from "../src";
 import { Store, Action } from "redux";
 
 
+// tslint:disable:max-classes-per-file
 //
 // This is how we declare a service provider.
 class ConsoleDemoServiceProvider extends ServiceProvider {
@@ -27,24 +28,24 @@ class ConsoleDemoServiceProvider extends ServiceProvider {
         this.bindConstructorParameter(reduxSymbols.Store, AsynchronousConsoleDemoApp, 0);
 
         // This is how you can add reducers. Imagine them coming from separate modules!
-        this.suite.container.bind<BusReducer>(reduxSymbols.BusReducer)
+        this.bundle.container.bind<BusReducer>(reduxSymbols.BusReducer)
             .toConstantValue({
                 action: "test",
                 reducer: (state: any, action: Action) => {
 
-                    if(_.isEmpty(state)) {
+                    if (_.isEmpty(state)) {
                         return {
                             counter: 1,
                         };
                     }
-                    
+
                     return {
                         counter: ++state.counter,
                     };
                 }
             });
 
-        this.suite.container.bind<BusReducer>(reduxSymbols.BusReducer)
+        this.bundle.container.bind<BusReducer>(reduxSymbols.BusReducer)
             .toConstantValue({
                 action: "done",
                 reducer: (state: any, action: Action) => {
@@ -73,11 +74,11 @@ class AsynchronousConsoleDemoApp implements App {
 
     public name = "async-app";
 
+    public bundle: Bundle;
+
     protected _working: boolean;
 
     protected timeout = 20;
-
-    public suite: Suite;
 
     public constructor(protected store: Store<any>) {
 
@@ -97,13 +98,13 @@ class AsynchronousConsoleDemoApp implements App {
 
         const timeout = setTimeout(
             () => {
-                this.suite.logger.log(`${this.timeout} second timeout elapsed!`, this);
+                this.bundle.logger.log(`${this.timeout} second timeout elapsed!`, this);
                 resolveDeferred();
             },
             this.timeout * 1000
         );
 
-        this.suite.logger.log(`${this.timeout} second timeout started.`, this);
+        this.bundle.logger.log(`${this.timeout} second timeout started.`, this);
 
         await deferred;
 
@@ -113,7 +114,7 @@ class AsynchronousConsoleDemoApp implements App {
 
         const count = this.store.getState().counter;
 
-        this.suite.logger.log(`The Redux app triggered: ${count} times!`, this);
+        this.bundle.logger.log(`The Redux app triggered: ${count} times!`, this);
 
         this._working = false;
     }
@@ -122,12 +123,12 @@ class AsynchronousConsoleDemoApp implements App {
 //
 // This app triggers Redux actions every 200ms!
 class ReduxConsoleDemoApp implements App {
-    
+
     public name = "redux-app";
 
-    public working: boolean = true;
-    
-    public suite: Suite;
+    public working = true;
+
+    public bundle: Bundle;
 
     protected interval: NodeJS.Timer;
 
@@ -141,14 +142,14 @@ class ReduxConsoleDemoApp implements App {
     }
 
     protected tick() {
-        
-        if(_.get(this.store.getState(), "done")) {
+
+        if (_.get(this.store.getState(), "done")) {
 
             clearInterval(this.interval);
 
             this.working = false;
 
-            this.suite.logger.log("All done!", this);
+            this.bundle.logger.log("All done!", this);
         }
         else {
 
@@ -160,8 +161,8 @@ class ReduxConsoleDemoApp implements App {
 }
 
 //
-// Here's a suite that acts as the composition root for the ServiceProvider.
-class ConsoleDemoSuite extends Suite {
+// Here's a bundle that acts as the composition root for the ServiceProvider.
+class ConsoleDemoBundle extends Bundle {
 
     public name = "boring-demo";
 
@@ -177,5 +178,5 @@ class ConsoleDemoSuite extends Suite {
 //
 // And this is how we start it!
 
-const suite = new ConsoleDemoSuite();
-suite.run().catch(console.error);
+const bundle = new ConsoleDemoBundle();
+bundle.run().catch(console.error);

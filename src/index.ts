@@ -1,7 +1,7 @@
 export { StaticApp, App, BaseApp } from "./App";
 export { StaticPlatform, Platform } from "./Platform";
 export { ServiceProviderContract, ServiceProvider, StaticServiceProvider } from "./ServiceProvider";
-export { Suite } from "./Suite";
+export { Bundle } from "./Bundle";
 export { LogLevel } from "./Log/LogLevel";
 
 export { ReduxServiceProvider } from "./Redux/ReduxServiceProvider";

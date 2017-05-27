@@ -1,15 +1,15 @@
 import * as _ from "lodash";
 import { App } from "../App";
-import { Suite } from "../Suite";
+import { Bundle } from "../Bundle";
 import { LogLevel } from "./LogLevel";
-import { Platform } from "../Suite";
+import { Platform } from "../Bundle";
 import { Environment } from "../index";
 
 
 export class LogService {
 
     public constructor(
-        protected suite: Suite,
+        protected bundle: Bundle,
         protected environment: Environment,
         protected platform: Platform
     ) {
@@ -38,7 +38,7 @@ export class LogService {
     protected buildLogLinePrefix(app: App) {
 
         const logLinePrefixParts = [
-            `protoculture@${this.platform.name}:${this.suite.name}`
+            `protoculture@${this.platform.name}:${this.bundle.name}`
         ];
 
         if (app) {
