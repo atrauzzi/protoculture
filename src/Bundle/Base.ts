@@ -242,19 +242,19 @@ export abstract class Bundle {
         );
     }
 
-        protected async runApps() {
+    protected async runApps() {
 
         this._logger.log("Running apps", null, LogLevel.Debug);
 
-        const appPromises = _.map(this.apps, (app: App) => {
+        const appPromises = _.map(this.apps, async (app: App) => {
 
             this._logger.log("Starting app", app, LogLevel.Info);
 
+            app.bundle = this;
+
             try {
 
-                app.bundle = this;
-
-                return app.run();
+                await app.run();
             }
             catch (error) {
 
