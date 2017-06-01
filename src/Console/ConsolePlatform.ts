@@ -21,7 +21,7 @@ export class ConsolePlatform implements Platform {
         const defaultEnvironment: Environment = {
             debug: true,
             name: undefined,
-            logLevel: LogLevel.Info,
+            logLevel: LogLevel.Fatal,
         };
 
         return _.assign(defaultEnvironment, process.env);
