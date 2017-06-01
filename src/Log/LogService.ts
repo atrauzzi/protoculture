@@ -21,7 +21,7 @@ export class LogService {
 
     }
 
-    public log(message: any, app: App, level: LogLevel = LogLevel.Info) {
+    public log(message: any, app: App, level: LogLevel = LogLevel.Fatal) {
 
         if (this.environment.logLevel >= level || this.environment.debug) {
 
