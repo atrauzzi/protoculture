@@ -1,3 +1,4 @@
+import "./Extensions";
 import {ServiceProvider} from "../ServiceProvider";
 import {Container, interfaces} from "inversify";
 import {createStore, compose as reduxCompose, applyMiddleware, Store, Reducer, StoreEnhancer, Middleware} from "redux";
@@ -29,6 +30,8 @@ export class ReduxServiceProvider extends ServiceProvider {
         this.bundle.container.bind<Redux.Store<any>>(reduxSymbols.Store)
             .toDynamicValue((context) => this.busReducerStoreFactory(context.container))
             .inSingletonScope();
+
+        this.configureBusReducers(ServiceProvider.getDecoratedTypes("protoculture-redux:bus-reducers"));
     }
 
     public async bootChild(container: Container): Promise<void> {

@@ -10,9 +10,31 @@ import {
     App,
     LogLevel,
     BusReducer,
+    busReducer,
 } from "../src";
 import { Store, Action } from "redux";
 
+
+// Reducers can be declared as classes and annotated in!
+@busReducer()
+class TestReducer implements BusReducer {
+
+    public action = "test";
+
+    public reducer(state: any, action: Action) {
+
+        if (_.isEmpty(state)) {
+
+            return {
+                counter: 1,
+            };
+        }
+
+        return {
+            counter: ++state.counter,
+        };
+    }
+}
 
 // tslint:disable:max-classes-per-file
 //
@@ -27,24 +49,7 @@ class ConsoleDemoServiceProvider extends ServiceProvider {
         this.bindConstructorParameter(reduxSymbols.Store, ReduxConsoleDemoApp, 0);
         this.bindConstructorParameter(reduxSymbols.Store, AsynchronousConsoleDemoApp, 0);
 
-        // This is how you can add reducers. Imagine them coming from separate modules!
-        this.bundle.container.bind<BusReducer>(reduxSymbols.BusReducer)
-            .toConstantValue({
-                action: "test",
-                reducer: (state: any, action: Action) => {
-
-                    if (_.isEmpty(state)) {
-                        return {
-                            counter: 1,
-                        };
-                    }
-
-                    return {
-                        counter: ++state.counter,
-                    };
-                }
-            });
-
+        // This is a non-class style reducer.  This works too!
         this.bundle.container.bind<BusReducer>(reduxSymbols.BusReducer)
             .toConstantValue({
                 action: "done",
