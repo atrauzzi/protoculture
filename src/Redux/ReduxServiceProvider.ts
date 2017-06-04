@@ -1,11 +1,12 @@
 import "./Extensions";
-import {ServiceProvider} from "../ServiceProvider";
-import {Container, interfaces} from "inversify";
-import {createStore, compose as reduxCompose, applyMiddleware, Store, Reducer, StoreEnhancer, Middleware} from "redux";
+import reduxThunk from "redux-thunk";
+import { ServiceProvider } from "../ServiceProvider";
+import { Container, interfaces } from "inversify";
+import { createStore, compose as reduxCompose, applyMiddleware, Store, Reducer, StoreEnhancer, Middleware } from "redux";
 import { LogLevel } from "../index";
-import {reduxSymbols} from "./index";
-import {Bundle} from "../Bundle";
-import {createBusReducer, BusReducer} from "./BusReducer";
+import { reduxSymbols } from "./index";
+import { Bundle } from "../Bundle";
+import { createBusReducer, BusReducer } from "./BusReducer";
 
 
 export class ReduxServiceProvider extends ServiceProvider {
@@ -23,6 +24,9 @@ export class ReduxServiceProvider extends ServiceProvider {
     }
 
     public async boot(): Promise<void> {
+
+        this.bundle.container.bind(reduxSymbols.Middleware)
+            .toConstantValue(reduxThunk);
 
         this.bundle.container.bind<typeof reduxCompose>(reduxSymbols.Compose)
             .toConstantValue(reduxCompose);
