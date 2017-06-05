@@ -7,16 +7,16 @@ export interface TypedAction<ActionType extends string> extends Action {
     type: ActionType;
 }
 
-export interface StaticBusReducer<ActionType extends string, State = any> {
+export interface StaticBusReducer<ActionType extends TypedAction<any>, State = any> {
 
     new(...args: any[]): BusReducer<ActionType, State>;
 }
 
-export interface BusReducer<ActionType extends string, State = any> {
+export interface BusReducer<Action extends TypedAction<any>, State = any> {
 
-    action: ActionType;
+    action: Action["type"];
 
-    reducer<Action extends TypedAction<ActionType>>(state: State, action: Action): State;
+    reducer(state: State, action: Action): State;
 }
 
 export function createBusReducer<State>(busReducers: BusReducer<any>[]) {
