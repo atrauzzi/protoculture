@@ -17,7 +17,7 @@ export { domReady } from "./Web/DomReady";
 export { appSymbols } from "./App/index";
 export { reduxSymbols } from "./Redux/index";
 
-export { TypedAction, BusReducer } from "./Redux/BusReducer";
+export { BusReducer } from "./Redux/BusReducer";
 export { busReducer } from "./Redux/Decorator/BusReducer";
 
 export const symbols = {

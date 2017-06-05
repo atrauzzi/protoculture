@@ -2,19 +2,14 @@ import * as _ from "lodash";
 import {Reducer, Action} from "redux";
 
 
-export interface TypedAction<ActionType extends string> extends Action {
-
-    type: ActionType;
-}
-
-export interface StaticBusReducer<ActionType extends TypedAction<any>, State = any> {
+export interface StaticBusReducer<ActionType extends Action, State = any> {
 
     new(...args: any[]): BusReducer<ActionType, State>;
 }
 
-export interface BusReducer<Action extends TypedAction<any>, State = any> {
+export interface BusReducer<ActionType extends Action, State = any> {
 
-    action: Action["type"];
+    action: ActionType["type"];
 
     reducer(state: State, action: Action): State;
 }
