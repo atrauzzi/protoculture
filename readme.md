@@ -22,7 +22,7 @@ The _slight_ opinionation of Protoculture comes from:
  - Asynchronous-first via `await` & the [standard Promise APIs](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
  - The powerful [inversify](http://inversify.io) dependency injection system
  - A bundled [Redux](http://redux.js.org) service provider for a popular and well documented set of conventions for data handling
- - Planned integrations with hosting and process management infrastructure like [PM2](http://pm2.keymetrics.io) and [ApplicationInsights](https://github.com/Microsoft/ApplicationInsights-node.js)
+ - Planned integrations with hosting and process management infrastructure like [ApplicationInsights](https://github.com/Microsoft/ApplicationInsights-node.js)
 
 ### In Detail
 The layering Protoculture provides has similar if not identical siblings in other languages and runtimes, 
@@ -32,7 +32,7 @@ application framework.
 While Protoculture is authored in TypeScript, you can definitely use it from regular ES as well.
 
 #### Service Providers
-Service providers are responsible for telling the dependency injection system about new classes and functionality. All
+Service providers are responsible for telling the dependency injection system about new configuration and functionality. All
 `ServiceProvider` instances are created when a `Bundle` is booted.  They are then asked to make registrations against the context.
 
 If you've used [Laravel](http://laravel.com), these should be very familiar.
@@ -42,13 +42,14 @@ Bundles represent the topmost entrypoint for a grouping of Apps.  Your entrypoin
 a bundle and call the `run` method on it with little fuss.  You configure your bundle by way of the `Platform`, `App` 
 and `ServiceProvider` types.
 
-The final role of the `Bundle` is to act as a language-level root for bundling an entire dependency graph.  This is most 
+The final role of the `Bundle` is to act as a language-level root for an entire dependency graph.  This is most 
 useful when authoring browser applications.
 Because bundles are the first thing run in a protoculture application, the bundle module automatically includes 
-popular fetch, promise and reflect-metadata polyfills.
+popular fetch, promise and reflect-metadata polyfills.  So long as you compose your application using `ServiceProviders`, 
+protoculture will do its best to bootstrap a consistent environment!
 
 #### Platforms
-Platforms represent the means by which you wish to populate the environment that Protoculture will make available.
+Platforms represent the means by which you wish to interact with the environment that Protoculture will make available.
 Platforms are free to do any kind of bootstrap you need and should be used to help make your app universal. 
 
 #### Apps
