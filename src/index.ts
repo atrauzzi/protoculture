@@ -1,6 +1,6 @@
 export { StaticApp, App, BaseApp } from "./App";
 export { StaticPlatform, Platform } from "./Platform";
-export { ServiceProviderContract, ServiceProvider, StaticServiceProvider } from "./ServiceProvider";
+export { ServiceProvider, StaticServiceProvider } from "./ServiceProvider";
 export { Bundle } from "./Bundle";
 export { LogLevel } from "./Log/LogLevel";
 
@@ -18,6 +18,7 @@ export { appSymbols } from "./App/index";
 export { reduxSymbols } from "./Redux/index";
 
 export { BusReducer } from "./Redux/BusReducer";
+export { busReducer } from "./Redux/Decorator/BusReducer";
 
 export const symbols = {
     Environment: Symbol("Environment"),

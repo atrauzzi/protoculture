@@ -2,6 +2,11 @@ import * as _ from "lodash";
 import {Reducer, Action} from "redux";
 
 
+export interface StaticBusReducer {
+
+    new(...args: any[]): BusReducer;
+}
+
 export interface BusReducer {
 
     action: string;

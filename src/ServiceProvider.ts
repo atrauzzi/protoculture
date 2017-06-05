@@ -10,11 +10,24 @@ export interface StaticServiceProvider<ServiceProviderType extends ServiceProvid
     new(bundle: Bundle): ServiceProviderType;
 }
 
-export interface ServiceProviderContract {
+export abstract class ServiceProvider {
 
-}
+    protected static readonly decoratedTypes: {[key: string]: any[]} = {};
 
-export abstract class ServiceProvider implements ServiceProviderContract {
+    public static addDecoratedType(key: string, constructor: any) {
+
+        if (!ServiceProvider.decoratedTypes[key]) {
+
+            ServiceProvider.decoratedTypes[key] = [];
+        }
+
+        ServiceProvider.decoratedTypes[key].push(constructor);
+    }
+
+    public static getDecoratedTypes<T>(key: string) {
+
+        return ServiceProvider.decoratedTypes[key] || [];
+    }
 
     protected bundle: Bundle;
 
