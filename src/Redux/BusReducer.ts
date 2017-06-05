@@ -2,19 +2,24 @@ import * as _ from "lodash";
 import {Reducer, Action} from "redux";
 
 
-export interface StaticBusReducer {
+export interface TypedAction<ActionType extends string> extends Action {
 
-    new(...args: any[]): BusReducer;
+    type: ActionType;
 }
 
-export interface BusReducer<A = Action, S = any> {
+export interface StaticBusReducer<ActionType extends string, State = any> {
 
-    action: string;
-
-    reducer: Reducer<S>;
+    new(...args: any[]): BusReducer<ActionType, State>;
 }
 
-export function createBusReducer<State>(busReducers: BusReducer[]) {
+export interface BusReducer<ActionType extends string, State = any> {
+
+    action: ActionType;
+
+    reducer<Action extends TypedAction<ActionType>>(state: State, action: Action): State;
+}
+
+export function createBusReducer<State>(busReducers: BusReducer<any>[]) {
 
     const indexedReducers = {};
 

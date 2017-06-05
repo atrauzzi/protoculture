@@ -60,11 +60,11 @@ export class ReduxServiceProvider extends ServiceProvider {
 
     protected busReducerStoreFactory(container: interfaces.Container) {
 
-        let busReducers: BusReducer[];
+        let busReducers: BusReducer<any>[];
 
         try {
 
-            busReducers = container.getAll<BusReducer>(reduxSymbols.BusReducer);
+            busReducers = container.getAll<BusReducer<any>>(reduxSymbols.BusReducer);
         }
         catch (error) {
 
@@ -74,7 +74,7 @@ export class ReduxServiceProvider extends ServiceProvider {
         return this.createBusReducerStore(busReducers, this.getInitialState<any>(container));
     }
 
-    protected createBusReducerStore(busReducers: BusReducer[], initialState: any) {
+    protected createBusReducerStore(busReducers: BusReducer<any>[], initialState: any) {
 
         return this.createStore(createBusReducer(busReducers), initialState);
     }

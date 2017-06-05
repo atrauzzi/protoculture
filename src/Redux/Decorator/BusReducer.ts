@@ -5,7 +5,8 @@ import { StaticBusReducer } from "../BusReducer";
 
 export function busReducer() {
 
-    return function (constructor: StaticBusReducer) {
+    // tslint:disable-next-line:only-arrow-functions
+    return function (constructor: StaticBusReducer<any>) {
 
         ServiceProvider.addDecoratedType("protoculture-redux:bus-reducers", constructor);
     };

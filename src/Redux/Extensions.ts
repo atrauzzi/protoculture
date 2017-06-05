@@ -8,12 +8,12 @@ declare module "../ServiceProvider" {
 
     export interface ServiceProvider {
 
-        configureBusReducer(busReducer: BusReducer): void;
-        configureBusReducers(busReducers: BusReducer[]): void;
+        configureBusReducer(busReducer: BusReducer<any>): void;
+        configureBusReducers(busReducers: BusReducer<any>[]): void;
     }
 }
 
-ServiceProvider.prototype.configureBusReducer = function (busReducer: BusReducer) {
+ServiceProvider.prototype.configureBusReducer = function (busReducer: BusReducer<any>) {
 
     this.makeInjectable(busReducer);
 
@@ -21,7 +21,7 @@ ServiceProvider.prototype.configureBusReducer = function (busReducer: BusReducer
         .to(busReducer);
 };
 
-ServiceProvider.prototype.configureBusReducers = function (busReducers: BusReducer[]) {
+ServiceProvider.prototype.configureBusReducers = function (busReducers: BusReducer<any>[]) {
 
     busReducers.forEach((busReducer) =>
         this.configureBusReducer(busReducer));
