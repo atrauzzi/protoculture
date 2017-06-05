@@ -7,11 +7,11 @@ export interface StaticBusReducer {
     new(...args: any[]): BusReducer;
 }
 
-export interface BusReducer {
+export interface BusReducer<A = Action, S = any> {
 
     action: string;
 
-    reducer: Reducer<any>;
+    reducer: Reducer<S>;
 }
 
 export function createBusReducer<State>(busReducers: BusReducer[]) {
