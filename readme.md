@@ -92,6 +92,21 @@ to be universal.  Simply put, the evolution of the JavaScript ecosystem has been
 Everything inside of protoculture has been distilled out of real production needs. I invite you to try it out and 
 report any ideas or issues in a ticket.
 
+### Why TypeScript?
+
+With all the attention pure functional languages like Elm, Clojure, Haskell, Dart, Scala and Go are getting, this is a good question to ask.
+
+My rationale for preferring TypeScript usually goes like this:
+
+ - It is a superset of JavaScript. It doesn't bridge and as such requires no special treatment.
+ - Tight integration with the NPM ecosystem.
+ - Proactive repository of typing information for extant JavaScript libraries on NPM.
+ - Future ES features today, no waiting.
+ - Multi-paradigm type system.
+ - The language designer behind TypeScript [Anders Hejlsberg](https://en.wikipedia.org/wiki/Anders_Hejlsberg) is responsible for some of the most pervasive programming languages over several decades and has likely influenced many more.
+  
+ If you take all these reasons - and I probably missed some - TypeScript positions itself in every sweet-spot while still being able to chart its own course, making very few if any compromises along the way.
+
 ### History
 
 If you look at the history of this package for versions `1.0.15` and before, it probably will look quite different.

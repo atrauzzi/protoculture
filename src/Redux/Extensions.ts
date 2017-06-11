@@ -13,6 +13,8 @@ declare module "../ServiceProvider" {
     }
 }
 
+// todo: Should these be configure or bind?
+
 ServiceProvider.prototype.configureBusReducer = function (busReducer: BusReducer<any>) {
 
     this.makeInjectable(busReducer);
