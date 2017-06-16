@@ -14,6 +14,7 @@ export { createRequest, requestJson } from "./CreateRequest";
 export { lazyLoad } from "./Web/LazyLoad";
 export { domReady } from "./Web/DomReady";
 
+export { bundleSymbols } from "./Bundle/index";
 export { appSymbols } from "./App/index";
 export { reduxSymbols } from "./Redux/index";
 

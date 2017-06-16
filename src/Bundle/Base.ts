@@ -89,7 +89,7 @@ export abstract class Bundle {
         this.booted = true;
     }
 
-    public async run(): Promise<void> {
+    public async run(...args: any[]): Promise<void> {
 
         if (!this.booted) {
 
@@ -103,9 +103,10 @@ export abstract class Bundle {
             return;
         }
 
-        this._logger.log("Bundle started", null, LogLevel.Debug);
+        this.container.bind(bundleSymbols.RunParameters)
+            .toConstantValue(args);
 
-        // ToDo: Redux event?
+        this._logger.log("Running bundle", null, LogLevel.Debug);
 
         try {
 
@@ -117,9 +118,11 @@ export abstract class Bundle {
         }
 
         try {
+
             await this.runApps();
         }
         catch (error) {
+
             this._logger.log(`Error running apps: ${error}`, null, LogLevel.Error);
         }
     }

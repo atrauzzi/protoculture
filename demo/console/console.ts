@@ -11,13 +11,13 @@ import {
     LogLevel,
     BusReducer,
     busReducer,
-} from "../src";
+} from "../../src";
 import { Store, Action } from "redux";
 
 
 // Reducers can be declared as classes and annotated in!
 @busReducer()
-class TestReducer implements BusReducer {
+class TestReducer implements BusReducer<any> {
 
     public action = "test";
 
@@ -50,7 +50,7 @@ class ConsoleDemoServiceProvider extends ServiceProvider {
         this.bindConstructorParameter(reduxSymbols.Store, AsynchronousConsoleDemoApp, 0);
 
         // This is a non-class style reducer.  This works too!
-        this.bundle.container.bind<BusReducer>(reduxSymbols.BusReducer)
+        this.bundle.container.bind(reduxSymbols.BusReducer)
             .toConstantValue({
                 action: "done",
                 reducer: (state: any, action: Action) => {
