@@ -17,6 +17,8 @@ export interface App {
     bundle: Bundle;
 
     run(): Promise<void>;
+
+    dispatch?(...args: any[]): Promise<void>;
 }
 
 // Provided as a reference.  If you don't mind calling `super()`, feel free to use it!
@@ -45,7 +47,7 @@ export abstract class BaseApp implements App {
 
     public async run() {
 
-        throw new Error("Not implemented!");
+        throw new Error("Run not implemented!");
     }
 
     protected log(message: any, level: LogLevel = LogLevel.Info) {

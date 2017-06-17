@@ -107,7 +107,7 @@ export abstract class Bundle {
 
         if (!_.isEmpty(this.apps)) {
 
-            this._logger.log("Bundle already run", null, LogLevel.Error);
+            this._logger.log("Bundle already run", null, LogLevel.Warn);
 
             return;
         }
@@ -133,11 +133,25 @@ export abstract class Bundle {
         }
     }
 
+    public async dispatch(...args: any[]) {
+
+        this.logger.log("Dispatch received", null, LogLevel.Info);
+
+        await this.run();
+
+        const dispatches = _.map(this.apps, (app: App) =>
+            this.dispatchToApp(app, ...args));
+
+        await Promise.all(dispatches);
+    }
+
     public async bootChild(): Promise<Container> {
 
         const childContainer = this.container.createChild();
 
-        const bootPromises = _.map(this.loadedServiceProviders, (serviceProvider: ServiceProvider) => serviceProvider.bootChild(childContainer));
+        const bootPromises = _.map(this.loadedServiceProviders, (serviceProvider: ServiceProvider) =>
+            serviceProvider.bootChild(childContainer));
+
         await Promise.all(bootPromises);
 
         return childContainer;
@@ -155,6 +169,18 @@ export abstract class Bundle {
         }
 
         return null;
+    }
+
+    protected async dispatchToApp(app: App, ...args: any[]) {
+
+        try {
+
+            await app.dispatch(...args);
+        }
+        catch (error) {
+
+            this._logger.log(error.stack, app, LogLevel.Error);
+        }
     }
 
     protected loadServiceProviders() {
