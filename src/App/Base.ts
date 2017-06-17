@@ -11,7 +11,7 @@ export interface App {
 
     readonly name: string;
 
-    readonly working: boolean;
+    readonly working?: boolean;
 
     // ToDo: Shift over to property/setter injection - https://github.com/inversify/InversifyJS/issues/531
     bundle: Bundle;
