@@ -175,7 +175,10 @@ export abstract class Bundle {
 
         try {
 
-            await app.dispatch(...args);
+            if (app.dispatch) {
+
+                await app.dispatch(...args);
+            }
         }
         catch (error) {
 
