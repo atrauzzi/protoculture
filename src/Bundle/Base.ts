@@ -135,9 +135,9 @@ export abstract class Bundle {
 
     public async dispatch(...args: any[]) {
 
-        this.logger.log("Dispatch received", null, LogLevel.Info);
-
         await this.run();
+
+        this.logger.log("Dispatch received", null, LogLevel.Info);
 
         const dispatches = _.map(this.apps, (app: App) =>
             this.dispatchToApp(app, ...args));
