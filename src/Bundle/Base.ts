@@ -27,7 +27,7 @@ export abstract class Bundle {
 
     protected get containerConfiguration(): ContainerOptions { return null; }
 
-    protected get heartbeatInterval(): number { return 5; }
+    protected get heartbeatInterval(): number { return 1; }
 
     protected get serviceProviders(): StaticServiceProvider<any>[] {
 
@@ -102,15 +102,15 @@ export abstract class Bundle {
             await this.boot();
         }
 
+        this.container.bind(bundleSymbols.RunParameters)
+            .toConstantValue(args);
+
         if (!_.isEmpty(this.apps)) {
 
             this._logger.log("Bundle already run", null, LogLevel.Error);
 
             return;
         }
-
-        this.container.bind(bundleSymbols.RunParameters)
-            .toConstantValue(args);
 
         this._logger.log("Running bundle", null, LogLevel.Debug);
 
@@ -227,53 +227,41 @@ export abstract class Bundle {
 
     protected startHeartbeat() {
 
-        let resolveDeferred: () => void;
-        const deferred = new Promise((resolve) => resolveDeferred = resolve);
+        const interval = this.heartbeatInterval * 1000;
 
-        const heartBeat = setInterval(
-            () => {
+        let timer: any;
+        let complete: () => void;
+        const deferred = new Promise((resolve) => complete = resolve);
 
-                this._logger.log("Beat...", null, LogLevel.Debug);
-
-                const workingApps = this.workingApps;
-
-                if (this.longRunning) {
-
-                    _.forEach(workingApps, (app: App) =>
-                        this._logger.log("Still working", app, LogLevel.Debug));
-                }
-                else {
-
-                    this._logger.log("...Heart beat.", null, LogLevel.Debug);
-                    clearInterval(heartBeat);
-                    resolveDeferred();
-                }
-            },
-            this.heartbeatInterval * 1000
-        );
+        timer = setInterval(() => this.tick(timer, complete), interval);
 
         return deferred;
+    }
+
+    protected tick(timer: any, complete: () => void) {
+
+        this._logger.log("Beat...", null, LogLevel.Debug);
+
+        const workingApps = this.workingApps;
+
+        if (this.longRunning) {
+
+            _.forEach(workingApps, (app: App) =>
+                this._logger.log("Still working", app, LogLevel.Debug));
+        }
+        else {
+
+            this._logger.log("...Heart beat.", null, LogLevel.Debug);
+            clearInterval(timer);
+            complete();
+        }
     }
 
     protected async runApps() {
 
         this._logger.log("Running apps", null, LogLevel.Debug);
 
-        const appPromises = _.map(this.apps, async (app: App) => {
-
-            this._logger.log("Starting app", app, LogLevel.Info);
-
-            app.bundle = this;
-
-            try {
-
-                await app.run();
-            }
-            catch (error) {
-
-                this._logger.log(error.stack, app, LogLevel.Error);
-            }
-        });
+        const appPromises = _.map(this.apps, (app: App) => this.runApp(app));
 
         this._logger.log("All apps started", null, LogLevel.Debug);
 
@@ -281,5 +269,21 @@ export abstract class Bundle {
             .all(appPromises)
             .then(() => this.longRunning ? this.startHeartbeat() : null)
             .then(() => this.stop());
+    }
+
+    protected async runApp(app: App) {
+
+        this._logger.log("Starting app", app, LogLevel.Info);
+
+        app.bundle = this;
+
+        try {
+
+            await app.run();
+        }
+        catch (error) {
+
+            this._logger.log(error.stack, app, LogLevel.Error);
+        }
     }
 }
