@@ -274,5 +274,7 @@ export abstract class Bundle {
         }
 
         await Promise.all(appPromises);
+
+        this._logger.log("All applications finished", null, LogLevel.Info);
     }
 }
