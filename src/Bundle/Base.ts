@@ -67,9 +67,15 @@ export abstract class Bundle {
         return this._container;
     }
 
-    public get working() {
+    public get workingApps() {
 
-        return _.filter(this.apps, (app) => app.working);
+        return _.filter(this.apps, (app) =>
+            app.working);
+    }
+
+    public get longRunning() {
+
+        return !!this.workingApps.length;
     }
 
     public constructor() {
@@ -219,26 +225,38 @@ export abstract class Bundle {
         this.apps = this.container.getAll<App>(appSymbols.App);
     }
 
+    protected detectLongRunning() {
+
+        if (this.longRunning) {
+
+            this.startHeartbeat();
+        }
+        else {
+
+            this.stop();
+        }
+    }
+
     protected startHeartbeat() {
 
-        this._logger.log("Starting heartbeat", null, LogLevel.Debug);
         const heartBeat = setInterval(
             () => {
 
                 this._logger.log("Beat...", null, LogLevel.Debug);
 
-                const workingApps = this.working;
+                const workingApps = this.workingApps;
 
-                if (_.isEmpty(workingApps)) {
+                if (this.longRunning) {
+
+                    _.forEach(workingApps, (app: App) =>
+                        this._logger.log("Still working", app, LogLevel.Debug));
+                }
+                else {
 
                     this._logger.log("...Heart beat.", null, LogLevel.Debug);
 
                     clearInterval(heartBeat);
                     this.stop();
-                }
-                else {
-
-                    _.forEach(workingApps, (app: App) => this._logger.log("Still working", app, LogLevel.Debug));
                 }
             },
             this.heartbeatInterval * 1000
@@ -267,14 +285,8 @@ export abstract class Bundle {
 
         this._logger.log("All apps started", null, LogLevel.Debug);
 
-        if (!_.isEmpty(this.working)) {
-
-            this._logger.log("An asynchronous app was detected", null, LogLevel.Info);
-            this.startHeartbeat();
-        }
-
-        await Promise.all(appPromises);
-
-        this._logger.log("All applications finished", null, LogLevel.Info);
+        await Promise
+            .all(appPromises)
+            .then(() => this.detectLongRunning());
     }
 }
