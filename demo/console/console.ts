@@ -152,9 +152,9 @@ class ReduxConsoleDemoApp implements App {
 
             clearInterval(this.interval);
 
-            this.working = false;
-
             this.bundle.logger.log("All done!", this);
+
+            this.working = false;
         }
         else {
 

@@ -147,7 +147,7 @@ export abstract class Bundle {
 
         try {
 
-            // todo
+            this._logger.log("Teardown APIs have not been implemented yet.", null, LogLevel.Warn);
         }
         catch (error) {
 
@@ -225,19 +225,10 @@ export abstract class Bundle {
         this.apps = this.container.getAll<App>(appSymbols.App);
     }
 
-    protected detectLongRunning() {
-
-        if (this.longRunning) {
-
-            this.startHeartbeat();
-        }
-        else {
-
-            this.stop();
-        }
-    }
-
     protected startHeartbeat() {
+
+        let resolveDeferred: () => void;
+        const deferred = new Promise((resolve) => resolveDeferred = resolve);
 
         const heartBeat = setInterval(
             () => {
@@ -254,13 +245,14 @@ export abstract class Bundle {
                 else {
 
                     this._logger.log("...Heart beat.", null, LogLevel.Debug);
-
                     clearInterval(heartBeat);
-                    this.stop();
+                    resolveDeferred();
                 }
             },
             this.heartbeatInterval * 1000
         );
+
+        return deferred;
     }
 
     protected async runApps() {
@@ -287,6 +279,7 @@ export abstract class Bundle {
 
         await Promise
             .all(appPromises)
-            .then(() => this.detectLongRunning());
+            .then(() => this.longRunning ? this.startHeartbeat() : null)
+            .then(() => this.stop());
     }
 }
