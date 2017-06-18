@@ -95,15 +95,12 @@ export abstract class Bundle {
         this.booted = true;
     }
 
-    public async run(...args: any[]): Promise<void> {
+    public async run(): Promise<void> {
 
         if (!this.booted) {
 
             await this.boot();
         }
-
-        this.container.bind(bundleSymbols.RunParameters)
-            .toConstantValue(args);
 
         if (!_.isEmpty(this.apps)) {
 
@@ -133,18 +130,6 @@ export abstract class Bundle {
         }
     }
 
-    public async dispatch(...args: any[]) {
-
-        await this.run();
-
-        this.logger.log("Dispatch received", null, LogLevel.Info);
-
-        const dispatches = _.map(this.apps, (app: App) =>
-            this.dispatchToApp(app, ...args));
-
-        await Promise.all(dispatches);
-    }
-
     public async bootChild(): Promise<Container> {
 
         const childContainer = this.container.createChild();
@@ -169,21 +154,6 @@ export abstract class Bundle {
         }
 
         return null;
-    }
-
-    protected async dispatchToApp(app: App, ...args: any[]) {
-
-        try {
-
-            if (app.dispatch) {
-
-                await app.dispatch(...args);
-            }
-        }
-        catch (error) {
-
-            this._logger.log(error.stack, app, LogLevel.Error);
-        }
     }
 
     protected loadServiceProviders() {

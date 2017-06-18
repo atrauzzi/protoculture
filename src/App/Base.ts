@@ -17,8 +17,6 @@ export interface App {
     bundle: Bundle;
 
     run(): Promise<void>;
-
-    dispatch?(...args: any[]): Promise<void>;
 }
 
 // Provided as a reference.  If you don't mind calling `super()`, feel free to use it!
