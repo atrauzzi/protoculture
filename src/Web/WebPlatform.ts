@@ -73,7 +73,7 @@ export class WebPlatform implements Platform {
 
         try {
 
-            return JSON.parse(stateElement.nodeValue);
+            return JSON.parse(stateElement.getAttribute("content"));
         }
         catch (error) {
 
