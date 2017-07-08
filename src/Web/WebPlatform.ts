@@ -5,6 +5,7 @@ import { LogLevel } from "../Log/LogLevel";
 import { Environment } from "../Environment";
 import { Method, requestJson } from "../CreateRequest";
 import { Bundle, reduxSymbols } from "../index";
+import { domReady } from "./DomReady";
 
 
 export class WebPlatform implements Platform {
@@ -16,6 +17,8 @@ export class WebPlatform implements Platform {
     protected env: Partial<Environment>;
 
     public async boot() {
+
+        await domReady();
 
         this.bindInitialState();
     }
