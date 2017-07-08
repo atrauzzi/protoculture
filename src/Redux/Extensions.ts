@@ -1,21 +1,21 @@
 import { interfaces } from "inversify";
 import { reduxSymbols } from "./index";
 import { ServiceProvider } from "../ServiceProvider";
-import { BusReducer } from "./BusReducer";
+import { StaticBusReducer, BusReducer } from "./BusReducer";
 
 
 declare module "../ServiceProvider" {
 
     export interface ServiceProvider {
 
-        configureBusReducer(busReducer: BusReducer<any>): void;
-        configureBusReducers(busReducers: BusReducer<any>[]): void;
+        configureBusReducer(busReducer: StaticBusReducer<any>): void;
+        configureBusReducers(busReducers: StaticBusReducer<any>[]): void;
     }
 }
 
 // todo: Should these be configure or bind?
 
-ServiceProvider.prototype.configureBusReducer = function (busReducer: BusReducer<any>) {
+ServiceProvider.prototype.configureBusReducer = function (busReducer: StaticBusReducer<any>) {
 
     this.makeInjectable(busReducer);
 
@@ -23,7 +23,7 @@ ServiceProvider.prototype.configureBusReducer = function (busReducer: BusReducer
         .to(busReducer);
 };
 
-ServiceProvider.prototype.configureBusReducers = function (busReducers: BusReducer<any>[]) {
+ServiceProvider.prototype.configureBusReducers = function (busReducers: StaticBusReducer<any>[]) {
 
     busReducers.forEach((busReducer) =>
         this.configureBusReducer(busReducer));
