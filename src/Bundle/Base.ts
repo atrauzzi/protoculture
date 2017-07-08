@@ -1,4 +1,4 @@
-import * as es6Promise from "es6-promise";
+import "es6-shim";
 import "isomorphic-fetch";
 import "reflect-metadata";
 //
@@ -15,8 +15,6 @@ import {ProtocultureServiceProvider} from "./ProtocultureServiceProvider";
 import {logSymbols, LogServiceProvider, LogService} from "../Log";
 import {ReduxServiceProvider} from "../Redux/ReduxServiceProvider";
 
-
-es6Promise.polyfill();
 
 export abstract class Bundle {
 
