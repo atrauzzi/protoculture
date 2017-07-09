@@ -6,6 +6,7 @@ import { Environment } from "../Environment";
 import { Method, requestJson } from "../CreateRequest";
 import { Bundle, reduxSymbols } from "../index";
 import { domReady } from "./DomReady";
+import { decorate, injectable } from "inversify";
 
 
 export class WebPlatform implements Platform {
@@ -61,6 +62,8 @@ export class WebPlatform implements Platform {
     protected bindInitialState() {
 
         const initialState = this.findInitialState();
+
+        decorate(injectable(), initialState);
 
         this.bundle.container.bind(reduxSymbols.InitialState)
             .to(initialState)
