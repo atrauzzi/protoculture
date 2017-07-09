@@ -10,7 +10,7 @@ export { WebServiceProvider } from "./Web/WebServiceProvider";
 
 export { Environment } from "./Environment";
 
-export { createRequest, requestJson } from "./CreateRequest";
+export { createRequest, requestJson, Method } from "./CreateRequest";
 export { lazyLoad } from "./Web/LazyLoad";
 export { domReady } from "./Web/DomReady";
 
