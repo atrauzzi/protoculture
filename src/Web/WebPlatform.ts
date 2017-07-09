@@ -63,11 +63,8 @@ export class WebPlatform implements Platform {
 
         const initialState = this.findInitialState();
 
-        decorate(injectable(), initialState);
-
         this.bundle.container.bind(reduxSymbols.InitialState)
-            .to(initialState)
-            .inSingletonScope();
+            .toConstantValue(initialState);
     }
 
     protected findInitialState() {
