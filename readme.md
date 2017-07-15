@@ -69,7 +69,12 @@ Protoculture is created by Alexander Trauzzi and is available under the [Apache 
 ### Integrations
 
  - [Redux](src/Redux)
+ - [Mongoose](https://github.com/atrauzzi/protoculture-mongoose)
  - [hapi](https://github.com/atrauzzi/protoculture-hapi)
+   - [inert](https://github.com/atrauzzi/protoculture-hapi/blob/master/src/InertServiceProvider.ts)
+   - [catbox](https://github.com/atrauzzi/protoculture-hapi-mongoose)
+   - [yar](https://github.com/atrauzzi/protoculture-hapi/blob/master/src/YarServiceProvider.ts)
+   - [bell](https://github.com/atrauzzi/protoculture-hapi/blob/master/src/BellServiceProvider.ts)
  - [react](https://github.com/atrauzzi/protoculture-react)
  - [Web Browsers](src/Web)
  - [Console](src/Console)
