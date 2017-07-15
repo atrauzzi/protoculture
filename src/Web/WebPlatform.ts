@@ -6,7 +6,6 @@ import { Environment } from "../Environment";
 import { Method, requestJson } from "../CreateRequest";
 import { Bundle, reduxSymbols } from "../index";
 import { domReady } from "./DomReady";
-import { decorate, injectable } from "inversify";
 
 
 export class WebPlatform implements Platform {

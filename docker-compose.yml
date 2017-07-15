@@ -3,7 +3,7 @@ version: '2'
 services:
 
   cli:
-    build: .
+    image: protoculture/tooling
     container_name: protoculture-cli
 
     volumes:

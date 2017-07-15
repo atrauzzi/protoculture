@@ -22,13 +22,13 @@ export class ProtocultureServiceProvider extends ServiceProvider {
                     .get<Platform>(symbols.CurrentPlatform)
                     .environment;
 
-                return _.reduce(environment, (prev: Dictionary<string>, value: string, key: string) => {
+                return _.reduce(environment, (previous: Dictionary<string>, value: string, key: string) => {
 
-                    prev = _.isObject(prev) ? prev : {};
+                    previous = _.isObject(previous) ? previous : {};
 
-                    prev[_.camelCase(key)] = value;
+                    previous[_.camelCase(key)] = value;
 
-                    return prev;
+                    return previous;
                 }) as Environment;
             })
             .inSingletonScope()
