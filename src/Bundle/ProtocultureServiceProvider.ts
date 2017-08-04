@@ -1,7 +1,10 @@
 import * as _ from "lodash";
-import { symbols, ServiceProvider, BaseApp, Environment } from "../index";
 import { bundleSymbols, Platform } from "./index";
 import { Dictionary } from "lodash";
+import { ServiceProvider } from "../ServiceProvider";
+import { BaseApp } from "../App/Base";
+import { Environment } from "../Environment";
+import { symbols } from "../index";
 
 
 export class ProtocultureServiceProvider extends ServiceProvider {

@@ -1,19 +1,15 @@
-import "es6-shim";
-import "isomorphic-fetch";
-import "reflect-metadata";
-//
 import * as _ from "lodash";
-import {symbols, ServiceProvider} from "../index";
-import {bundleSymbols} from "./index";
-import {appSymbols, App} from "../App";
-import {Container, interfaces} from "inversify";
+import { symbols, ServiceProvider } from "../index";
+import { bundleSymbols } from "./index";
+import { appSymbols, App } from "../App";
+import { Container, interfaces } from "inversify";
 import ContainerOptions = interfaces.ContainerOptions;
-import {Platform} from "../Platform";
-import {LogLevel} from "../Log/LogLevel";
-import {StaticServiceProvider} from "../ServiceProvider";
-import {ProtocultureServiceProvider} from "./ProtocultureServiceProvider";
-import {logSymbols, LogServiceProvider, LogService} from "../Log";
-import {ReduxServiceProvider} from "../Redux/ReduxServiceProvider";
+import { Platform } from "../Platform";
+import { LogLevel } from "../Log/LogLevel";
+import { StaticServiceProvider } from "../ServiceProvider";
+import { ProtocultureServiceProvider } from "./ProtocultureServiceProvider";
+import { logSymbols, LogServiceProvider, LogService } from "../Log";
+import { ReduxServiceProvider } from "../Redux/ReduxServiceProvider";
 
 
 export abstract class Bundle {
