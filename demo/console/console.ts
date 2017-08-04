@@ -1,5 +1,6 @@
 #!/usr/bin/env ts-node
 import * as _ from "lodash";
+import "../../src/Shims";
 import {
     reduxSymbols,
     ServiceProvider,
