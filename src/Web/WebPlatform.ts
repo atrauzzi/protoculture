@@ -51,6 +51,11 @@ export class WebPlatform implements Platform {
                 console.log(logMessage);
                 break;
 
+            case LogLevel.Warn:
+                // tslint:disable-next-line:no-console
+                console.warn(logMessage);
+                break;
+
             default:
                 // tslint:disable-next-line:no-console
                 console.error(logMessage);
