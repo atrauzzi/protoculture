@@ -111,7 +111,7 @@ export abstract class Bundle {
         }
         catch (error) {
 
-            this._logger.log(`Unable to build apps: ${error}`, null, LogLevel.Error);
+            this._logger.log(`Unable to build apps: ${error}`, null, LogLevel.Warn);
         }
 
         try {
