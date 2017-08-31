@@ -17,12 +17,8 @@
         "outDir": "lib",
         "skipLibCheck": true,
         "lib": [
-            "dom",
-            "es5",
-            "es2015",
-            "es2015.promise",
-            "es6",
-            "es2016"
+            "esnext",
+            "dom"
         ]
     },
     "include": [
