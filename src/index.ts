@@ -7,7 +7,6 @@ export { LogLevel } from "./Log/LogLevel";
 export { ReduxServiceProvider } from "./Redux/ReduxServiceProvider";
 export { ConsoleServiceProvider } from "./Console/ConsoleServiceProvider";
 export { WebServiceProvider } from "./Web/WebServiceProvider";
-export { ElectronServiceProvider } from "./Electron/ElectronServiceProvider";
 
 export { Environment } from "./Environment";
 
