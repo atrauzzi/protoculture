@@ -10,6 +10,8 @@ declare module "../ServiceProvider" {
 
         configureBusReducer(busReducer: StaticBusReducer<any>): void;
         configureBusReducers(busReducers: StaticBusReducer<any>[]): void;
+
+        bindInitialState(state: any): void;
     }
 }
 
@@ -27,4 +29,10 @@ ServiceProvider.prototype.configureBusReducers = function (busReducers: StaticBu
 
     busReducers.forEach((busReducer) =>
         this.configureBusReducer(busReducer));
+};
+
+ServiceProvider.prototype.bindInitialState = function (state: any) {
+
+    this.bundle.container.bind(reduxSymbols.InitialState)
+        .toConstantValue(state);
 };
