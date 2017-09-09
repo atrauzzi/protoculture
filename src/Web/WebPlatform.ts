@@ -67,8 +67,11 @@ export class WebPlatform implements Platform {
 
         const initialState = this.findInitialState();
 
-        this.bundle.container.bind(reduxSymbols.InitialState)
-            .toConstantValue(initialState);
+        if (initialState) {
+
+            this.bundle.container.bind(reduxSymbols.InitialState)
+                .toConstantValue(initialState);
+        }
     }
 
     protected findInitialState() {
