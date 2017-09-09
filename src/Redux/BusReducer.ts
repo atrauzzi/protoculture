@@ -10,7 +10,7 @@ export interface BusReducer<ActionType extends Action, State = any> {
 
     action: ActionType["type"];
 
-    reducer(state: State, action: Action): State;
+    reducer(state: State, action: ActionType): State;
 }
 
 export function createBusReducer<State>(busReducers: BusReducer<any>[]) {
