@@ -26,7 +26,7 @@ export class ReduxServiceProvider extends ServiceProvider {
     public async boot(): Promise<void> {
 
         this.bundle.container.bind(reduxSymbols.Middleware)
-            .toConstantValue(reduxThunk);
+            .toConstantValue(reduxThunk.withExtraArgument(this.bundle));
 
         this.bundle.container.bind<typeof reduxCompose>(reduxSymbols.Compose)
             .toConstantValue(reduxCompose);
