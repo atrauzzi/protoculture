@@ -39,15 +39,18 @@ function asMultipart(data: any) {
 
 export interface RequestOptions {
 
-    method: string;
-    contentType: string;
+    method?: string;
+    contentType?: string;
 
-    data: any;
-    query: any;
+    data?: any;
+    query?: any;
 
-    csrf: string;
+    csrf?: string;
 
-    accept: string;
+    accept?: string;
+
+    username?: string;
+    password?: string;
 }
 
 export async function createRequest<ResponseData>(uri: string, options: Partial<RequestOptions> = {}) {
@@ -60,7 +63,7 @@ export async function createRequest<ResponseData>(uri: string, options: Partial<
 
     options = _.merge(defaultOptions, options);
 
-    const headers = {
+    const headers: any = {
         accept: options.accept,
     };
 
@@ -71,6 +74,19 @@ export async function createRequest<ResponseData>(uri: string, options: Partial<
     //     queryString = asUrlEncoded(data);
     //     uri = uri + "?" + queryString;
     // }
+
+    if (options.username) {
+
+        const usernamePasswordPair = options.password
+            ? `${options.username}:${options.password}`
+            : `${options.username}`;
+
+        const encoded = btoa(usernamePasswordPair);
+
+        const authorizationHeader = `Basic ${encoded}`;
+
+        headers.authorization = authorizationHeader;
+    }
 
     if (options.data && options.method === Method.Post) {
 
