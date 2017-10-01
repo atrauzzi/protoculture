@@ -51,6 +51,8 @@ export interface RequestOptions {
 
     username?: string;
     password?: string;
+
+    token?: string;
 }
 
 export async function createRequest<ResponseData>(uri: string, options: Partial<RequestOptions> = {}) {
@@ -74,6 +76,11 @@ export async function createRequest<ResponseData>(uri: string, options: Partial<
     //     queryString = asUrlEncoded(data);
     //     uri = uri + "?" + queryString;
     // }
+
+    if (options.token) {
+
+        headers.authorization = `token ${options.token}`;
+    }
 
     if (options.username) {
 
