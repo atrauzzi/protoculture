@@ -14,7 +14,7 @@ The best way to understand how Protoculture works is to think about its main pil
  - Platforms
  - Bundles
  - Layers
- - Service Providers
+ - ServiceProviders
  - Apps
  
 The _slight_ opinionation of Protoculture comes from:
@@ -22,7 +22,7 @@ The _slight_ opinionation of Protoculture comes from:
  - Being authored in TypeScript
  - Asynchronous-first via `await` & the [standard Promise APIs](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
  - The powerful [inversify](http://inversify.io) dependency injection system
- - A bundled [Redux](http://redux.js.org) service provider for a popular and well documented set of conventions for data handling
+ - A bundled [Redux](http://redux.js.org) ServiceProvider for a popular and well documented set of conventions for data handling
  - Planned integrations with hosting and process management infrastructure like [ApplicationInsights](https://github.com/Microsoft/ApplicationInsights-node.js)
 
 ### In Detail
@@ -46,13 +46,13 @@ Platforms represent the environment running your protoculture application.  Over
 
 Most of the time you'll use a provided platform but if you ever create your own, Platforms are also free to do any kind of bootstrap you need and should be used to help make your app [universal/isomorphic](https://medium.com/@mjackson/universal-javascript-4761051b7ae9).
 
-#### Layers & Service Providers
+#### Layers & ServiceProviders
 
 The quickest way to explain a Layer is to say that it's one of several directories you use to group your source code.
 
 Having said that, Layers are one of the most important concepts to appreciate as they represent a horizontal strip of functionality.
 
-Each layer has a `ServiceProvider` which can be referenced by one or more Bundles. Service providers are responsible for telling the dependency injection system about new configuration and functionality.
+Each layer has a `ServiceProvider` which can be referenced by one or more Bundles. ServiceProviders are responsible for telling the dependency injection system about new configuration and functionality.
 
 If you've used [Laravel](http://laravel.com), these should be very familiar.
 
