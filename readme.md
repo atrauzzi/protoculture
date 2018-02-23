@@ -11,9 +11,10 @@ Everything protoculture does aims to help structure your TypeScript/ES codebase,
 
 The best way to understand how Protoculture works is to think about its main pillars:
 
- - Service Providers
- - Bundles
  - Platforms
+ - Bundles
+ - Layers
+ - Service Providers
  - Apps
  
 The _slight_ opinionation of Protoculture comes from:
@@ -27,30 +28,46 @@ The _slight_ opinionation of Protoculture comes from:
 ### In Detail
 The layering Protoculture provides has similar if not identical siblings in other languages and runtimes, 
 its big advantage is in how everything is tied together.  In that sense, protoculture is not a full framework, but an 
-application framework.
+applications framework.
 
 While Protoculture is authored in TypeScript, you can definitely use it from regular ES as well.
 
-#### Service Providers
-Service providers are responsible for telling the dependency injection system about new configuration and functionality. All
-`ServiceProvider` instances are created when a `Bundle` is booted.  They are then asked to make registrations against the context.
+#### Bundles
+Bundles represent the first level of execution, whether in a console or in a browser.  Modules that contain Bundles are often also your entrypoint scripts, instantiating the Bundle and calling its `run` method. Protoculture includes inversify for dependency injection, Bundles initialize this system and act as the top of the graph.
+
+The other role of the `Bundle` is to act as a language-level root for an entire dependency graph.  Regardless of what bundler you choose to use, protoculture bundles are where everything begins!
+
+Because bundles are the first thing run in a protoculture application, the bundle module automatically includes popular polyfills/ponyfills.
+
+You configure your bundle by assigning it `ServiceProvider` types to use.
+
+#### Platforms
+Platforms represent the environment running your protoculture application.  Over time protoculture gains common abstractions that are necessary across different platforms.  Platform specific implementations of these abstractions are made available where possible via the dependency injection system.
+
+Most of the time you'll use a provided platform but if you ever create your own, Platforms are also free to do any kind of bootstrap you need and should be used to help make your app [universal/isomorphic](https://medium.com/@mjackson/universal-javascript-4761051b7ae9).
+
+#### Layers & Service Providers
+
+The quickest way to explain a Layer is to say that it's one of several directories you use to group your source code.
+
+Having said that, Layers are one of the most important concepts to appreciate as they represent a horizontal strip of functionality.
+
+Each layer has a `ServiceProvider` which can be referenced by one or more Bundles. Service providers are responsible for telling the dependency injection system about new configuration and functionality.
 
 If you've used [Laravel](http://laravel.com), these should be very familiar.
 
-#### Bundles
-Bundles represent the topmost entrypoint for a grouping of Apps.  Your entrypoint scripts should be able to instantiate 
-a bundle and call the `run` method on it with little fuss.  You configure your bundle by way of the `Platform`, `App` 
-and `ServiceProvider` types.
+If the philosophy of layers seems too unfamiliar, just start by creating your application under a single layer.  Over time as you think of features and concepts that can act independently of each other, move them into their own layers.
+This will get you thinking about the abstractions required to allow that layer to be switched on or off without preventing the rest of the application from working.  In this way, Layers and `ServiceProviders` can be an effective mechanism for powering feature flags.
 
-The final role of the `Bundle` is to act as a language-level root for an entire dependency graph.  This is most 
-useful when authoring browser applications.
-Because bundles are the first thing run in a protoculture application, the bundle module automatically includes 
-popular fetch, promise and reflect-metadata polyfills.  So long as you compose your application using `ServiceProviders`, 
-protoculture will do its best to bootstrap a consistent environment!
+Eventually, you may even find that some layers can be moved into their own packages!  This is especially helpful as you discover layers that depend on each other.  NPM packages allow you to express those dependencies using [semver](https://semver.org/).
 
-#### Platforms
-Platforms represent the means by which you wish to interact with the environment that Protoculture will make available.
-Platforms are free to do any kind of bootstrap you need and should be used to help make your app universal. 
+##### Examples
+
+ - Browser
+  - Grouping screens and data access by domain concern. User edit vs. organization edit.
+  - Multiple _applications_ on a single page.  Rather than load multiple `Bundles`, create a single `Bundle` that contains the desired Layers.
+ - Server
+  - Groups of routes, organized by domain concern or aggregate.
 
 #### Apps
 Apps are probably the easiest level of encapsulation to think about.  If you were making a console application, you 
