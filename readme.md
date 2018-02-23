@@ -63,10 +63,10 @@ Eventually, you may even find that some layers can be moved into their own packa
 
 ##### Examples
 
- - Browser
+- Browser
   - Grouping screens and data access by domain concern. User edit vs. organization edit.
   - Multiple _applications_ on a single page.  Rather than load multiple `Bundles`, create a single `Bundle` that contains the desired Layers.
- - Server
+- Server
   - Groups of routes, organized by domain concern or aggregate.
 
 #### Apps
