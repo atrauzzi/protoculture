@@ -65,7 +65,7 @@ Each layer has a `ServiceProvider` which can be referenced by one or more Bundle
 If you've used [Laravel](http://laravel.com), you'll be right at home.
 
 If the philosophy of layers seems too unfamiliar, just start by creating your application under a single layer.  Over time as you think of features and concepts that can act independently of each other, move them into their own layers.
-This will get you thinking about the abstractions required to allow that layer to be switched on or off without preventing the rest of the application from working.  In this way, Layers and `ServiceProviders` can be an effective mechanism for powering feature flags.
+This will get you thinking about the abstractions required to allow that layer to be switched on or off independently of other `Layers`.  In this way, Layers and `ServiceProviders` can be an effective mechanism for powering feature flags.
 
 Eventually, you may even find that some layers can be moved into their own packages!  This is especially helpful as you discover layers that depend on each other.  NPM packages allow you to express those dependencies using [semver](https://semver.org/).
 
