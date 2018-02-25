@@ -33,9 +33,9 @@ applications framework.
 While Protoculture is authored in TypeScript, you can definitely use it from regular ES as well.
 
 #### Bundles
-Bundles represent the first level of execution, whether in a console or in a browser.  Modules that contain Bundles are often also your entrypoint scripts, instantiating the Bundle and calling its `run` method. Protoculture includes inversify for dependency injection, Bundles initialize this system and act as the top of the graph.
+Bundles represent a like-static pre-execution phase.  The module that contains your Bundle is often also your entrypoint script, instantiating the Bundle and calling its `run` method. Protoculture includes inversify for inversion of control, `Bundles` initialize this system and act as the top of the dependency graph.
 
-The other role of the `Bundle` is to act as a language-level root for an entire dependency graph.  Regardless of what bundler you choose to use, protoculture bundles are where everything begins!
+The other role of the `Bundle` is to act as a language-level root for an entire module graph. Regardless of what bundler you choose to use, protoculture `Bundles` are where everything begins!
 
 Because bundles are the first thing run in a protoculture application, the bundle module automatically includes popular polyfills/ponyfills.
 
@@ -54,7 +54,7 @@ Having said that, Layers are one of the most important concepts to appreciate as
 
 Each layer has a `ServiceProvider` which can be referenced by one or more Bundles. ServiceProviders are responsible for telling the dependency injection system about new configuration and functionality.
 
-If you've used [Laravel](http://laravel.com), these should be very familiar.
+If you've used [Laravel](http://laravel.com), you'll be right at home.
 
 If the philosophy of layers seems too unfamiliar, just start by creating your application under a single layer.  Over time as you think of features and concepts that can act independently of each other, move them into their own layers.
 This will get you thinking about the abstractions required to allow that layer to be switched on or off without preventing the rest of the application from working.  In this way, Layers and `ServiceProviders` can be an effective mechanism for powering feature flags.
@@ -71,14 +71,13 @@ Eventually, you may even find that some layers can be moved into their own packa
   - Groups of routes, organized by domain concern or aggregate.
 
 #### Apps
-Apps are probably the easiest level of encapsulation to think about.  If you were making a console application, you 
-would treat the entrypoint in the `App` class as your `main`.  A `Bundle` can also be made up of multiple applications.  
-This is especially true when working in the browser as you may have multiple bundles that get minified that wish to reuse apps!
+`Apps` are the simplest level of encapsulation to think about that protoculture offers. If you were making a console application, you 
+would treat the entrypoint in the `App` class as your `main`.  What's unique about `Apps` in protoculture is that you can have several of them.  `Apps` are also useful when working in the browser as you can have multiple `Bundles` that wish to reuse an arbitrary combination of apps!
 
-Remember, Protoculture is asynchronous!  That means your apps can be too.  If a Protoculture bundle detects that it 
-contains any asynchronous apps, it will automatically set up a heartbeat.  This is extremely useful for when you have  
+Remember, Protoculture is asynchronous and supports running multiple apps at once!  If a Protoculture bundle detects that it 
+contains any asynchronous apps, it will automatically set up a heartbeat.  This is handy for when you have  
 long running processes or are using a library that opens up sockets.  When all applications are done executing, Protoculture 
-will ask every app to finish up.  You don't have to manage a thing!
+will give every app a chance to do cleanup.
 
 ## Meta
 
