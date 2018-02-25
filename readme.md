@@ -23,7 +23,7 @@ The _slight_ opinionation of Protoculture comes from:
  - Asynchronous-first via `await` & the [standard Promise APIs](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
  - The powerful [inversify](http://inversify.io) dependency injection system
  - A bundled [Redux](http://redux.js.org) ServiceProvider for a popular and well documented set of conventions for data handling
- - Planned integrations with hosting and process management infrastructure like [ApplicationInsights](https://github.com/Microsoft/ApplicationInsights-node.js)
+ - Planned integrations with many popular JS libraries, frameworks and utilities
 
 ### Oh man, _not another javascript framework_!
 
