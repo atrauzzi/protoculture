@@ -6,7 +6,7 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 ## About
-Protoculture is a _slightly opinionated_ set of ECMAScript practices backed by an applications framework.  It sits between your chosen libraries and process managers or platform acting as a layer to organize your abstractions.
+Protoculture is a _slightly opinionated_ set of ECMAScript practices backed by an applications framework.  It sits between your bundler, chosen libraries, process managers and platforms acting as a layer to organize your abstractions.
 Everything protoculture does aims to help structure your TypeScript/ES codebase, reducing cognitive overhead and making it easier for multiple people to work together.
 
 The best way to understand how Protoculture works is to think about its main pillars:
