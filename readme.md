@@ -6,7 +6,7 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 ## About
-Protoculture is a _slightly opinionated_ set of ECMAScript practices with a supporting applications framework.  It sits between your chosen libraries and process managers or platform acting as a layer to organize your abstractions.
+Protoculture is a _slightly opinionated_ set of ECMAScript practices backed by an applications framework.  It sits between your chosen libraries and process managers or platform acting as a layer to organize your abstractions.
 Everything protoculture does aims to help structure your TypeScript/ES codebase, reducing cognitive overhead and making it easier for multiple people to work together.
 
 The best way to understand how Protoculture works is to think about its main pillars:
@@ -24,6 +24,17 @@ The _slight_ opinionation of Protoculture comes from:
  - The powerful [inversify](http://inversify.io) dependency injection system
  - A bundled [Redux](http://redux.js.org) ServiceProvider for a popular and well documented set of conventions for data handling
  - Planned integrations with hosting and process management infrastructure like [ApplicationInsights](https://github.com/Microsoft/ApplicationInsights-node.js)
+
+### Oh man, _not another javascript framework_!
+
+I get it, we all know about [JavaScript framework fatigue](http://www.commitstrip.com/wp-content/uploads/2015/09/Strip-Prendre-le-train-en-marche-650-finalenglish1.jpg).
+
+Cynicism over JavaScript is a super hip joke; but this kind of negativity can get the better of us. Protoculture 
+enters the slightly empty space of application frameworks.  It is not a middleware platform and is intended 
+to be universal.  Simply put, the evolution of the JavaScript ecosystem has been _because_ of all the _yet anothers_.
+
+Everything inside of protoculture has been distilled out of real production needs. I invite you to try it out and 
+report any ideas or issues in a ticket.
 
 ### In Detail
 The layering Protoculture provides has similar if not identical siblings in other languages and runtimes, 
@@ -102,17 +113,6 @@ Protoculture is created by Alexander Trauzzi and is available under the [Apache 
  - ASP.NET Core
  - Other cool things in the ES community
  - Maybe some Scala?
-
-### Oh man, _not another javascript framework_
-
-I get it, we all know about [JavaScript framework fatigue](http://www.commitstrip.com/wp-content/uploads/2015/09/Strip-Prendre-le-train-en-marche-650-finalenglish1.jpg).
-
-Cynicism over JavaScript is a super hip joke; but this kind of negativity can get the better of us. Protoculture 
-enters the slightly empty space of application frameworks.  It is not a middleware platform and is intended 
-to be universal.  Simply put, the evolution of the JavaScript ecosystem has been _because_ of all the _yet anothers_.
-
-Everything inside of protoculture has been distilled out of real production needs. I invite you to try it out and 
-report any ideas or issues in a ticket.
 
 ### Why TypeScript?
 
