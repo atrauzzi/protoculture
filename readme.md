@@ -27,14 +27,11 @@ The _slight_ opinionation of Protoculture comes from:
 
 ### Oh man, _not another javascript framework_!
 
-I get it, we all know about [JavaScript framework fatigue](http://www.commitstrip.com/wp-content/uploads/2015/09/Strip-Prendre-le-train-en-marche-650-finalenglish1.jpg).
+We all know about [JavaScript framework fatigue](http://www.commitstrip.com/wp-content/uploads/2015/09/Strip-Prendre-le-train-en-marche-650-finalenglish1.jpg).
 
-Cynicism over JavaScript is a super hip joke; but this kind of negativity can get the better of us. Protoculture 
-enters the slightly empty space of application frameworks.  It is not a middleware platform and is intended 
-to be universal.  Simply put, the evolution of the JavaScript ecosystem has been _because_ of all the _yet anothers_.
+Cynicism over JavaScript is a super hip joke; but we mustn't let this prevent us from growing. Protoculture enters the slightly empty space of guidance for ECMAScript applications. Protoculture itself only offers application structure and is intended to be universal.
 
-Everything inside of protoculture has been distilled out of real production needs. I invite you to try it out and 
-report any ideas or issues in a ticket.
+Really though, the evolution of the JavaScript ecosystem has been _because_ of all the _yet anothers_. Everything inside of protoculture has been distilled out of real production needs. I invite you to try it out and report any feedback or issues in a ticket!
 
 ### In Detail
 The layering Protoculture provides has similar if not identical siblings in other languages and runtimes, 
