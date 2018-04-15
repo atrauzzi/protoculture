@@ -31,7 +31,7 @@ export class ReduxServiceProvider extends ServiceProvider {
         this.bundle.container.bind<typeof reduxCompose>(reduxSymbols.Compose)
             .toConstantValue(reduxCompose);
 
-        this.bundle.container.bind<Redux.Store<any>>(reduxSymbols.Store)
+        this.bundle.container.bind<Store<any>>(reduxSymbols.Store)
             .toDynamicValue((context) => this.busReducerStoreFactory(context.container))
             .inSingletonScope();
 
@@ -40,7 +40,7 @@ export class ReduxServiceProvider extends ServiceProvider {
 
     public async bootChild(container: Container): Promise<void> {
 
-        container.bind<Redux.Store<any>>(reduxSymbols.Store)
+        container.bind<Store<any>>(reduxSymbols.Store)
             .toDynamicValue((context) => this.busReducerStoreFactory(container));
     }
 
