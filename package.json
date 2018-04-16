@@ -33,15 +33,15 @@
     "@types/redux": "^3.6.0",
     "@types/redux-thunk": "^2.1.0",
     "inversify": "^4.11.1",
-    "redux-thunk": "^2.1.0"
-  },
-  "devDependencies": {
+    "redux-thunk": "^2.1.0",
     "domready": "^1.0.8",
     "platform": "^1.3.4",
     "reflect-metadata": "^0.1.12",
+    "urlsearchparams": "^0.1.1"
+  },
+  "devDependencies": {
     "semantic-release": "^6.3.2",
     "ts-node": "^3.0.2",
-    "typescript": "^2.2.2",
-    "urlsearchparams": "^0.1.1"
+    "typescript": "^2.2.2"
   }
 }
