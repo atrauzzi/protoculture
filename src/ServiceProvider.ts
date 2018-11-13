@@ -1,18 +1,19 @@
-import * as _ from "lodash";
-import {appSymbols, StaticApp} from "./App";
-import {symbols, StaticPlatform, Platform} from "./index";
-import {Bundle} from "./Bundle";
-import {decorate, injectable, multiInject, inject, Container, interfaces} from "inversify";
+import _ from "lodash";
+import { decorate, injectable, multiInject, inject, Container } from "inversify";
+import { protocultureSymbols, Bundle, App } from "./index";
 
 
-export interface StaticServiceProvider<ServiceProviderType extends ServiceProvider> {
+interface AppConstructor<AppType extends App> {
 
-    new(bundle: Bundle): ServiceProviderType;
+    new(...args: any[]): AppType;
+}
+
+export interface StaticServiceProvider {
+
+    new(bundle: Bundle): ServiceProvider;
 }
 
 export abstract class ServiceProvider {
-
-    protected static readonly decoratedTypes: {[key: string]: any[]} = {};
 
     public static addDecoratedType(key: string, constructor: any) {
 
@@ -29,7 +30,9 @@ export abstract class ServiceProvider {
         return ServiceProvider.decoratedTypes[key] || [];
     }
 
-    protected bundle: Bundle;
+    protected static readonly decoratedTypes: {[key: string]: any[]} = {};
+
+    public bundle: Bundle;
 
     public constructor(bundle: Bundle) {
 
@@ -46,22 +49,11 @@ export abstract class ServiceProvider {
         // Optional, override this in subtype.
     }
 
-    //
-    // Utilities
-
-    protected bindPlatform<PlatformType extends Platform>(platform: StaticPlatform<PlatformType>) {
-
-        this.makeInjectable(platform);
-
-        this.bundle.container.bind(symbols.AvailablePlatform)
-            .to(platform);
-    }
-
-    protected bindApp<App extends StaticApp<any>>(app: App) {
+    protected bindApp<AppType extends AppConstructor<any>>(app: AppType) {
 
         this.makeInjectable(app);
 
-        return this.bindConstructor<App>(appSymbols.App, app);
+        return this.bindConstructor<AppType>(protocultureSymbols.App, app);
     }
 
     protected makeInjectable(object: any): void {
@@ -69,20 +61,22 @@ export abstract class ServiceProvider {
         decorate(injectable(), object);
     }
 
-    protected bindConstructor<Type>(symbol: symbol, staticType: {new(...args: any[]): Type}): interfaces.BindingWhenOnSyntax<Type> {
+    protected bindConstructor<Type>(symbol: symbol, staticType: {new(...args: any[]): Type}) {
 
         return this.bundle.container.bind<Type>(symbol)
-            .to(staticType);
+            .to(staticType)
+            .inSingletonScope();
     }
 
     protected bindConstructorParameter(symbol: symbol | symbol[], staticType: any, position: number) {
 
         if (_.isArray(symbol)) {
 
-            decorate(multiInject(symbol[0]), staticType, position);
+            decorate(multiInject(symbol[0]) as ParameterDecorator, staticType, position);
         }
         else {
-            decorate(inject(symbol as symbol), staticType, position);
+
+            decorate(inject(symbol) as ParameterDecorator, staticType, position);
         }
     }
 }

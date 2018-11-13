@@ -1,32 +1,38 @@
-import * as _ from "lodash";
+import _ from "lodash";
+import { Tracer } from "opentracing";
 import { App } from "../App";
-import { Bundle } from "../Bundle";
-import { LogLevel } from "./LogLevel";
-import { Platform } from "../Bundle";
-import { Environment } from "../index";
+import { Bundle } from "../index";
 
 
 export class LogService {
 
-    protected static readonly defaultEnvironment = {
-        logLevel: LogLevel.Fatal,
-        debug: false,
-    };
-
     public constructor(
-        protected bundle: Bundle,
-        protected platform: Platform,
-        protected environment: Environment = LogService.defaultEnvironment
+        private bundle: Bundle,
+        private tracer: Tracer
     ) {
-
     }
 
-    public log(message: any, app: App, level: LogLevel = LogLevel.Info) {
+    public log(eventName: string, app?: App, message?: string) {
 
-        if (this.environment.logLevel >= level || this.environment.debug) {
+        console.log(eventName);
 
-            this.platform.log(this.buildLogMessage(message, app), level);
+        const span = this.beginTrace(eventName, app);
+
+        if (message) {
+
+            span.log({
+                message,
+            });
         }
+
+        span.finish();
+    }
+
+    public beginTrace(eventName: string, app?: App) {
+
+        return this.tracer.startSpan(eventName, {
+            tags: this.buildDefaultTags(app),
+        });
     }
 
     protected buildLogMessage(message: any, app: App = null): string[] {
@@ -35,24 +41,17 @@ export class LogService {
             ? message.split("\n")
             : [message];
 
-        const logLinePrefix = this.buildLogLinePrefix(app);
+        const logLinePrefix = this.buildDefaultTags(app);
 
         return _.map(messageLines, (messageLine) => `${logLinePrefix}${messageLine}`);
     }
 
-    protected buildLogLinePrefix(app: App) {
+    protected buildDefaultTags(app: App) {
 
-        const logLinePrefixParts = [
-            `protoculture@${this.platform.name}:${this.bundle.name}`
-        ];
-
-        if (app) {
-
-            logLinePrefixParts.push(`/${app.name}`);
-        }
-
-        logLinePrefixParts.push("# ");
-
-        return logLinePrefixParts.join("");
+        return {
+            "framework": "protoculture",
+            "bundle": this.bundle.name,
+            "app": app ? app.name : null,
+        };
     }
 }

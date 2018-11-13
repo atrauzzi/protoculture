@@ -1,11 +1,6 @@
-import {Bundle} from "../Bundle";
-import {LogLevel} from "../Log/LogLevel";
+import { Bundle } from "./index";
+import { LogService } from "./index";
 
-
-export interface StaticApp<AppType extends App> {
-
-    new(...args: any[]): AppType;
-}
 
 export interface App {
 
@@ -23,6 +18,8 @@ export interface App {
 export abstract class BaseApp implements App {
 
     private _bundle: Bundle;
+
+    private _logger: LogService;
 
     public abstract get name(): string;
 
@@ -48,8 +45,8 @@ export abstract class BaseApp implements App {
         throw new Error("Run not implemented!");
     }
 
-    protected log(message: any, level: LogLevel = LogLevel.Info) {
+    protected log(eventName: string, message?: string) {
 
-        this.bundle.logger.log(message, this, level);
+        this._logger.log(eventName, this, message);
     }
 }
