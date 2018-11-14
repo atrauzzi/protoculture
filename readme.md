@@ -137,4 +137,3 @@ about the ES ecosystem.  Particularly as it pertains to the various platforms it
 
 ### Other
 The only answer you're probably looking for this far down is: _Macross_.
-
