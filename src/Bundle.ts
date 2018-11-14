@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import _ from "lodash";
 import ContainerOptions = interfaces.ContainerOptions;
 import { Container, interfaces } from "inversify";
