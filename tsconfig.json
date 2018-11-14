@@ -16,6 +16,7 @@
         "sourceMap": true,
         "outDir": "lib",
         "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
         "skipLibCheck": true,
         "lib": [
             "esnext",
