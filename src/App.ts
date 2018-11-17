@@ -9,7 +9,7 @@ export interface App {
     readonly working?: boolean;
 
     // ToDo: Shift over to property/setter injection - https://github.com/inversify/InversifyJS/issues/531
-    bundle: Bundle;
+    bundle: Bundle | null;
 
     run(): Promise<void>;
 }
