@@ -22,7 +22,6 @@ The _slight_ opinionation of Protoculture comes from:
  - Being authored in TypeScript
  - Asynchronous-first via `await` & the [standard Promise APIs](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Promise)
  - The powerful [inversify](http://inversify.io) dependency injection system
- - A bundled [Redux](http://redux.js.org) ServiceProvider for a popular and well documented set of conventions for data handling
  - Planned integrations with many popular JS libraries, frameworks and utilities
 
 ### Oh man, _not another javascript framework_!
@@ -93,7 +92,6 @@ Protoculture is created by Alexander Trauzzi and is available under the [Apache 
 
 ### Integrations
 
- - [Redux](src/Redux)
  - [Mongoose](https://github.com/atrauzzi/protoculture-mongoose)
  - [hapi](https://github.com/atrauzzi/protoculture-hapi)
    - [inert](https://github.com/atrauzzi/protoculture-hapi/blob/master/src/InertServiceProvider.ts)
