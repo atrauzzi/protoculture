@@ -6,16 +6,6 @@ import { protocultureSymbols, App, StaticServiceProvider, ServiceProvider, LogSe
 import { ProtocultureServiceProvider } from "./ProtocultureServiceProvider";
 
 
-declare global {
-
-    interface Window {
-
-        bootedBundles: string[];
-    }
-}
-
-window.bootedBundles = [];
-
 export abstract class Bundle {
 
     //
@@ -79,8 +69,6 @@ export abstract class Bundle {
         await this.bootLogging();
 
         this.booted = true;
-        
-        window.bootedBundles.push(this.name);
     }
 
     public async run(): Promise<void> {
@@ -168,11 +156,6 @@ export abstract class Bundle {
     }
 
     protected async bootServiceProviders() {
-
-        if (window.bootedBundles.includes(this.name)) {
-
-            return;
-        }
 
         await _.reduce(
             this.loadedServiceProviders,
