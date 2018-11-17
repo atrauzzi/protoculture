@@ -59,7 +59,7 @@ export abstract class Bundle {
         this.loadServiceProviders();
     }
 
-    public async boot(): Promise<void> {
+    public async boot() {
 
         this.booted = false;
 
@@ -71,12 +71,7 @@ export abstract class Bundle {
         this.booted = true;
     }
 
-    public async run(): Promise<void> {
-
-        if (!this.booted) {
-
-            await this.boot();
-        }
+    public async runHot() {
 
         if (!_.isEmpty(this.apps)) {
 
@@ -106,6 +101,16 @@ export abstract class Bundle {
         }
     }
 
+    public async run() {
+
+        if (!this.booted) {
+
+            await this.boot();
+        }
+
+        await this.runHot();
+    }
+
     public async bootChild(): Promise<Container> {
 
         const childContainer = this.container.createChild();
@@ -118,7 +123,7 @@ export abstract class Bundle {
         return childContainer;
     }
 
-    public async stop(): Promise<void> {
+    public async stop() {
 
         try {
 
@@ -159,7 +164,7 @@ export abstract class Bundle {
 
         await _.reduce(
             this.loadedServiceProviders,
-            (previous: Promise<void>, current) => previous.then(() => current.boot()),
+            (previous, current) => previous.then(() => current.boot()),
             new Promise<void>((resolve) => resolve())
         );
     }
