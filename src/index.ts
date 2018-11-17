@@ -1,3 +1,5 @@
+export { createDeferred } from "./Util";
+
 export { Bundle } from "./Bundle";
 export { App, BaseApp } from "./App";
 export { ServiceProvider, StaticServiceProvider } from "./ServiceProvider";
