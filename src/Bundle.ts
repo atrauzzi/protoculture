@@ -79,6 +79,8 @@ export abstract class Bundle {
         await this.bootLogging();
 
         this.booted = true;
+        
+        window.bootedBundles.push(this.name);
     }
 
     public async run(): Promise<void> {
@@ -177,8 +179,6 @@ export abstract class Bundle {
             (previous: Promise<void>, current) => previous.then(() => current.boot()),
             new Promise<void>((resolve) => resolve())
         );
-
-        window.bootedBundles.push(this.name);
     }
 
     protected async bootLogging() {
