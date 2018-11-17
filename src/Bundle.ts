@@ -80,12 +80,12 @@ export abstract class Bundle {
 
         if (!_.isEmpty(this.apps)) {
 
-            this.logger.log("Bundle already run", null);
+            this.logger.log("Bundle already running.", null);
 
             return;
         }
 
-        this.logger.log("Running bundle", null);
+        this.logger.log("Running bundle.", null);
 
         try {
 
