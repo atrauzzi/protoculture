@@ -6,6 +6,15 @@ import { protocultureSymbols, App, StaticServiceProvider, ServiceProvider, LogSe
 import { ProtocultureServiceProvider } from "./ProtocultureServiceProvider";
 
 
+declare global {
+
+    interface Window {
+
+        bootedBundles: string[];
+    }
+}
+
+
 export abstract class Bundle {
 
     //
@@ -59,7 +68,7 @@ export abstract class Bundle {
         this.loadServiceProviders();
     }
 
-    public async boot() {
+    public async boot(): Promise<void> {
 
         this.booted = false;
 
@@ -71,7 +80,12 @@ export abstract class Bundle {
         this.booted = true;
     }
 
-    public async runHot() {
+    public async run(): Promise<void> {
+
+        if (!this.booted) {
+
+            await this.boot();
+        }
 
         if (!_.isEmpty(this.apps)) {
 
@@ -101,16 +115,6 @@ export abstract class Bundle {
         }
     }
 
-    public async run() {
-
-        if (!this.booted) {
-
-            await this.boot();
-        }
-
-        await this.runHot();
-    }
-
     public async bootChild(): Promise<Container> {
 
         const childContainer = this.container.createChild();
@@ -123,7 +127,7 @@ export abstract class Bundle {
         return childContainer;
     }
 
-    public async stop() {
+    public async stop(): Promise<void> {
 
         try {
 
@@ -162,11 +166,18 @@ export abstract class Bundle {
 
     protected async bootServiceProviders() {
 
+        if (window.bootedBundles.includes(this.name)) {
+
+            return;
+        }
+
         await _.reduce(
             this.loadedServiceProviders,
-            (previous, current) => previous.then(() => current.boot()),
+            (previous: Promise<void>, current) => previous.then(() => current.boot()),
             new Promise<void>((resolve) => resolve())
         );
+
+        window.bootedBundles.push(this.name);
     }
 
     protected async bootLogging() {
