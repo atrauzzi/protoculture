@@ -14,6 +14,7 @@ declare global {
     }
 }
 
+window.bootedBundles = [];
 
 export abstract class Bundle {
 
