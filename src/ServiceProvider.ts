@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { decorate, injectable, multiInject, inject, Container, METADATA_KEY } from "inversify";
+import { decorate, injectable, multiInject, inject, Container } from "inversify";
 import { protocultureSymbols, Bundle, App } from "./index";
 
 
@@ -58,10 +58,7 @@ export abstract class ServiceProvider {
 
     protected makeInjectable(object: any): void {
 
-        if (!Reflect.hasOwnMetadata(METADATA_KEY.PARAM_TYPES, object)) {
-
-            decorate(injectable(), object);
-        }
+        decorate(injectable(), object);
     }
 
     protected bindConstructor<Type>(symbol: symbol, staticType: {new(...args: any[]): Type}) {
