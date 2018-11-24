@@ -1,5 +1,4 @@
-import { Bundle } from "./index";
-import { LogService } from "./index";
+import { Bundle, LogService } from "./index";
 
 
 export interface App {
