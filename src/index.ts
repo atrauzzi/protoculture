@@ -10,6 +10,9 @@ export { LogService } from "./Log/LogService";
 export { lazyLoad } from "./Web/LazyLoad";
 export { domReady } from "./Web/DomReady";
 
+export { Method, ConnectionConfiguration, ServerRoute, ServerRoutes, defaultAxiosConfiguration } from "./Data/ApiConfiguration";
+export { ApiConnection } from "./Data/ApiConnection";
+
 export const protocultureSymbols = {
     App: Symbol("App"),
     Bundle: Symbol("Bundle"),

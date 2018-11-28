@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { AxiosInstance } from "axios";
-import { ConnectionConfiguration, ServerRoute, ServerRoutes } from "../Domain/ApiConfiguration";
+import { ConnectionConfiguration, ServerRoute, ServerRoutes } from "./ApiConfiguration";
 import { AxiosRequestConfig } from "axios";
 
 
