@@ -49,11 +49,13 @@ export abstract class ServiceProvider {
         // Optional, override this in subtype.
     }
 
-    protected configureApiConnection<RoutesType extends ServerRoutes>(configuration: ConnectionConfiguration<RoutesType>) {
+    protected configureApiConnection<RoutesType extends ServerRoutes>(configurationOrFactory: ConnectionConfiguration<RoutesType> | ((...args: any[]) => ConnectionConfiguration<RoutesType>)) {
 
-        return this.bundle.container
-            .bind(protocultureSymbols.ApiConnection)
-            .toConstantValue(configuration);
+        const binding = this.bundle.container.bind(protocultureSymbols.ApiConnection);
+
+        return _.isFunction(configurationOrFactory)
+            ? binding.toDynamicValue(configurationOrFactory)
+            : binding.toConstantValue(configurationOrFactory);
     }
 
     protected bindApp<AppType extends AppConstructor<any>>(app: AppType) {
