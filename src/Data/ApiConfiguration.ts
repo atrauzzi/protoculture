@@ -33,6 +33,7 @@ export interface ServerRoutes {
 
 export interface ConnectionConfiguration<Routes extends ServerRoutes> {
 
+    hostAndPrefix?: string;
     routes: Routes;
     axiosConfiguration?: AxiosRequestConfig;
 }
