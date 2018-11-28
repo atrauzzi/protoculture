@@ -13,10 +13,4 @@ export { domReady } from "./Web/DomReady";
 export { Method, ConnectionConfiguration, ServerRoute, ServerRoutes, defaultAxiosConfiguration } from "./Data/ApiConfiguration";
 export { ApiConnection } from "./Data/ApiConnection";
 
-export const protocultureSymbols = {
-    App: Symbol("App"),
-    Bundle: Symbol("Bundle"),
-    MessageBus: Symbol("MessageBus"),
-    LogService: Symbol("Log"),
-    Tracer: Symbol("Tracer"),
-};
+export { protocultureSymbols } from "./Symbols";

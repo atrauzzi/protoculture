@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { decorate, injectable, multiInject, inject, Container } from "inversify";
-import { protocultureSymbols, Bundle, App } from "./index";
+import { Bundle, App, protocultureSymbols, ConnectionConfiguration, ServerRoutes } from "./index";
 
 
 interface AppConstructor<AppType extends App> {
@@ -47,6 +47,13 @@ export abstract class ServiceProvider {
     public async bootChild(container: Container): Promise<void> {
 
         // Optional, override this in subtype.
+    }
+
+    protected configureApiConnection<RoutesType extends ServerRoutes>(configuration: ConnectionConfiguration<RoutesType>) {
+
+        return this.bundle.container
+            .bind(protocultureSymbols.ApiConnection)
+            .toConstantValue(configuration);
     }
 
     protected bindApp<AppType extends AppConstructor<any>>(app: AppType) {
