@@ -52,7 +52,7 @@ export abstract class ServiceProvider {
 
     protected configureApiConnection<RoutesType extends ServerRoutes>(configurationOrFactory: ConnectionConfiguration<RoutesType> | ((context: Context) => ConnectionConfiguration<RoutesType>)) {
 
-        const binding = this.bundle.container.bind(protocultureSymbols.ApiConnection);
+        const binding = this.bundle.container.bind(protocultureSymbols.ApiConfiguration);
 
         return _.isFunction(configurationOrFactory)
             ? binding.toDynamicValue(configurationOrFactory)

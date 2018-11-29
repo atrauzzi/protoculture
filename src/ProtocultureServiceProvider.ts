@@ -1,7 +1,7 @@
 import mitt from "mitt";
 import { ServiceProvider } from "./ServiceProvider";
 import { BaseApp } from "./App";
-import { protocultureSymbols } from ".";
+import { protocultureSymbols, ApiConnection } from ".";
 
 
 export class ProtocultureServiceProvider extends ServiceProvider {
@@ -16,5 +16,9 @@ export class ProtocultureServiceProvider extends ServiceProvider {
         this.bundle.container
             .bind(protocultureSymbols.MessageBus)
             .toConstantValue(new mitt());
+
+        this.makeInjectable(ApiConnection);
+        this.bindConstructor(protocultureSymbols.ApiConnection, ApiConnection);
+        this.bindConstructorParameter(protocultureSymbols.ApiConfiguration, ApiConnection, 0);
     }
 }

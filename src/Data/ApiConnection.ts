@@ -1,4 +1,5 @@
 import _ from "lodash";
+import axios, { AxiosStatic } from "axios";
 import { AxiosInstance } from "axios";
 import { ConnectionConfiguration, ServerRoute, ServerRoutes } from "./ApiConfiguration";
 import { AxiosRequestConfig } from "axios";
@@ -8,10 +9,12 @@ export type ConfiguredRouteKey<Configuration extends ConnectionConfiguration<Rou
 
 export class ApiConnection<Configuration extends ConnectionConfiguration<Routes>, Routes extends ServerRoutes> {
 
+    private axios: AxiosStatic = null;
+
     public constructor(
-        private axios: AxiosInstance,
         private configuration: Configuration
     ) {
+        this.axios = axios;
     }
 
     public call<ResponseDataType = any>(name: ConfiguredRouteKey<Configuration>, extraConfiguration?: Partial<AxiosRequestConfig>): Promise<ResponseDataType>;
