@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { Context } from "inversify/dts/planning/context";
 import { decorate, injectable, multiInject, inject, Container } from "inversify";
 import { Bundle, App, protocultureSymbols, ConnectionConfiguration, ServerRoutes } from "./index";
 
@@ -49,7 +50,7 @@ export abstract class ServiceProvider {
         // Optional, override this in subtype.
     }
 
-    protected configureApiConnection<RoutesType extends ServerRoutes>(configurationOrFactory: ConnectionConfiguration<RoutesType> | ((...args: any[]) => ConnectionConfiguration<RoutesType>)) {
+    protected configureApiConnection<RoutesType extends ServerRoutes>(configurationOrFactory: ConnectionConfiguration<RoutesType> | ((context: Context) => ConnectionConfiguration<RoutesType>)) {
 
         const binding = this.bundle.container.bind(protocultureSymbols.ApiConnection);
 
