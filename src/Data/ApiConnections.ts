@@ -22,7 +22,7 @@ export class ApiConnections {
             .value();
     }
 
-    public connection(name: string) {
+    public connection(name: keyof ConfiguredConnections) {
 
         return this.configuredConnections[name];
     }
