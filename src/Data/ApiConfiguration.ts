@@ -33,8 +33,8 @@ export interface ServerRoutes {
 
 export interface ConnectionConfiguration<Routes extends ServerRoutes> {
 
-    routes: Routes;
     axiosConfiguration?: AxiosRequestConfig;
+    routes?: Routes;
 }
 
 export const defaultAxiosConfiguration: AxiosRequestConfig = {
