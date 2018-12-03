@@ -40,8 +40,8 @@ export abstract class ServiceProvider {
         configuration: Partial<ConnectionConfiguration<any>>,
     ): interfaces.BindingWhenOnSyntax<{}>;
     protected configureApiConnection(
-        configurationOrFactoryOrName: string | Partial<ConnectionConfigurations> | ((context: Context) => Partial<ConnectionConfiguration<any>>),
-        configurationOrFactory?: Partial<ConnectionConfiguration<any>> | ((context: Context) => Partial<ConnectionConfiguration<any>>)
+        configurationOrFactoryOrName: string | Partial<ConnectionConfiguration<any>> | ((context: Context) => Partial<ConnectionConfiguration<any>>),
+        configurationOrFactory?: Partial<ConnectionConfiguration<any>> | ((context: Context) => Partial<ConnectionConfigurations>)
     ): interfaces.BindingWhenOnSyntax<{}> {
 
         const name = _.isString(configurationOrFactoryOrName)
