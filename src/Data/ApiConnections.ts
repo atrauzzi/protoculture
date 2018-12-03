@@ -3,8 +3,10 @@ import { ConnectionConfiguration, ServerRoutes } from "./ApiConfiguration";
 import { ApiConnection } from "./ApiConnection";
 
 
-// note: Use declaration merging to extend this type for type hinting on APIs.
-export type ConfiguredConnections = { [x: string]: ApiConnection<any, ServerRoutes> };
+export interface ConfiguredConnections { 
+
+    // note: Use declaration merging to extend this type for type hinting on APIs.
+}
 
 export type ConnectionConfigurations = { [name: string]: ConnectionConfiguration<any> };
 
@@ -22,7 +24,7 @@ export class ApiConnections {
             .value();
     }
 
-    public connection(name: keyof ConfiguredConnections) {
+    public connection(name: keyof ConfiguredConnections): ConfiguredConnections[typeof name] {
 
         return this.configuredConnections[name];
     }
