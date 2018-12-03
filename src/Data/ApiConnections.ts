@@ -19,7 +19,10 @@ export class ApiConnections {
     ) {
 
         this.configuredConnections = _.chain(connectionConfigurations)
-            .merge()
+            .reduce((previous, current) => {
+
+                return _.merge(previous, current);
+            })
             .mapValues((apiConfiguration) =>  new ApiConnection(apiConfiguration))
             .value();
     }
