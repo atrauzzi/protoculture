@@ -34,14 +34,14 @@ export abstract class ServiceProvider {
         // Optional, override this in subtype.
     }
 
-    protected configureApiConnection(factory: ((context: Context) => Partial<ConnectionConfigurations>)): interfaces.BindingWhenOnSyntax<{}>;
+    protected configureApiConnection(factory: ((context: Context) => Partial<ConnectionConfiguration<any>>)): interfaces.BindingWhenOnSyntax<{}>;
     protected configureApiConnection(
         name: string,
-        configuration: Partial<ConnectionConfigurations>,
+        configuration: Partial<ConnectionConfiguration<any>>,
     ): interfaces.BindingWhenOnSyntax<{}>;
     protected configureApiConnection(
-        configurationOrFactoryOrName: string | Partial<ConnectionConfigurations> | ((context: Context) => Partial<ConnectionConfigurations>),
-        configurationOrFactory?: Partial<ConnectionConfigurations> | ((context: Context) => Partial<ConnectionConfigurations>)
+        configurationOrFactoryOrName: string | Partial<ConnectionConfigurations> | ((context: Context) => Partial<ConnectionConfiguration<any>>),
+        configurationOrFactory?: Partial<ConnectionConfiguration<any>> | ((context: Context) => Partial<ConnectionConfiguration<any>>)
     ): interfaces.BindingWhenOnSyntax<{}> {
 
         const name = _.isString(configurationOrFactoryOrName)
