@@ -1,12 +1,12 @@
 import _ from "lodash";
 import axios, { AxiosInstance } from "axios";
-import { ConnectionConfiguration, ServerRoute, ServerRoutes } from "./ApiConfiguration";
+import { ConnectionConfiguration, ServerRoute } from "./ApiConfiguration";
 import { AxiosRequestConfig } from "axios";
 
 
-export type ConfiguredRouteKey<Configuration extends ConnectionConfiguration<Routes>, Routes extends ServerRoutes = any> = keyof Configuration["routes"];
+export type ConfiguredRouteKey<Configuration extends ConnectionConfiguration<any>> = keyof Configuration["routes"];
 
-export class ApiConnection<Configuration extends ConnectionConfiguration<Routes>, Routes extends ServerRoutes> {
+export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
 
     private axios: AxiosInstance = null;
 
