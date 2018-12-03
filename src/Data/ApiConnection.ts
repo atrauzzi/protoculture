@@ -1,6 +1,6 @@
 import _ from "lodash";
 import axios, { AxiosInstance } from "axios";
-import { ConnectionConfiguration, ServerRoute } from "./ApiConfiguration";
+import { ConnectionConfiguration, ServerRoute, Authorization } from "./ApiConfiguration";
 import { AxiosRequestConfig } from "axios";
 
 
@@ -35,6 +35,14 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
         return response.data;
     }
 
+    public setAuthorization(type: Authorization, data: any) {
+
+        this.configuration.authorization = {
+            type,
+            data,
+        };
+    }
+
     public getRoute(name: ConfiguredRouteKey<Configuration>): ServerRoute {
 
         const route = this.configuration.routes[name];
@@ -59,8 +67,31 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
                 params: route.query,
                 data: route.data,
             },
-            extraConfiguration
+            this.createAxiosAuthorizationConfiguration(),
+            extraConfiguration,
         );
+    }
+
+    private createAxiosAuthorizationConfiguration() {
+
+        switch (_.get(this.configuration, "authorization.type")) {
+
+            case Authorization.Bearer:
+                return this.createAxiosBearerAuthorizationConfiguration();
+
+            default:
+                return {};
+        }
+    }
+
+    private createAxiosBearerAuthorizationConfiguration() {
+
+        return {
+
+            headers: {
+                "authorization": `Bearer ${this.configuration.authorization.data}`,
+            },
+        };
     }
 
     private templatePathParameters(route: ServerRoute, parameters: any) {

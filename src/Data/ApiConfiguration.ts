@@ -10,6 +10,10 @@ export enum Method {
     DELETE = "delete",
 }
 
+export enum Authorization {
+    Bearer = 0,
+}
+
 export interface ServerRoute<ResponseDataType = any, PathType = any, QueryType = any, DataType = any> {
 
     name: string;
@@ -35,6 +39,10 @@ export interface ConnectionConfiguration<Routes extends ServerRoutes> {
 
     axiosConfiguration?: AxiosRequestConfig;
     routes?: Routes;
+    authorization?: {
+        type: Authorization,
+        data: any,
+    };
 }
 
 export const defaultAxiosConfiguration: AxiosRequestConfig = {
