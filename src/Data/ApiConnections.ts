@@ -24,7 +24,7 @@ export class ApiConnections {
             .value();
     }
 
-    public connection(name: keyof ConfiguredConnections): ConfiguredConnections[typeof name] {
+    public connection<Name extends keyof ConfiguredConnections>(name: Name): ConfiguredConnections[Name] {
 
         return this.configuredConnections[name];
     }
