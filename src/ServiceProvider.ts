@@ -34,7 +34,7 @@ export abstract class ServiceProvider {
         // Optional, override this in subtype.
     }
 
-    protected configureApiConnection(factory: ((context: Context) => Partial<ConnectionConfiguration<any>>)): interfaces.BindingWhenOnSyntax<{}>;
+    protected configureApiConnection(factory: ((context: Context) => Partial<ConnectionConfigurations>)): interfaces.BindingWhenOnSyntax<{}>;
     protected configureApiConnection(
         name: string,
         configuration: Partial<ConnectionConfiguration<any>>,
