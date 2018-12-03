@@ -1,7 +1,8 @@
 import _ from "lodash";
 import { Context } from "inversify/dts/planning/context";
-import { decorate, injectable, multiInject, inject, Container } from "inversify";
+import { decorate, injectable, multiInject, inject, Container, interfaces } from "inversify";
 import { Bundle, App, protocultureSymbols, ConnectionConfiguration, ServerRoutes } from "./index";
+import { ConnectionConfigurations } from "./Data/ApiConnections";
 
 
 interface AppConstructor<AppType extends App> {
@@ -15,23 +16,6 @@ export interface StaticServiceProvider {
 }
 
 export abstract class ServiceProvider {
-
-    public static addDecoratedType(key: string, constructor: any) {
-
-        if (!ServiceProvider.decoratedTypes[key]) {
-
-            ServiceProvider.decoratedTypes[key] = [];
-        }
-
-        ServiceProvider.decoratedTypes[key].push(constructor);
-    }
-
-    public static getDecoratedTypes<T>(key: string) {
-
-        return ServiceProvider.decoratedTypes[key] || [];
-    }
-
-    protected static readonly decoratedTypes: {[key: string]: any[]} = {};
 
     public bundle: Bundle;
 
@@ -50,13 +34,29 @@ export abstract class ServiceProvider {
         // Optional, override this in subtype.
     }
 
-    protected configureApiConnection<RoutesType extends ServerRoutes>(configurationOrFactory: ConnectionConfiguration<RoutesType> | ((context: Context) => ConnectionConfiguration<RoutesType>)) {
+    protected configureApiConnection(factory: ((context: Context) => Partial<ConnectionConfigurations>)): interfaces.BindingWhenOnSyntax<{}>;
+    protected configureApiConnection(
+        name: string,
+        configuration: Partial<ConnectionConfigurations>,
+    ): interfaces.BindingWhenOnSyntax<{}>;
+    protected configureApiConnection(
+        configurationOrFactoryOrName: string | Partial<ConnectionConfigurations> | ((context: Context) => Partial<ConnectionConfigurations>),
+        configurationOrFactory?: Partial<ConnectionConfigurations> | ((context: Context) => Partial<ConnectionConfigurations>)
+    ): interfaces.BindingWhenOnSyntax<{}> {
+
+        const name = _.isString(configurationOrFactoryOrName)
+            ? configurationOrFactoryOrName
+            : "";
+
+        const configuration = configurationOrFactory || configurationOrFactoryOrName;
 
         const binding = this.bundle.container.bind(protocultureSymbols.ApiConfiguration);
 
-        return _.isFunction(configurationOrFactory)
-            ? binding.toDynamicValue(configurationOrFactory)
-            : binding.toConstantValue(configurationOrFactory);
+        return _.isFunction(configuration)
+            ? binding.toDynamicValue(configuration)
+            : binding.toConstantValue({
+                [name]: configuration,
+            });
     }
 
     protected bindApp<AppType extends AppConstructor<any>>(app: AppType) {
@@ -78,7 +78,7 @@ export abstract class ServiceProvider {
             .inSingletonScope();
     }
 
-    protected bindConstructorParameter(symbol: symbol | symbol[], staticType: any, position: number) {
+    protected bindConstructorParameter(symbol: symbol | symbol[], staticType: any, position: number, tag: string = null) {
 
         if (_.isArray(symbol)) {
 

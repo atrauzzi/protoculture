@@ -7,5 +7,5 @@ export const protocultureSymbols = {
     LogService: Symbol("Log"),
     Tracer: Symbol("Tracer"),
     ApiConfiguration: Symbol("ApiConfiguration"),
-    ApiConnection: Symbol("ApiConnection"),
+    ApiConnections: Symbol("ApiConnections"),
 };

@@ -12,5 +12,6 @@ export { domReady } from "./Web/DomReady";
 
 export { Method, ConnectionConfiguration, ServerRoute, ServerRoutes, defaultAxiosConfiguration } from "./Data/ApiConfiguration";
 export { ApiConnection } from "./Data/ApiConnection";
+export { ApiConnections, ConfiguredConnections } from "./Data/ApiConnections";
 
 export { protocultureSymbols } from "./Symbols";

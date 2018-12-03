@@ -1,6 +1,5 @@
 import _ from "lodash";
-import axios, { AxiosStatic } from "axios";
-import { AxiosInstance } from "axios";
+import axios, { AxiosInstance } from "axios";
 import { ConnectionConfiguration, ServerRoute, ServerRoutes } from "./ApiConfiguration";
 import { AxiosRequestConfig } from "axios";
 
@@ -9,11 +8,12 @@ export type ConfiguredRouteKey<Configuration extends ConnectionConfiguration<Rou
 
 export class ApiConnection<Configuration extends ConnectionConfiguration<Routes>, Routes extends ServerRoutes> {
 
-    private axios: AxiosStatic = null;
+    private axios: AxiosInstance = null;
 
     public constructor(
         private configuration: Configuration
     ) {
+
         this.axios = axios;
     }
 
