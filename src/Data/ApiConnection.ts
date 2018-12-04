@@ -37,7 +37,7 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
 
     public setAuthorization<AuthorizationData extends Authorization>(type: AuthorizationData["type"], authorization: AuthorizationData) {
 
-        this.configuration.authorizations[type as string] = authorization;
+        _.set(this.configuration, `authorizations.${type}`, authorization);
     }
 
     public getRoute(name: ConfiguredRouteKey<Configuration>): ServerRoute {
