@@ -31,7 +31,7 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
             extraConfiguration || routeParametersOrConfig
         );
 
-        const request = this.axios.request(configuration);
+        const request = this.axios.request<ResponseDataType>(configuration);
         const response = await request;
 
         return response.data;

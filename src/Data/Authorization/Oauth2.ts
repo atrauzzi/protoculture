@@ -55,11 +55,10 @@ ApiConnection.prototype.createAxiosOauth2AuthorizationConfiguration = async func
 
     const now = new Date();
    
-    const expiresAt = authorization.accessToken.expiresAt ? moment(authorization.accessToken.expiresAt) : null;
-    const expired = expiresAt ? expiresAt.isBefore(now) : null;
+    const expired = authorization.accessToken.expiresAt ? authorization.accessToken.expiresAt.isBefore(now) : null;
 
     if (
-        !_.isNull(expiresAt) 
+        !_.isNull(authorization.accessToken.expiresAt) 
         && expired
         && authorization.refreshToken
         && authorization.refreshConnection
