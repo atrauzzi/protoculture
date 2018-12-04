@@ -1,10 +1,9 @@
+import "./Authorization/Bearer";
+import "./Authorization/Oauth2";
 import _ from "lodash";
-import moment from "moment";
 import axios, { AxiosInstance } from "axios";
 import { ConnectionConfiguration, ServerRoute, AuthorizationType, Authorization } from "./ApiConfiguration";
 import { AxiosRequestConfig } from "axios";
-import { Oauth2AccessToken, Oauth2Authorization } from "./Authorization/Oauth2";
-import { BearerAuthorization } from "./Authorization/Bearer";
 
 
 type ConfiguredRouteKey<Configuration extends ConnectionConfiguration<any>> = keyof Configuration["routes"];
@@ -67,88 +66,27 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
                 params: route.query,
                 data: route.data,
             },
-            this.createAxiosAuthorizationConfiguration(),
+            this.createAxiosAuthorizationConfiguration(route.authorizationType),
             extraConfiguration,
         );
     }
 
-    private createAxiosAuthorizationConfiguration() {
+    private createAxiosAuthorizationConfiguration(authorizationType: AuthorizationType) {
 
-        switch (_.get(this.configuration, "authorization.type") as AuthorizationType) {
+        const typePart = _.chain(authorizationType)
+            .camelCase()
+            .upperFirst();
 
-            case AuthorizationType.Bearer:
-                return this.createAxiosBearerAuthorizationConfiguration();
+        const configurationMethod = `createAxios${typePart}AuthorizationConfiguration`;
 
-            case AuthorizationType.Oauth2:
-                return this.createAxiosOauth2AuthorizationConfiguration();
+        const authorization = this.configuration.authorizations[authorizationType];
 
-            default:
-                return {};
+        if (this[configurationMethod]) {
+
+            return this[configurationMethod](authorization);
         }
-    }
 
-    private createAxiosBearerAuthorizationConfiguration() {
-
-        if (this.configuration.authorizations[AuthorizationType.Bearer]) {
-
-            return {
-                headers: {
-                    "authorization": `Bearer ${this.configuration.authorizations.bearer.token}`,
-                },
-            };
-        }
-    }
-
-    private async createAxiosOauth2AuthorizationConfiguration(): Promise<AxiosRequestConfig> {
-
-        const now = new Date();
-       
-        const authorization = this.configuration.authorizations[AuthorizationType.Oauth2];
-        
-        const expiresAt = authorization.accessToken.expiresAt ? moment(authorization.accessToken.expiresAt) : null;
-        const expired = expiresAt ? expiresAt.isBefore(now) : null;
-
-        if (
-            !_.isNull(expiresAt) 
-            && expired
-            && authorization.refreshToken
-            && authorization.refreshConnection
-        ) {
-
-            this.configuration.authorizations[AuthorizationType.Oauth2] = {
-                ...this.configuration.authorizations[AuthorizationType.Oauth2],
-                accessToken: await this.refreshToken(authorization),
-            } as Oauth2Authorization;           
-        }
-        else if (expired) {
-
-            throw new Error("Token expired.");
-        }
-       
-        return {
-            headers: {
-                "authorization": `Bearer ${this.configuration.authorizations[AuthorizationType.Oauth2].accessToken.value}`,
-            },
-        };
-    }
-
-    private async refreshToken(authorization: Oauth2Authorization): Promise<Oauth2AccessToken> {
-
-        const refreshRouteName = authorization.refreshRouteName || "refresh";
-
-        const response = await authorization.refreshConnection.call(refreshRouteName, {
-            data: {
-                "grant_type": "refresh_token",
-                "refresh_token": authorization.refreshToken,
-            },
-        });
-
-        return {
-            value: response.access_token,
-            expiresAt: moment().add(response.expires_in, "seconds"),
-            expiresIn: response.expires_in,
-            type: response.token_type,
-        };
+        return {};
     }
 
     private templatePathParameters(route: ServerRoute, parameters: any) {

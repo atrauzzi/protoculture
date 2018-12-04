@@ -29,6 +29,8 @@ export interface ServerRoute<ResponseDataType = any, PathType = any, QueryType =
     data?: ResponseDataType;
     parameters?: string[];
 
+    authorizationType?: AuthorizationType;
+
     validators?: {
         path?(): Yup.Schema<PathType>;
         query?(): Yup.Schema<QueryType>;
