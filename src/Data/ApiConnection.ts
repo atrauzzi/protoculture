@@ -52,7 +52,7 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
         throw new Error(`Route ${name} is not defined.`);
     }
 
-    private async createAxiosRequestConfiguration(route: ServerRoute, parameters: any, extraConfiguration: Partial<AxiosRequestConfig> = {}): AxiosRequestConfig {
+    private async createAxiosRequestConfiguration(route: ServerRoute, parameters: any, extraConfiguration: Partial<AxiosRequestConfig> = {}): Promise<AxiosRequestConfig> {
 
         const url = this.templatePathParameters(route, parameters);
 
