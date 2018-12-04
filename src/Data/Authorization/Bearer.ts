@@ -18,6 +18,7 @@ declare module "../ApiConnection" {
 
     export interface ApiConnection<Configuration extends ConnectionConfiguration<any>> {
 
+        setAuthorization(type: AuthorizationType.Bearer, authorization: BearerAuthorization): void;
         createAxiosBearerAuthorizationConfiguration(authorization: BearerAuthorization): Promise<Partial<AxiosRequestConfig>>;
     }
 }
