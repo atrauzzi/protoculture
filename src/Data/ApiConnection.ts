@@ -64,7 +64,7 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
                 params: route.query,
                 data: route.data,
             },
-            this.createAxiosAuthorizationConfiguration(route.authorizationType),
+            route.authorizationType ? this.createAxiosAuthorizationConfiguration(route.authorizationType) : {},
             extraConfiguration,
         );
     }
