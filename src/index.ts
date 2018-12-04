@@ -15,7 +15,6 @@ export {
     ConnectionConfiguration, 
     ServerRoute, 
     ServerRoutes, 
-    AuthorizationType,
     defaultAxiosConfiguration
 } from "./Data/ApiConfiguration";
 

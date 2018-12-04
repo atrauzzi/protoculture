@@ -2,16 +2,6 @@ import * as Yup from "yup";
 import { AxiosRequestConfig } from "axios";
 
 
-export enum AuthorizationType {
-    
-    // note: To be extended with declaration merging.
-}
-
-export interface Authorization {
-
-    type: AuthorizationType;
-}
-
 export enum Method {
     GET = "get",
     POST = "post",
@@ -29,7 +19,7 @@ export interface ServerRoute<ResponseDataType = any, PathType = any, QueryType =
     data?: ResponseDataType;
     parameters?: string[];
 
-    authorizationType?: AuthorizationType;
+    authorizationType?: string;
 
     validators?: {
         path?(): Yup.Schema<PathType>;

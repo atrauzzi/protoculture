@@ -1,15 +1,11 @@
 import _ from "lodash";
 import moment from "moment";
 import { ApiConnection } from "../ApiConnection";
-import { AuthorizationType, ConnectionConfiguration, Authorization } from "../ApiConfiguration";
+import { ConnectionConfiguration } from "../ApiConfiguration";
 import { AxiosRequestConfig } from "axios";
 
 
 declare module "../ApiConfiguration" {
-
-    export enum AuthorizationType {
-        Oauth2 = "oauth2",
-    }
 
     export interface ConfiguredAuthorizations {
         "oauth2": Oauth2Authorization;
@@ -43,8 +39,7 @@ export interface Oauth2Response {
     token_type: string;
 }
 
-export interface Oauth2Authorization<ConnectionConfigurationType extends ConnectionConfiguration<any> = any> extends Authorization {
-    type: AuthorizationType.Oauth2;
+export interface Oauth2Authorization<ConnectionConfigurationType extends ConnectionConfiguration<any> = any> {
     accessToken: Oauth2AccessToken;
     refreshToken?: string;
     refreshConnection?: ApiConnection<ConnectionConfigurationType>;
@@ -64,7 +59,7 @@ ApiConnection.prototype.createAxiosOauth2AuthorizationConfiguration = async func
         && authorization.refreshConnection
     ) {
 
-        this.setAuthorization(AuthorizationType.Oauth2, {
+        this.setAuthorization("oauth2", {
             ...authorization,
             accessToken: await refreshToken(authorization),
         });

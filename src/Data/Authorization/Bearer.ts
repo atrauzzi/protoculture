@@ -1,13 +1,9 @@
-import { AuthorizationType, Authorization, ConnectionConfiguration } from "../ApiConfiguration";
+import { ConnectionConfiguration } from "../ApiConfiguration";
 import { ApiConnection } from "../ApiConnection";
 import { AxiosRequestConfig } from "axios";
 
 
 declare module "../ApiConfiguration" {
-
-    export enum AuthorizationType {
-        Bearer = "bearer",
-    }
 
     export interface ConfiguredAuthorizations {
         "bearer": BearerAuthorization;
@@ -23,8 +19,7 @@ declare module "../ApiConnection" {
     }
 }
 
-export interface BearerAuthorization extends Authorization {
-    type: AuthorizationType.Bearer;
+export interface BearerAuthorization {
     token: string;
 }
 

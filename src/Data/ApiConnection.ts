@@ -1,6 +1,6 @@
 import _ from "lodash";
 import axios, { AxiosInstance } from "axios";
-import { ConnectionConfiguration, ServerRoute, AuthorizationType, Authorization } from "./ApiConfiguration";
+import { ConnectionConfiguration, ServerRoute } from "./ApiConfiguration";
 import { AxiosRequestConfig } from "axios";
 
 
@@ -35,7 +35,7 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
         return response.data;
     }
 
-    public setAuthorization<AuthorizationData extends Authorization>(type: AuthorizationData["type"], authorization: AuthorizationData) {
+    public setAuthorization(type: string, authorization: any) {
 
         _.set(this.configuration, `authorizations.${type}`, authorization);
     }
@@ -69,7 +69,7 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
         );
     }
 
-    private createAxiosAuthorizationConfiguration(authorizationType: AuthorizationType) {
+    private createAxiosAuthorizationConfiguration(authorizationType: string) {
 
         const typePart = _.chain(authorizationType)
             .camelCase()
