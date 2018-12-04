@@ -15,9 +15,7 @@ export {
     ConnectionConfiguration, 
     ServerRoute, 
     ServerRoutes, 
-    TokenType, 
     AuthorizationType,
-    Oauth2AccessToken,
     defaultAxiosConfiguration
 } from "./Data/ApiConfiguration";
 export { ApiConnection } from "./Data/ApiConnection";
