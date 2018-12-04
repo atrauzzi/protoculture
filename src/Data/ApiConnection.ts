@@ -1,10 +1,13 @@
 import _ from "lodash";
+import moment from "moment";
 import axios, { AxiosInstance } from "axios";
-import { ConnectionConfiguration, ServerRoute, Authorization } from "./ApiConfiguration";
+import { ConnectionConfiguration, ServerRoute, AuthorizationType, Authorization } from "./ApiConfiguration";
 import { AxiosRequestConfig } from "axios";
+import { Oauth2AccessToken, Oauth2Authorization } from "./Authorization/Oauth2";
+import { BearerAuthorization } from "./Authorization/Bearer";
 
 
-export type ConfiguredRouteKey<Configuration extends ConnectionConfiguration<any>> = keyof Configuration["routes"];
+type ConfiguredRouteKey<Configuration extends ConnectionConfiguration<any>> = keyof Configuration["routes"];
 
 export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
 
@@ -35,12 +38,9 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
         return response.data;
     }
 
-    public setAuthorization(type: Authorization, data: any) {
+    public setAuthorization<AuthorizationData extends Authorization>(type: AuthorizationData["type"], authorization: AuthorizationData) {
 
-        this.configuration.authorization = {
-            type,
-            data,
-        };
+        this.configuration.authorizations[type as string] = authorization;
     }
 
     public getRoute(name: ConfiguredRouteKey<Configuration>): ServerRoute {
@@ -74,10 +74,13 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
 
     private createAxiosAuthorizationConfiguration() {
 
-        switch (_.get(this.configuration, "authorization.type")) {
+        switch (_.get(this.configuration, "authorization.type") as AuthorizationType) {
 
-            case Authorization.Bearer:
+            case AuthorizationType.Bearer:
                 return this.createAxiosBearerAuthorizationConfiguration();
+
+            case AuthorizationType.Oauth2:
+                return this.createAxiosOauth2AuthorizationConfiguration();
 
             default:
                 return {};
@@ -86,11 +89,65 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
 
     private createAxiosBearerAuthorizationConfiguration() {
 
-        return {
+        if (this.configuration.authorizations[AuthorizationType.Bearer]) {
 
+            return {
+                headers: {
+                    "authorization": `Bearer ${this.configuration.authorizations.bearer.token}`,
+                },
+            };
+        }
+    }
+
+    private async createAxiosOauth2AuthorizationConfiguration(): Promise<AxiosRequestConfig> {
+
+        const now = new Date();
+       
+        const authorization = this.configuration.authorizations[AuthorizationType.Oauth2];
+        
+        const expiresAt = authorization.accessToken.expiresAt ? moment(authorization.accessToken.expiresAt) : null;
+        const expired = expiresAt ? expiresAt.isBefore(now) : null;
+
+        if (
+            !_.isNull(expiresAt) 
+            && expired
+            && authorization.refreshToken
+            && authorization.refreshConnection
+        ) {
+
+            this.configuration.authorizations[AuthorizationType.Oauth2] = {
+                ...this.configuration.authorizations[AuthorizationType.Oauth2],
+                accessToken: await this.refreshToken(authorization),
+            } as Oauth2Authorization;           
+        }
+        else if (expired) {
+
+            throw new Error("Token expired.");
+        }
+       
+        return {
             headers: {
-                "authorization": `Bearer ${this.configuration.authorization.data}`,
+                "authorization": `Bearer ${this.configuration.authorizations[AuthorizationType.Oauth2].accessToken.value}`,
             },
+        };
+    }
+
+    private async refreshToken(authorization: Oauth2Authorization): Promise<Oauth2AccessToken> {
+
+        const refreshRouteName = authorization.refreshRouteName || "refresh";
+
+        const response = await authorization.refreshConnection.call(refreshRouteName, {
+            data: {
+                "grant_type": "refresh_token",
+                "refresh_token": authorization.refreshToken,
+            },
+        });
+
+        return {
+            value: response.access_token,
+            expiresAt: moment().add(response.expires_in, "seconds"),
+            expiresIn: response.expires_in,
+            type: response.token_type,
         };
     }
 

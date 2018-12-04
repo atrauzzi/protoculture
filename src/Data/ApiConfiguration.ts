@@ -2,16 +2,22 @@ import * as Yup from "yup";
 import { AxiosRequestConfig } from "axios";
 
 
+export enum AuthorizationType {
+    
+    // note: To be extended with declaration merging.
+}
+
+export interface Authorization {
+
+    type: AuthorizationType;
+}
+
 export enum Method {
     GET = "get",
     POST = "post",
     PUT = "put",
     PATCH = "patch",
     DELETE = "delete",
-}
-
-export enum Authorization {
-    Bearer = 0,
 }
 
 export interface ServerRoute<ResponseDataType = any, PathType = any, QueryType = any, DataType = any> {
@@ -35,17 +41,17 @@ export interface ServerRoutes {
     [routeName: string]: ServerRoute;
 }
 
+export interface ConfiguredAuthorizations {
+
+}
+
 export interface ConnectionConfiguration<Routes extends ServerRoutes> {
 
     axiosConfiguration?: AxiosRequestConfig;
     routes?: Routes;
-    authorization?: {
-        type: Authorization,
-        data: any,
-    };
+    authorizations?: ConfiguredAuthorizations;
 }
 
 export const defaultAxiosConfiguration: AxiosRequestConfig = {
-
     withCredentials: true,
 };
