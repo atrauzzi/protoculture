@@ -32,7 +32,7 @@ export enum Oauth2TokenType {
 export interface Oauth2AccessToken {
     value: string;
     type: Oauth2TokenType;
-    expiresIn?: string;
+    expiresIn?: number;
     expiresAt?: moment.Moment;
 }
 
