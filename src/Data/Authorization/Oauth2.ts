@@ -36,6 +36,13 @@ export interface Oauth2AccessToken {
     expiresAt?: moment.Moment;
 }
 
+export interface Oauth2Response {
+    access_token: string;
+    expires_in: number;
+    refresh_token: string;
+    token_type: string;
+}
+
 export interface Oauth2Authorization<ConnectionConfigurationType extends ConnectionConfiguration<any> = any> extends Authorization {
     type: AuthorizationType.Oauth2;
     accessToken: Oauth2AccessToken;
