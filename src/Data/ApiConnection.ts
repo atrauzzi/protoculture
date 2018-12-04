@@ -1,5 +1,3 @@
-import "./Authorization/Bearer";
-import "./Authorization/Oauth2";
 import _ from "lodash";
 import axios, { AxiosInstance } from "axios";
 import { ConnectionConfiguration, ServerRoute, AuthorizationType, Authorization } from "./ApiConfiguration";

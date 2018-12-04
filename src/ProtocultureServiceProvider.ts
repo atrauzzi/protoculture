@@ -1,3 +1,5 @@
+import "./Data/Authorization/Bearer";
+import "./Data/Authorization/Oauth2";
 import mitt from "mitt";
 import { ServiceProvider } from "./ServiceProvider";
 import { BaseApp } from "./App";
