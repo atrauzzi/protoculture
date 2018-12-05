@@ -18,7 +18,7 @@ export {
     defaultAxiosConfiguration
 } from "./Data/ApiConfiguration";
 
-export { Oauth2Response } from "./Data/Authorization/Oauth2";
+export { Oauth2Response, Oauth2AccessToken, Oauth2TokenType } from "./Data/Authorization/Oauth2";
 
 export { ApiConnection } from "./Data/ApiConnection";
 export { ApiConnections, ConfiguredConnections } from "./Data/ApiConnections";
