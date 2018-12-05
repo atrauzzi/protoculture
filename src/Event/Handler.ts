@@ -2,5 +2,5 @@
 
 export interface Handler<EventType = any> {
 
-    handle(event: EventType): void;
+    handleEvent(event: EventType): void;
 }
