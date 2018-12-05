@@ -3,7 +3,7 @@ import "./Data/Authorization/Oauth2";
 import mitt from "mitt";
 import { ServiceProvider } from "./ServiceProvider";
 import { BaseApp } from "./App";
-import { protocultureSymbols, ApiConnection } from ".";
+import { protocultureSymbols } from "./Symbols";
 import { ApiConnections } from "./Data/ApiConnections";
 import { Handler } from "./Event/Handler";
 
