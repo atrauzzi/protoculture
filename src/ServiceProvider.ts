@@ -34,6 +34,29 @@ export abstract class ServiceProvider {
         // Optional, override this in subtype.
     }
 
+    protected configureEventHandler(event: string, symbol: symbol): void;
+    protected configureEventHandler(event: string, handler: { new(): any }, injections: symbol[]): void;
+    protected configureEventHandler(event: string, handlerOrSymbol: { new(): any } | symbol, injections: symbol[] = []) {
+
+        const eventKey = `protoculture.event.${event}`;
+
+        if (_.isSymbol(handlerOrSymbol)) {
+
+            const symbol = handlerOrSymbol as symbol;
+
+            this.bundle.container.bind(eventKey).toService(symbol);
+        }
+        else {
+
+            const handler = handlerOrSymbol as { new(): any };
+
+            this.makeInjectable(handler);
+            this.bindConstructor(eventKey, handler);
+            injections.forEach((injection, index) =>
+                this.bindConstructorParameter(injection, handler, index));
+        }
+    }
+
     protected configureApiConnection(factory: ((context: Context) => Partial<ConnectionConfigurations>)): interfaces.BindingWhenOnSyntax<{}>;
     protected configureApiConnection(
         name: string,
@@ -71,7 +94,7 @@ export abstract class ServiceProvider {
         decorate(injectable(), object);
     }
 
-    protected bindConstructor<Type>(symbol: symbol, staticType: {new(...args: any[]): Type}) {
+    protected bindConstructor<Type>(symbol: symbol | string, staticType: {new(...args: any[]): Type}) {
 
         return this.bundle.container.bind<Type>(symbol)
             .to(staticType)

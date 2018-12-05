@@ -5,6 +5,7 @@ import { ServiceProvider } from "./ServiceProvider";
 import { BaseApp } from "./App";
 import { protocultureSymbols, ApiConnection } from ".";
 import { ApiConnections } from "./Data/ApiConnections";
+import { Handler } from "./Event/Handler";
 
 
 export class ProtocultureServiceProvider extends ServiceProvider {
@@ -16,9 +17,36 @@ export class ProtocultureServiceProvider extends ServiceProvider {
         this.bundle.container.bind(protocultureSymbols.Bundle)
             .toConstantValue(this.bundle);
 
+            this.configureEventBusDispatcher();
+        this.configureApiConnections();
+    }
+
+    private configureEventBusDispatcher() {
+
         this.bundle.container
-            .bind(protocultureSymbols.EventBus)
-            .toConstantValue(new mitt());
+            .bind<mitt.Emitter>(protocultureSymbols.EventBus)
+            .toConstantValue(new mitt())
+            .onActivation((context, mitt) => {
+
+                // see: https://github.com/developit/mitt/issues/82
+                mitt.on("*", ((type: string, event: any) => {
+
+                    const eventKey = `protoculture.event.${type}`;
+
+                    if (context.container.isBound(eventKey)) {
+
+                        context.container
+                            .getAll(eventKey)
+                            .forEach((handler: Handler) =>
+                                handler.handle(event));
+                    }
+                }) as any);
+
+                return mitt;
+            });
+    }
+
+    private configureApiConnections() {
 
         this.makeInjectable(ApiConnections);
         this.bindConstructor(protocultureSymbols.ApiConnections, ApiConnections);
