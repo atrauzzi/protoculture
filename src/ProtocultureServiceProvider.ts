@@ -17,7 +17,7 @@ export class ProtocultureServiceProvider extends ServiceProvider {
         this.bundle.container.bind(protocultureSymbols.Bundle)
             .toConstantValue(this.bundle);
 
-            this.configureEventBusDispatcher();
+        this.configureEventBusDispatcher();
         this.configureApiConnections();
     }
 
