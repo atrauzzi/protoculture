@@ -38,7 +38,7 @@ export class ProtocultureServiceProvider extends ServiceProvider {
                         context.container
                             .getAll(eventKey)
                             .forEach((handler: Handler) =>
-                                handler.handle(event));
+                                handler.handleEvent(event));
                     }
                 }) as any);
 
