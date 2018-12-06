@@ -23,29 +23,26 @@ export class ProtocultureServiceProvider extends ServiceProvider {
 
     private configureEventBusDispatcher() {
 
+        const eventBus = new mitt();
+
+        eventBus.on("*", ((type: string, event: any) => {
+
+            const eventKey = `protoculture.event.${type}`;
+
+            if (this.bundle.container.isBound(eventKey)) {
+
+                const eventMethod = _.camelCase(`${type}`);
+
+                this.bundle.container
+                    .getAll(eventKey)
+                    .forEach((handler: any) =>
+                        handler[eventMethod](event));
+            }
+        }) as any);
+
         this.bundle.container
             .bind<mitt.Emitter>(protocultureSymbols.EventBus)
-            .toConstantValue(new mitt())
-            .onActivation((context, mitt) => {
-
-                // see: https://github.com/developit/mitt/issues/82
-                mitt.on("*", ((type: string, event: any) => {
-
-                    const eventKey = `protoculture.event.${type}`;
-
-                    if (context.container.isBound(eventKey)) {
-
-                        const eventMethod = _.camelCase(`${type}`);
-
-                        context.container
-                            .getAll(eventKey)
-                            .forEach((handler: any) =>
-                                handler[eventMethod](event));
-                    }
-                }) as any);
-
-                return mitt;
-            });
+            .toConstantValue(eventBus);
     }
 
     private configureApiConnections() {
