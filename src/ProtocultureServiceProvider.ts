@@ -1,11 +1,11 @@
 import "./Data/Authorization/Bearer";
 import "./Data/Authorization/Oauth2";
+import _ from "lodash";
 import mitt from "mitt";
 import { ServiceProvider } from "./ServiceProvider";
 import { BaseApp } from "./App";
 import { protocultureSymbols } from "./Symbols";
 import { ApiConnections } from "./Data/ApiConnections";
-import { Handler } from "./Event/Handler";
 
 
 export class ProtocultureServiceProvider extends ServiceProvider {
@@ -35,10 +35,12 @@ export class ProtocultureServiceProvider extends ServiceProvider {
 
                     if (context.container.isBound(eventKey)) {
 
+                        const eventMethod = _.camelCase(`${type}`);
+
                         context.container
                             .getAll(eventKey)
-                            .forEach((handler: Handler) =>
-                                handler.handleEvent(event));
+                            .forEach((handler: any) =>
+                                handler[eventMethod](event));
                     }
                 }) as any);
 

@@ -18,8 +18,6 @@ export {
     defaultAxiosConfiguration
 } from "./Data/ApiConfiguration";
 
-export { Handler } from "./Event/Handler";
-
 export { Oauth2Response, Oauth2AccessToken, Oauth2TokenType } from "./Data/Authorization/Oauth2";
 
 export { ApiConnection } from "./Data/ApiConnection";
