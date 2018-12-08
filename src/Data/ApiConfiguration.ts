@@ -19,6 +19,8 @@ export interface ServerRoute<ResponseDataType = any, PathType = any, QueryType =
     data?: ResponseDataType;
     parameters?: string[];
 
+    authorizationType?: string;
+
     validators?: {
         path?(): Yup.Schema<PathType>;
         query?(): Yup.Schema<QueryType>;
@@ -31,13 +33,17 @@ export interface ServerRoutes {
     [routeName: string]: ServerRoute;
 }
 
+export interface ConfiguredAuthorizations {
+
+}
+
 export interface ConnectionConfiguration<Routes extends ServerRoutes> {
 
-    routes: Routes;
     axiosConfiguration?: AxiosRequestConfig;
+    routes?: Routes;
+    authorizations?: ConfiguredAuthorizations;
 }
 
 export const defaultAxiosConfiguration: AxiosRequestConfig = {
-
     withCredentials: true,
 };

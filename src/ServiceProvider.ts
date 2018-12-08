@@ -1,6 +1,8 @@
 import _ from "lodash";
-import { decorate, injectable, multiInject, inject, Container } from "inversify";
-import { protocultureSymbols, Bundle, App } from "./index";
+import { Context } from "inversify/dts/planning/context";
+import { decorate, injectable, multiInject, inject, Container, interfaces } from "inversify";
+import { Bundle, App, protocultureSymbols, ConnectionConfiguration, ServerRoutes } from "./index";
+import { ConnectionConfigurations } from "./Data/ApiConnections";
 
 
 interface AppConstructor<AppType extends App> {
@@ -14,23 +16,6 @@ export interface StaticServiceProvider {
 }
 
 export abstract class ServiceProvider {
-
-    public static addDecoratedType(key: string, constructor: any) {
-
-        if (!ServiceProvider.decoratedTypes[key]) {
-
-            ServiceProvider.decoratedTypes[key] = [];
-        }
-
-        ServiceProvider.decoratedTypes[key].push(constructor);
-    }
-
-    public static getDecoratedTypes<T>(key: string) {
-
-        return ServiceProvider.decoratedTypes[key] || [];
-    }
-
-    protected static readonly decoratedTypes: {[key: string]: any[]} = {};
 
     public bundle: Bundle;
 
@@ -49,6 +34,54 @@ export abstract class ServiceProvider {
         // Optional, override this in subtype.
     }
 
+    protected configureEventHandler(event: string, symbol: symbol): void;
+    protected configureEventHandler(event: string, handler: { new(): any }, injections: symbol[]): void;
+    protected configureEventHandler(event: string, handlerOrSymbol: { new(): any } | symbol, injections: symbol[] = []) {
+
+        const eventKey = `protoculture.event.${event}`;
+
+        if (_.isSymbol(handlerOrSymbol)) {
+
+            const symbol = handlerOrSymbol as symbol;
+
+            this.bundle.container.bind(eventKey).toService(symbol);
+        }
+        else {
+
+            const handler = handlerOrSymbol as { new(): any };
+
+            this.makeInjectable(handler);
+            this.bindConstructor(eventKey, handler);
+            injections.forEach((injection, index) =>
+                this.bindConstructorParameter(injection, handler, index));
+        }
+    }
+
+    protected configureApiConnection(factory: ((context: Context) => Partial<ConnectionConfigurations>)): interfaces.BindingWhenOnSyntax<{}>;
+    protected configureApiConnection(
+        name: string,
+        configuration: Partial<ConnectionConfiguration<any>>,
+    ): interfaces.BindingWhenOnSyntax<{}>;
+    protected configureApiConnection(
+        configurationOrFactoryOrName: string | Partial<ConnectionConfiguration<any>> | ((context: Context) => Partial<ConnectionConfigurations>),
+        configurationOrFactory?: Partial<ConnectionConfiguration<any>> | ((context: Context) => Partial<ConnectionConfigurations>)
+    ): interfaces.BindingWhenOnSyntax<{}> {
+
+        const name = _.isString(configurationOrFactoryOrName)
+            ? configurationOrFactoryOrName
+            : "";
+
+        const configuration = configurationOrFactory || configurationOrFactoryOrName;
+
+        const binding = this.bundle.container.bind(protocultureSymbols.ApiConfiguration);
+
+        return _.isFunction(configuration)
+            ? binding.toDynamicValue(configuration)
+            : binding.toConstantValue({
+                [name]: configuration,
+            });
+    }
+
     protected bindApp<AppType extends AppConstructor<any>>(app: AppType) {
 
         this.makeInjectable(app);
@@ -61,14 +94,14 @@ export abstract class ServiceProvider {
         decorate(injectable(), object);
     }
 
-    protected bindConstructor<Type>(symbol: symbol, staticType: {new(...args: any[]): Type}) {
+    protected bindConstructor<Type>(symbol: symbol | string, staticType: {new(...args: any[]): Type}) {
 
         return this.bundle.container.bind<Type>(symbol)
             .to(staticType)
             .inSingletonScope();
     }
 
-    protected bindConstructorParameter(symbol: symbol | symbol[], staticType: any, position: number) {
+    protected bindConstructorParameter(symbol: symbol | symbol[], staticType: any, position: number, tag: string = null) {
 
         if (_.isArray(symbol)) {
 

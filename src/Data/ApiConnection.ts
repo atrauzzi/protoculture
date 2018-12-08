@@ -1,17 +1,20 @@
 import _ from "lodash";
-import { AxiosInstance } from "axios";
-import { ConnectionConfiguration, ServerRoute, ServerRoutes } from "../Domain/ApiConfiguration";
+import axios, { AxiosInstance } from "axios";
+import { ConnectionConfiguration, ServerRoute } from "./ApiConfiguration";
 import { AxiosRequestConfig } from "axios";
 
 
-export type ConfiguredRouteKey<Configuration extends ConnectionConfiguration<Routes>, Routes extends ServerRoutes = any> = keyof Configuration["routes"];
+type ConfiguredRouteKey<Configuration extends ConnectionConfiguration<any>> = keyof Configuration["routes"];
 
-export class ApiConnection<Configuration extends ConnectionConfiguration<Routes>, Routes extends ServerRoutes> {
+export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
+
+    private axios: AxiosInstance = null;
 
     public constructor(
-        private axios: AxiosInstance,
         private configuration: Configuration
     ) {
+
+        this.axios = axios;
     }
 
     public call<ResponseDataType = any>(name: ConfiguredRouteKey<Configuration>, extraConfiguration?: Partial<AxiosRequestConfig>): Promise<ResponseDataType>;
@@ -20,16 +23,21 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<Routes>
 
         const route = this.getRoute(name);
 
-        const configuration = this.createAxiosRequestConfiguration(
+        const configuration = await this.createAxiosRequestConfiguration(
             route,
             routeParametersOrConfig,
             extraConfiguration || routeParametersOrConfig
         );
 
-        const request = this.axios.request(configuration);
+        const request = this.axios.request<ResponseDataType>(configuration);
         const response = await request;
 
         return response.data;
+    }
+
+    public setAuthorization(type: string, authorization: any) {
+
+        _.set(this.configuration, `authorizations.${type}`, authorization);
     }
 
     public getRoute(name: ConfiguredRouteKey<Configuration>): ServerRoute {
@@ -44,7 +52,7 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<Routes>
         throw new Error(`Route ${name} is not defined.`);
     }
 
-    private createAxiosRequestConfiguration(route: ServerRoute, parameters: any, extraConfiguration: Partial<AxiosRequestConfig> = {}): AxiosRequestConfig {
+    private async createAxiosRequestConfiguration(route: ServerRoute, parameters: any, extraConfiguration: Partial<AxiosRequestConfig> = {}): Promise<AxiosRequestConfig> {
 
         const url = this.templatePathParameters(route, parameters);
 
@@ -56,8 +64,27 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<Routes>
                 params: route.query,
                 data: route.data,
             },
-            extraConfiguration
+            route.authorizationType ? await this.createAxiosAuthorizationConfiguration(route.authorizationType) : {},
+            extraConfiguration,
         );
+    }
+
+    private async createAxiosAuthorizationConfiguration(authorizationType: string) {
+
+        const typePart = _.chain(authorizationType)
+            .camelCase()
+            .upperFirst();
+
+        const configurationMethod = `createAxios${typePart}AuthorizationConfiguration`;
+
+        const authorization = this.configuration.authorizations[authorizationType];
+
+        if (this[configurationMethod]) {
+
+            return await this[configurationMethod](authorization);
+        }
+
+        return {};
     }
 
     private templatePathParameters(route: ServerRoute, parameters: any) {
