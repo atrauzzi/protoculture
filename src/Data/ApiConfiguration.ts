@@ -26,6 +26,8 @@ export interface ServerRoute<ResponseDataType = any, PathType = any, QueryType =
         query?(): Yup.Schema<QueryType>;
         data?(): Yup.Schema<DataType>;
     };
+
+    axiosConfiguration?: AxiosRequestConfig;
 }
 
 export interface ServerRoutes {

@@ -58,6 +58,7 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
 
         return _.merge(
             this.configuration.axiosConfiguration,
+            route.axiosConfiguration || {},
             {
                 url,
                 method: route.method,
