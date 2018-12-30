@@ -1,4 +1,4 @@
-export { createDeferred } from "./Util";
+export { Omit, createDeferred } from "./Util";
 
 export { Bundle } from "./Bundle";
 export { App, BaseApp } from "./App";
