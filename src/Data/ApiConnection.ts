@@ -13,7 +13,6 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
     public constructor(
         private configuration: Configuration
     ) {
-
         this.axios = axios;
     }
 
