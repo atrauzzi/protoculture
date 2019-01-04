@@ -16,7 +16,7 @@ declare module "../ApiConnection" {
 
     export interface ApiConnection<Configuration extends ConnectionConfiguration<any>> {
 
-        setAuthorization(type: "oauth2", authorization: Oauth2Authorization): void;
+        setAuthorization(type: "oauth2", authorization?: Oauth2Authorization | null): void;
         createAxiosOauth2AuthorizationConfiguration(authorization: Oauth2Authorization): Promise<Partial<AxiosRequestConfig>>;
     }
 }
