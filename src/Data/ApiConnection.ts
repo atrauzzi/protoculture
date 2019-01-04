@@ -34,9 +34,18 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
         return response.data;
     }
 
-    public setAuthorization(type: string, authorization: any) {
+    public setAuthorization(type: string, authorization?: any | null) {
 
-        _.set(this.configuration, `authorizations.${type}`, authorization);
+        const key = `authorizations.${type}`;
+
+        if (authorization) {
+
+            _.set(this.configuration, key, authorization);
+        }
+        else {
+
+            _.unset(this.configuration, key);
+        }
     }
 
     public getRoute(name: ConfiguredRouteKey<Configuration>): ServerRoute {
