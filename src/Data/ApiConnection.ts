@@ -34,6 +34,15 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
         return response.data;
     }
 
+    // todo: https://github.com/axios/axios/issues/1624#issuecomment-408867227
+    public getUri(name: ConfiguredRouteKey<Configuration>, routeParameters?: any) {
+
+        const route = this.getRoute(name);
+        const path = this.templatePathParameters(route, routeParameters);
+
+        return `//${this.configuration.axiosConfiguration.baseURL}${path}`;
+    }
+
     public setAuthorization(type: string, authorization?: any | null) {
 
         const key = `authorizations.${type}`;

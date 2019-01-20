@@ -28,6 +28,7 @@
   "types": "./lib/index.d.ts",
   "dependencies": {
     "@types/lodash": "^4.14.118",
+    "@types/moment": "^2.13.0",
     "@types/yup": "^0.26.1",
     "axios": "^0",
     "domready": "^1.0.8",

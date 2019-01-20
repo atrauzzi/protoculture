@@ -10,7 +10,6 @@
         "**/.DS_Store": true,
         ".vscode": true,
         "node_modules": true,
-        "lib": true,
         "public/lib": true,
         "yarn.lock": true,
         "protoculture.png": true
