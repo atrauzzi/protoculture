@@ -8,7 +8,7 @@ type ConfiguredRouteKey<Configuration extends ConnectionConfiguration<any>> = ke
 
 export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
 
-    private axios: AxiosInstance = null;
+    public axios: AxiosInstance = null;
 
     public constructor(
         private configuration: Configuration
