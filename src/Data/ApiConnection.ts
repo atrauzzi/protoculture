@@ -74,7 +74,7 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
         const url = this.templatePathParameters(route, parameters);
 
         return _.merge(
-            this.configuration.axiosConfiguration,
+            _.cloneDeep(this.configuration.axiosConfiguration),
             route.axiosConfiguration || {},
             {
                 url,
