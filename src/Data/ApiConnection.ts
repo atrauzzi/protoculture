@@ -40,7 +40,7 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
         const route = this.getRoute(name);
         const path = this.templatePathParameters(route, routeParameters);
 
-        return `//${this.configuration.axiosConfiguration.baseURL}${path}`;
+        return `//${this.configuration.axiosConfiguration.baseURL}/${path}`;
     }
 
     public setAuthorization(type: string, authorization?: any | null) {
