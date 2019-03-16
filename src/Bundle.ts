@@ -122,7 +122,7 @@ export abstract class Bundle {
 
         try {
 
-            this.logger.log("Teardown APIs have not been implemented yet.", null);
+            // this.logger.log("Teardown APIs have not been implemented yet.", null);
         }
         catch (error) {
 
@@ -209,10 +209,6 @@ export abstract class Bundle {
         this.logger.log("All apps started", null);
 
         await Promise.all(appPromises);
-
-        await this.longRunning 
-            ? this.startHeartbeat() 
-            : null;
 
         await this.stop();
     }
