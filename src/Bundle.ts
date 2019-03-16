@@ -190,7 +190,7 @@ export abstract class Bundle {
 
     protected tick(timer: any, complete: () => void) {
 
-        this.logger.log("Beat...", null);
+        // this.logger.log("Beat...", null);
 
         if (!this.longRunning) {
 
@@ -210,6 +210,10 @@ export abstract class Bundle {
 
         await Promise.all(appPromises);
 
+        await this.longRunning 
+            ? this.startHeartbeat() 
+            : null;
+        
         await this.stop();
     }
 
