@@ -194,7 +194,7 @@ export abstract class Bundle {
 
         if (!this.longRunning) {
 
-            this.logger.log("...Heart beat.", null);
+            // this.logger.log("...Heart beat.", null);
             clearInterval(timer);
             complete();
         }
