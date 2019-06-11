@@ -89,9 +89,9 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
 
         if (configuration.method === Method.GET) {
            
-            delete configuration.params;
-
             configuration.url = `${configuration.url}?${queryStringify(configuration.params)}`;
+
+            delete configuration.params;
         }
 
         return configuration;
