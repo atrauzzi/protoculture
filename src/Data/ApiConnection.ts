@@ -1,7 +1,8 @@
 import _ from "lodash";
 import axios, { AxiosInstance } from "axios";
-import { ConnectionConfiguration, ServerRoute } from "./ApiConfiguration";
+import { ConnectionConfiguration, ServerRoute, Method } from "./ApiConfiguration";
 import { AxiosRequestConfig } from "axios";
+import { stringify as queryStringify } from "qs";
 
 
 type ConfiguredRouteKey<Configuration extends ConnectionConfiguration<any>> = keyof Configuration["routes"];
@@ -73,7 +74,7 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
 
         const url = this.templatePathParameters(route, parameters);
 
-        return _.merge(
+        const configuration = _.merge(
             _.cloneDeep(this.configuration.axiosConfiguration),
             route.axiosConfiguration || {},
             {
@@ -85,6 +86,13 @@ export class ApiConnection<Configuration extends ConnectionConfiguration<any>> {
             route.authorizationType ? await this.createAxiosAuthorizationConfiguration(route.authorizationType) : {},
             extraConfiguration,
         );
+
+        if (configuration.method === Method.GET) {
+           
+            configuration.params = queryStringify(configuration.params);
+        }
+
+        return configuration;
     }
 
     private async createAxiosAuthorizationConfiguration(authorizationType: string) {
