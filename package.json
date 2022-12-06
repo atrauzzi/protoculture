@@ -141,6 +141,6 @@
     "@sindresorhus/is": "0.14.0",
     "fstream": "1.0.12",
     "query-string": "6.7.0",
-    "qs": "6.7.0"
+    "qs": "6.7.3"
   }
 }
